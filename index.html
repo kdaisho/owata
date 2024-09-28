@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Wakarimi</title>
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body>
+        <h1>わかりみ。</h1>
+
+        <form action="/encode" method="post" id="encode-form">
+            <label for="encode">Encode URL</label>
+            <textarea name="url" id="encode" rows="10" cols="100"></textarea>
+
+            <button type="submit">Encode</button>
+        </form>
+
+        <script>
+            document
+                .getElementById("encode-form")
+                .addEventListener("submit", async e => {
+                    e.preventDefault();
+                    await fetch("/encode", {
+                        method: "POST",
+                        body: new FormData(e.target)
+                    });
+                });
+        </script>
+    </body>
+</html>
