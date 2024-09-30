@@ -1,6 +1,6 @@
 import { Application } from "jsr:@oak/oak/application";
 import { Router } from "jsr:@oak/oak/router";
-import { decode, encode } from "./lib/utils.ts";
+import { decrypt, encrypt } from "./lib/utils.ts";
 
 const books = new Map<string, Record<string, string>>();
 books.set("1", {
@@ -19,19 +19,25 @@ router
         context.response.headers.set("Content-Type", "text/html");
         context.response.body = html;
     })
-    .post("/encode", async ({ request, response }) => {
+    .post("/encrypt", async ({ request, response }) => {
         const res = await request.body.formData();
-        const url = res.get("url");
+        const url = res.get("raw-text");
         let result = "";
         if (typeof url === "string") {
-            result = encode(url);
-            result = decode(result);
+            result = encrypt(url);
         }
-        console.log("==> END", result);
+        response.body = result;
+    })
+    .post("/decrypt", async ({ request, response }) => {
+        const res = await request.body.formData();
+        const url = res.get("encoded-txt");
+        let result = "";
+        if (typeof url === "string") {
+            result = decrypt(url);
+        }
         response.body = result;
     })
     .get("/book", ({ response }) => {
-        console.log("==>", books.values());
         response.body = Array.from(books.values());
     })
     .get("/book/:id", ({ response, params }) => {
@@ -65,11 +71,4 @@ app.use(context => {
     }
 });
 
-await app
-    .listen({ port: 8000 })
-    .then(() => {
-        console.log("==>", "Server is running on http://localhost:8000");
-    })
-    .finally(() => {
-        console.log("==>", "Server is stopped2");
-    });
+await app.listen({ port: 8000 });

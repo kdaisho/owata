@@ -1,3 +1,5 @@
+import { deflate, inflate } from "https://deno.land/x/compress@v0.4.5/mod.ts";
+
 let salt: number;
 
 try {
@@ -6,7 +8,23 @@ try {
     throw new Error("Invalid salt");
 }
 
-export function encode(input: string): string {
+export function encrypt(input: string): string {
+    return encode(deflate(new TextEncoder().encode(input)).toString());
+}
+
+export function decrypt(input: string) {
+    return new TextDecoder().decode(
+        inflate(
+            new Uint8Array(
+                decode(input)
+                    .split(",")
+                    .map(str => parseInt(str, 10))
+            )
+        )
+    );
+}
+
+function encode(input: string): string {
     let output = input;
 
     for (let i = 0; i < salt; i++) {
