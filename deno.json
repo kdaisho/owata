@@ -1,0 +1,12 @@
+{
+  "tasks": {
+    "dev": "deno fmt --watch | deno run --env --allow-all --watch index.ts"
+  },
+  "fmt": {
+    "semiColons": false
+  },
+  "imports": {
+    "oak/router": "jsr:@oak/oak/router",
+    "oak/application": "jsr:@oak/oak/application"
+  }
+}
