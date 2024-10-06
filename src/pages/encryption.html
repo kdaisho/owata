@@ -1,0 +1,11 @@
+<h2>{{ title }}</h2>
+<p>{{ subtitle }}</p>
+
+<form action="/encrypt" method="post" id="encryption-form">
+  <label for="encrypt">Encrypt</label>
+  <textarea name="raw-text" id="encrypt" rows="10" cols="100"></textarea>
+
+  <button type="submit">Submit</button>
+</form>
+
+<textarea id="encrypted" rows="40" cols="100"></textarea>

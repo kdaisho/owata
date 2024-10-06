@@ -1,4 +1,5 @@
 import { Application } from "oak/application"
+import { isHttpError } from "oak/commons/http_errors"
 import router from "./src/router.ts"
 
 const app = new Application()
@@ -15,10 +16,14 @@ app.use(async (context, next) => {
 })
 app.use(router.routes())
 app.use(router.allowedMethods())
-app.use((context) => {
-  if (context.response.status === 404) {
-    context.response.status = 404
-    context.response.body = { message: "Not Found" }
+app.use(async (ctx, next) => {
+  try {
+    await next()
+  } catch (err) {
+    if (isHttpError(err)) {
+      ctx.throw(err.status, err.message)
+    }
+    throw err
   }
 })
 

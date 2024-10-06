@@ -1,0 +1,16 @@
+<h2>{{ title }}</h2>
+<p>{{ subtitle }}</p>
+
+<form action="/decrypt" method="post" id="decryption-form">
+  <label for="decrypt">Decrypt</label>
+  <textarea
+    name="encoded-txt"
+    id="decrypt"
+    rows="10"
+    cols="100"
+  ></textarea>
+
+  <button type="submit">Submit</button>
+</form>
+
+<textarea id="decrypted" rows="40" cols="100"></textarea>

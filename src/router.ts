@@ -1,44 +1,59 @@
 import { Router } from "oak/router"
-import { decrypt, encrypt, replaceValue } from "./lib/utils.ts"
+import { decrypt, encrypt, render } from "./lib/utils.ts"
 
 const router = new Router()
 const decoder = new TextDecoder("utf-8")
 
+const _layout = await Deno.readFile("src/html/layout.html")
+
 export default router
-  .get("/", async (context) => {
-    const data = await Deno.readFile("index.html")
-    const html = decoder.decode(data)
-    context.response.headers.set("Content-Type", "text/html")
-    context.response.body = html
+  .get("/", async ({ response }) => {
+    const [_head, _body] = await Promise.all([
+      Deno.readFile("src/html/head.html"),
+      Deno.readFile("src/pages/decryption.html"),
+    ])
+    const head = render(decoder.decode(_head), {
+      css: "styles.css",
+      script: "decrypt.js",
+    })
+    const body = render(decoder.decode(_body), {
+      title: "Hey",
+      subtitle: "Home Page",
+    })
+
+    response.headers.set("Content-Type", "text/html")
+    response.body = render(decoder.decode(_layout), {
+      head,
+      body,
+    })
   })
   .get("/encryption", async ({ response }) => {
-    const html = await Deno.readFile("html.html")
-    const head = await Deno.readFile("head.html")
-    const body = await Deno.readFile("encryption.html")
-
-    const htmlHead = replaceValue(decoder.decode(head), {
+    const [_head, _body] = await Promise.all([
+      Deno.readFile("src/html/head.html"),
+      Deno.readFile("src/pages/encryption.html"),
+    ])
+    const head = render(decoder.decode(_head), {
       css: "styles2.css",
       script: "encrypt.js",
     })
-    const htmlBody = replaceValue(decoder.decode(body), {
-      head: htmlHead,
+    const body = render(decoder.decode(_body), {
       title: "Encrypt your secret",
       subtitle: "Encryption Page!",
     })
 
-    response.body = replaceValue(decoder.decode(html), {
-      content: htmlHead + htmlBody,
+    response.body = render(decoder.decode(_layout), {
+      head,
+      body,
     })
   })
-  .post("/encrypt", async ({ request, response }) => {
-    console.log("==>", "======================== oooo")
-    const res = await request.body.formData()
-    const url = res.get("raw-text")
-    let result = ""
-    if (typeof url === "string") {
-      result = encrypt(url)
+  .post("/encrypt", async (ctx) => {
+    const formData = await ctx.request.body.formData()
+    const text = formData.get("raw-text")
+    if (typeof text !== "string") {
+      ctx.throw(400, "invalid input")
+    } else {
+      ctx.response.body = encrypt(text)
     }
-    response.body = result
   })
   .post("/decrypt", async ({ request, response }) => {
     const res = await request.body.formData()

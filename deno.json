@@ -5,9 +5,9 @@
   "fmt": {
     "semiColons": false
   },
-  "lib": ["esnext", "dom", "dom.iterable"],
+  "lib": ["esnext", "dom", "dom.iterable", "deno.ns"],
   "imports": {
-    "oak/router": "jsr:@oak/oak/router",
-    "oak/application": "jsr:@oak/oak/application"
+    "oak": "jsr:@oak/oak",
+    "oak/commons": "jsr:@oak/commons"
   }
 }

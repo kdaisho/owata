@@ -1,17 +1,12 @@
 import { deflate, inflate } from "https://deno.land/x/compress@v0.4.5/mod.ts"
 
-export function replaceValue(
+export function render(
   html: string,
-  value: { [key: string]: string },
+  props: { [key: string]: string },
 ): string {
-  let output = html
-  for (const key in value) {
-    output = output.replace(
-      new RegExp(`{{\\s?${key}\\s?}}`, "g"),
-      value[key],
-    )
-  }
-  return output
+  return html.replace(/{{(.*)}}/g, (_, key) => {
+    return props[key.trim()]
+  })
 }
 
 let salt: number
