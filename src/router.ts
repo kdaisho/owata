@@ -3,14 +3,13 @@ import { decrypt, encrypt, render } from "./lib/utils.ts"
 
 const router = new Router()
 const decoder = new TextDecoder("utf-8")
-
 const _layout = await Deno.readFile("src/html/layout.html")
 
 export default router
   .get("/", async ({ response }) => {
     const [_head, _body] = await Promise.all([
       Deno.readFile("src/html/head.html"),
-      Deno.readFile("src/pages/decryption.html"),
+      Deno.readFile("src/html/pages/decryption.html"),
     ])
     const head = render(decoder.decode(_head), {
       css: "styles.css",
@@ -30,7 +29,7 @@ export default router
   .get("/encryption", async ({ response }) => {
     const [_head, _body] = await Promise.all([
       Deno.readFile("src/html/head.html"),
-      Deno.readFile("src/pages/encryption.html"),
+      Deno.readFile("src/html/pages/encryption.html"),
     ])
     const head = render(decoder.decode(_head), {
       css: "styles2.css",
@@ -49,18 +48,20 @@ export default router
   .post("/encrypt", async (ctx) => {
     const formData = await ctx.request.body.formData()
     const text = formData.get("raw-text")
+
     if (typeof text !== "string") {
       ctx.throw(400, "invalid input")
     } else {
       ctx.response.body = encrypt(text)
     }
   })
-  .post("/decrypt", async ({ request, response }) => {
-    const res = await request.body.formData()
-    const url = res.get("encoded-txt")
-    let result = ""
-    if (typeof url === "string") {
-      result = decrypt(url)
+  .post("/decrypt", async (ctx) => {
+    const formData = await ctx.request.body.formData()
+    const text = formData.get("encoded-txt")
+
+    if (typeof text !== "string") {
+      ctx.throw(400, "invalid input")
+    } else {
+      ctx.response.body = decrypt(text)
     }
-    response.body = result
   })
