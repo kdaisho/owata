@@ -8,23 +8,17 @@
     <script src="app.js" type="module" defer></script>
   </head>
   <body>
-    <h1>\(^o^)/ owata</h1>
-
-    <form action="/encrypt" method="post" id="encryption-form">
-      <label for="encrypt">Encrypt</label>
-      <textarea
-        name="raw-text"
-        id="encrypt"
-        rows="10"
-        cols="100"
-      ></textarea>
-
-      <button type="submit">Submit</button>
-    </form>
-
-    <textarea id="encrypted" rows="40" cols="100"></textarea>
-
-    <br />
+    <header>
+      <h1>\(^o^)/ owata</h1>
+      <nav>
+        <a id="decrypt" href="/">
+          Decryption
+        </a>
+        <a id="encryption" href="/encryption">
+          Encryption
+        </a>
+      </nav>
+    </header>
 
     <form action="/decrypt" method="post" id="decryption-form">
       <label for="decrypt">Decrypt</label>

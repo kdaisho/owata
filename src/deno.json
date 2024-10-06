@@ -5,7 +5,9 @@
   "fmt": {
     "semiColons": false
   },
-  "lib": ["esnext", "dom", "dom.iterable"],
+  "compilerOptions": {
+    "lib": ["dom", "esnext", "dom.iterable", "deno.ns"]
+  },
   "imports": {
     "oak/router": "jsr:@oak/oak/router",
     "oak/application": "jsr:@oak/oak/application"
