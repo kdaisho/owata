@@ -21,8 +21,8 @@ export default router
       script: "decrypt.js",
     })
     const body = render(decoder.decode(_body), {
-      title: "unlock your stuff",
-      subtitle: "paste your encrypted key here to decode your secret message",
+      title: "get your stuff back",
+      subtitle: "paste your encrypted key here to decode your secret",
     })
 
     response.headers.set("Content-Type", "text/html")
@@ -44,8 +44,8 @@ export default router
       script: "encrypt.js",
     })
     const body = render(decoder.decode(_body), {
-      title: "Dump your thing",
-      subtitle: "Turn your information into encrypted code",
+      title: "dump your thing",
+      subtitle: "turn your information into encrypted code",
     })
 
     response.body = render(decoder.decode(_layout), {
