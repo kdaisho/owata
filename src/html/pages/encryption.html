@@ -1,11 +1,20 @@
-<h2>{{ title }}</h2>
-<p>{{ subtitle }}</p>
+<div class="content">
+  <hgroup>
+    <h2>{{ title }}</h2>
+    <p>{{ subtitle }}</p>
+  </hgroup>
 
-<form action="/encrypt" method="post" id="encryption-form">
-  <label for="encrypt">Encrypt</label>
-  <textarea name="raw-text" id="encrypt" rows="10" cols="100"></textarea>
+  <form action="/encrypt" method="post" id="encryption-form">
+    <label for="encrypt">encrypt</label>
+    <textarea name="raw-text" id="encrypt" rows="10" cols="100"></textarea>
 
-  <button type="submit">Submit</button>
-</form>
+    <button type="submit">s... submit?</button>
+  </form>
 
-<textarea id="encrypted" rows="40" cols="100"></textarea>
+  <textarea
+    id="encrypted"
+    rows="40"
+    cols="100"
+    placeholder="your stuff will appear here"
+  ></textarea>
+</div>

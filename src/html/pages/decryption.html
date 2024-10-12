@@ -1,16 +1,25 @@
-<h2>{{ title }}</h2>
-<p>{{ subtitle }}</p>
+<div class="content">
+  <hgroup>
+    <h2>{{ title }}</h2>
+    <p>{{ subtitle }}</p>
+  </hgroup>
 
-<form action="/decrypt" method="post" id="decryption-form">
-  <label for="decrypt">Decrypt</label>
+  <form action="/decrypt" method="post" id="decryption-form">
+    <label for="decrypt">decrypt</label>
+    <textarea
+      name="encoded-txt"
+      id="decrypt"
+      rows="10"
+      cols="100"
+    ></textarea>
+
+    <button type="submit">s... submit?</button>
+  </form>
+
   <textarea
-    name="encoded-txt"
-    id="decrypt"
-    rows="10"
+    id="decrypted"
+    rows="40"
     cols="100"
+    placeholder="your stuff will appear here"
   ></textarea>
-
-  <button type="submit">Submit</button>
-</form>
-
-<textarea id="decrypted" rows="40" cols="100"></textarea>
+</div>
