@@ -3,16 +3,21 @@ import { decrypt, encrypt, render } from "./lib/utils.ts"
 
 const router = new Router()
 const decoder = new TextDecoder("utf-8")
-const _layout = await Deno.readFile("src/html/layout.html")
 
 export default router
-  .get("/", async ({ response }) => {
-    const [_head, _body] = await Promise.all([
+  .get("/", ({ response }) => {
+    response.redirect("/decryption")
+  })
+  .get("/decryption", async ({ response }) => {
+    const [_layout, _head, _gcss, _css, _body] = await Promise.all([
+      Deno.readFile("src/html/layout.html"),
       Deno.readFile("src/html/head.html"),
+      Deno.readFile("src/css/global.css"),
+      Deno.readFile("src/css/decryption.css"),
       Deno.readFile("src/html/pages/decryption.html"),
     ])
     const head = render(decoder.decode(_head), {
-      css: "styles.css",
+      css: `<style>${decoder.decode(_gcss) + decoder.decode(_css)}</style>`,
       script: "decrypt.js",
     })
     const body = render(decoder.decode(_body), {
@@ -27,12 +32,15 @@ export default router
     })
   })
   .get("/encryption", async ({ response }) => {
-    const [_head, _body] = await Promise.all([
+    const [_layout, _head, _gcss, _css, _body] = await Promise.all([
+      Deno.readFile("src/html/layout.html"),
       Deno.readFile("src/html/head.html"),
+      Deno.readFile("src/css/global.css"),
+      Deno.readFile("src/css/encryption.css"),
       Deno.readFile("src/html/pages/encryption.html"),
     ])
     const head = render(decoder.decode(_head), {
-      css: "styles2.css",
+      css: `<style>${decoder.decode(_gcss) + decoder.decode(_css)}</style>`,
       script: "encrypt.js",
     })
     const body = render(decoder.decode(_body), {
