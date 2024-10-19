@@ -137,7 +137,7 @@ form {
 }
 
 .modal {
-  background: #fff;
+  background: var(--lightgray);
   border: 1px solid var(--black);
   max-width: 680px;
   padding: 2rem;
@@ -146,4 +146,12 @@ form {
 
 body:has(#modal) .app-container {
   filter: blur(3px);
+}
+
+.backdrop:has(.content[data-is-encryption="true"]) {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.modal:has(.content[data-is-encryption="true"]) {
+  background: var(--lime);
 }
