@@ -70,6 +70,9 @@ body {
   padding: 1rem 2rem;
   display: grid;
   gap: 2rem;
+  grid-template-rows: 50px auto;
+  height: 100vh;
+  border: 1px solid red;
 }
 
 header {
@@ -84,7 +87,7 @@ nav {
   gap: 1rem;
 }
 
-.wrapper {
+.app-container {
   max-width: 768px;
   margin: 0 auto;
   width: 100%;
@@ -120,4 +123,27 @@ form {
 
 .app-title a {
   text-decoration: none;
+}
+
+.backdrop {
+  align-items: center;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+.modal {
+  background: #fff;
+  border: 1px solid var(--black);
+  max-width: 680px;
+  padding: 2rem;
+  width: 100%;
+}
+
+body:has(#modal) .app-container {
+  filter: blur(3px);
 }

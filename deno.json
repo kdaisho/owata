@@ -5,9 +5,12 @@
   "fmt": {
     "semiColons": false
   },
-  "lib": ["esnext", "dom", "dom.iterable", "deno.ns"],
   "imports": {
     "oak": "jsr:@oak/oak",
     "oak/commons": "jsr:@oak/commons"
+  },
+  "compilerOptions": {
+    "checkJs": true,
+    "lib": ["dom", "dom.iterable", "deno.ns"]
   }
 }
