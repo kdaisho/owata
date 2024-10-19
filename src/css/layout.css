@@ -147,3 +147,7 @@ form {
 body:has(#modal) .app-container {
   filter: blur(3px);
 }
+
+.backdrop:has(.content[data-is-encryption="true"]) {
+  background: rgba(0, 0, 0, 0.4);
+}

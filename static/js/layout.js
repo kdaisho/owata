@@ -40,6 +40,7 @@ document.querySelector("button#encryption")?.addEventListener(
     await renderModal({
       action: "/encrypt",
       label: "let's encrypt",
+      isEncryption: true,
     })
 
     formElem?.addEventListener(
@@ -53,13 +54,15 @@ document.querySelector("button#encryption")?.addEventListener(
  * @param {Object} param
  * @param {string} param.action
  * @param {string} param.label
+ * @param {boolean} [param.isEncryption]
  */
-async function renderModal({ action, label }) {
+async function renderModal({ action, label, isEncryption = false }) {
   const response = await fetch("/get-form", {
     method: "POST",
     body: JSON.stringify({
       action,
       label,
+      isEncryption,
     }),
   })
   const html = await response.text()

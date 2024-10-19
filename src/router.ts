@@ -25,11 +25,12 @@ export default router
     })
   })
   .post("/get-form", async ({ request, response }) => {
-    const { action, label } = await request.body.json()
+    const { action, label, isEncryption } = await request.body.json()
     const blob = await Deno.readFile("src/html/form.html")
     response.body = bindValues(decoder.decode(blob), {
       action,
       label,
+      isEncryption,
     })
   })
   .get("/decryption", async ({ response }) => {
