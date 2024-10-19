@@ -1,6 +1,6 @@
 import { deflate, inflate } from "https://deno.land/x/compress@v0.4.5/mod.ts"
 
-export function render(
+export function bindValues(
   html: string,
   props: { [key: string]: string },
 ): string {
