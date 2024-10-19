@@ -24,10 +24,13 @@ export default router
       main: decoder.decode(_main),
     })
   })
-  .get("/form", async ({ response }) => {
+  .post("/get-form", async ({ request, response }) => {
+    const { action, label } = await request.body.json()
     const blob = await Deno.readFile("src/html/form.html")
-    console.log("==>", blob)
-    response.body = decoder.decode(blob)
+    response.body = bindValues(decoder.decode(blob), {
+      action,
+      label,
+    })
   })
   .get("/decryption", async ({ response }) => {
     const [_layout, _head, _gcss, _css, _body] = await Promise.all([
@@ -78,7 +81,7 @@ export default router
     "/encrypt",
     async (ctx) => {
       const formData = await ctx.request.body.formData()
-      const text = formData.get("raw-text")
+      const text = formData.get("input-value")
 
       if (typeof text !== "string") {
         ctx.throw(400, "invalid input")
@@ -89,7 +92,7 @@ export default router
   )
   .post("/decrypt", async (ctx) => {
     const formData = await ctx.request.body.formData()
-    const text = formData.get("encoded-txt")
+    const text = formData.get("input-value")
 
     if (typeof text !== "string") {
       ctx.throw(400, "invalid input")

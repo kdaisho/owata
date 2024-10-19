@@ -1,3 +1,5 @@
+import $store from "./store.js"
+
 const modal = document.createElement("div")
 modal.id = "modal"
 modal.className = "modal"
@@ -13,14 +15,84 @@ modal.addEventListener("click", (event) => {
   event.stopPropagation()
 })
 
-document.querySelector("button#decrypt")?.addEventListener(
+/**
+ * @type {HTMLFormElement | null}
+ */
+let formElem
+
+document.querySelector("button#decryption")?.addEventListener(
   "click",
   async () => {
-    const response = await fetch("/form")
-    const html = await response.text()
-
-    modal.innerHTML = html
-    backdrop.append(modal)
-    document.body.append(backdrop)
+    await renderModal({
+      action: "/decrypt",
+      label: "decrypt!",
+    })
+    formElem?.addEventListener(
+      "submit",
+      submit,
+    )
   },
 )
+
+document.querySelector("button#encryption")?.addEventListener(
+  "click",
+  async () => {
+    await renderModal({
+      action: "/encrypt",
+      label: "let's encrypt",
+    })
+
+    formElem?.addEventListener(
+      "submit",
+      submit,
+    )
+  },
+)
+
+/**
+ * @param {Object} param
+ * @param {string} param.action
+ * @param {string} param.label
+ */
+async function renderModal({ action, label }) {
+  const response = await fetch("/get-form", {
+    method: "POST",
+    body: JSON.stringify({
+      action,
+      label,
+    }),
+  })
+  const html = await response.text()
+
+  modal.innerHTML = html
+  backdrop.append(modal)
+  document.body.append(backdrop)
+  formElem = modal.querySelector("#form")
+}
+
+/**
+ * @param {SubmitEvent} event
+ */
+async function submit(event) {
+  event.preventDefault()
+  if (!formElem || !(event.target instanceof HTMLFormElement)) return
+
+  try {
+    const response = await fetch(formElem.action, {
+      method: "POST",
+      body: new FormData(event.target),
+    })
+    if (response.ok) {
+      $store.encrypted = await response.text()
+      const textarea = formElem.querySelector("#output")
+      if (textarea instanceof HTMLTextAreaElement) {
+        textarea.value = $store.encrypted
+      }
+    } else {
+      throw new Error(response.status.toString())
+    }
+  } catch (err) {
+    /* directly ends up here only when the promise is rejected: network or CORS errors */
+    console.error(err)
+  }
+}
