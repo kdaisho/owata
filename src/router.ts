@@ -9,13 +9,13 @@ export default router
     const [_layout, _head, _gcss, _css, _main] = await Promise.all([
       Deno.readFile("src/html/layout.html"),
       Deno.readFile("src/html/head.html"),
-      Deno.readFile("src/css/global.css"),
+      Deno.readFile("src/css/layout.css"),
       Deno.readFile("src/css/main.css"),
       Deno.readFile("src/html/main.html"),
     ])
     const head = bindValues(decoder.decode(_head), {
       css: `<style>${decoder.decode(_gcss) + decoder.decode(_css)}</style>`,
-      script: "decrypt.js",
+      script: "main.js",
     })
 
     response.headers.set("Content-Type", "text/html")
@@ -24,11 +24,16 @@ export default router
       main: decoder.decode(_main),
     })
   })
+  .get("/form", async ({ response }) => {
+    const blob = await Deno.readFile("src/html/form.html")
+    console.log("==>", blob)
+    response.body = decoder.decode(blob)
+  })
   .get("/decryption", async ({ response }) => {
     const [_layout, _head, _gcss, _css, _body] = await Promise.all([
       Deno.readFile("src/html/layout.html"),
       Deno.readFile("src/html/head.html"),
-      Deno.readFile("src/css/global.css"),
+      Deno.readFile("src/css/layout.css"),
       Deno.readFile("src/css/decryption.css"),
       Deno.readFile("src/html/pages/decryption.html"),
     ])
@@ -51,7 +56,7 @@ export default router
     const [_layout, _head, _gcss, _css, _body] = await Promise.all([
       Deno.readFile("src/html/layout.html"),
       Deno.readFile("src/html/head.html"),
-      Deno.readFile("src/css/global.css"),
+      Deno.readFile("src/css/layout.css"),
       Deno.readFile("src/css/encryption.css"),
       Deno.readFile("src/html/pages/encryption.html"),
     ])
