@@ -1,6 +1,10 @@
-<div class="content" data-is-encryption="{{ isEncryption }}">
+<div class="form-container" data-is-encryption="{{ isEncryption }}">
   <form action="{{ action }}" method="post" id="form">
-    <label for="input">{{ label }}</label>
+    <div class="form-header">
+      <label for="input">{{ label }}</label>
+      <button type="button" id="switch">switch →</button>
+    </div>
+
     <textarea
       name="input-value"
       id="input"

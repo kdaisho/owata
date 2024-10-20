@@ -33,51 +33,6 @@ export default router
       isEncryption,
     })
   })
-  .get("/decryption", async ({ response }) => {
-    const [_layout, _head, _gcss, _css, _body] = await Promise.all([
-      Deno.readFile("src/html/layout.html"),
-      Deno.readFile("src/html/head.html"),
-      Deno.readFile("src/css/layout.css"),
-      Deno.readFile("src/css/decryption.css"),
-      Deno.readFile("src/html/pages/decryption.html"),
-    ])
-    const head = bindValues(decoder.decode(_head), {
-      css: `<style>${decoder.decode(_gcss) + decoder.decode(_css)}</style>`,
-      script: "decrypt.js",
-    })
-    const body = bindValues(decoder.decode(_body), {
-      title: "get your stuff back",
-      subtitle: "paste your encrypted key here to decode your secret",
-    })
-
-    response.headers.set("Content-Type", "text/html")
-    response.body = bindValues(decoder.decode(_layout), {
-      head,
-      body,
-    })
-  })
-  .get("/encryption", async ({ response }) => {
-    const [_layout, _head, _gcss, _css, _body] = await Promise.all([
-      Deno.readFile("src/html/layout.html"),
-      Deno.readFile("src/html/head.html"),
-      Deno.readFile("src/css/layout.css"),
-      Deno.readFile("src/css/encryption.css"),
-      Deno.readFile("src/html/pages/encryption.html"),
-    ])
-    const head = bindValues(decoder.decode(_head), {
-      css: `<style>${decoder.decode(_gcss) + decoder.decode(_css)}</style>`,
-      script: "encrypt.js",
-    })
-    const body = bindValues(decoder.decode(_body), {
-      title: "dump your thing",
-      subtitle: "turn your information into encrypted code",
-    })
-
-    response.body = bindValues(decoder.decode(_layout), {
-      head,
-      body,
-    })
-  })
   .post(
     "/encrypt",
     async (ctx) => {

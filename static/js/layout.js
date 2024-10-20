@@ -71,6 +71,24 @@ async function renderModal({ action, label, isEncryption = false }) {
   backdrop.append(modal)
   document.body.append(backdrop)
   formElem = modal.querySelector("#form")
+  formElem?.querySelector("#input")?.addEventListener("keydown", (e) => {
+    if (e instanceof KeyboardEvent && e.key === "Enter") {
+      e.preventDefault()
+      formElem?.requestSubmit()
+    }
+  })
+
+  formElem?.querySelector("#switch")?.addEventListener("click", async () => {
+    await renderModal({
+      action: isEncryption ? "/decrypt" : "/encrypt",
+      label: isEncryption ? "decrypt!" : "let's encrypt",
+      ...(!isEncryption && { isEncryption: true }),
+    })
+    formElem?.addEventListener(
+      "submit",
+      submit,
+    )
+  })
 }
 
 /**
