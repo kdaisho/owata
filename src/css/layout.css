@@ -126,6 +126,19 @@ button {
     padding: 0.5rem;
   }
 
+  textarea:focus-visible {
+    outline-color: var(--black);
+  }
+
+  .form-container[data-is-encryption="true"] textarea {
+    background: var(--black);
+    color: var(--lightgray);
+  }
+
+  .form-container[data-is-encryption="true"] textarea:focus-visible {
+    outline-color: var(--lightgray);
+  }
+
   .backdrop {
     align-items: center;
     display: flex;
@@ -140,7 +153,9 @@ button {
   .modal {
     background: var(--lightgray);
     border: 1px solid var(--black);
+    max-height: 90%;
     max-width: 680px;
+    overflow-y: scroll;
     padding: 2rem;
     width: 100%;
   }
@@ -150,10 +165,10 @@ button {
   }
 
   .backdrop:has(.form-container[data-is-encryption="true"]) {
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.6);
   }
 
   .modal:has(.form-container[data-is-encryption="true"]) {
-    background: var(--lime);
+    background: var(--gray);
   }
 }
