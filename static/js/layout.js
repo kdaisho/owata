@@ -77,12 +77,24 @@ async function renderModal(
   backdrop.append(modal)
   document.body.append(backdrop)
   formElem = modal.querySelector("#form")
+
   formElem?.querySelector("#input")?.addEventListener("keydown", (e) => {
     if (e instanceof KeyboardEvent && e.key === "Enter") {
       e.preventDefault()
       formElem?.requestSubmit()
     }
   })
+
+  formElem?.querySelector("#output")?.addEventListener(
+    "dblclick",
+    (e) => {
+      if (e.target instanceof HTMLTextAreaElement) {
+        navigator.clipboard.writeText(e.target.value).then(() => {
+          console.info("Copied")
+        })
+      }
+    },
+  )
 
   formElem?.querySelector("#switch")?.addEventListener("click", async () => {
     await renderModal({
