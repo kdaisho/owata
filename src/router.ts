@@ -3,37 +3,51 @@ import { bindValues, decrypt, encrypt } from "./lib/utils.ts"
 
 const router = new Router()
 const decoder = new TextDecoder("utf-8")
+const dev = Boolean(Deno.env.get("ENV"))
+const cache = {
+  main: "",
+  modal: "",
+}
 
 export default router
   .get("/", async ({ response }) => {
-    const [_layout, _head, _gcss, _css, _main] = await Promise.all([
-      Deno.readFile("src/html/layout.html"),
-      Deno.readFile("src/html/head.html"),
-      Deno.readFile("src/css/layout.css"),
-      Deno.readFile("src/css/main.css"),
-      Deno.readFile("src/html/main.html"),
-    ])
-    const head = bindValues(decoder.decode(_head), {
-      css: `<style>${decoder.decode(_gcss) + decoder.decode(_css)}</style>`,
-      script: "main.js",
-    })
+    if (dev || !cache.main) {
+      const [_layout, _head, _gcss, _css, _main] = await Promise.all([
+        Deno.readFile("src/html/layout.html"),
+        Deno.readFile("src/html/head.html"),
+        Deno.readFile("src/css/layout.css"),
+        Deno.readFile("src/css/main.css"),
+        Deno.readFile("src/html/main.html"),
+      ])
+      const head = bindValues(decoder.decode(_head), {
+        css: `<style>${decoder.decode(_gcss) + decoder.decode(_css)}</style>`,
+      })
+      response.headers.set("Content-Type", "text/html")
+      cache.main = bindValues(decoder.decode(_layout), {
+        head,
+        main: decoder.decode(_main),
+      })
+    }
 
-    response.headers.set("Content-Type", "text/html")
-    response.body = bindValues(decoder.decode(_layout), {
-      head,
-      main: decoder.decode(_main),
-    })
+    response.body = cache.main
   })
   .post("/get-form", async ({ request, response }) => {
-    const { action, label, buttonLabel, isEncryption } = await request.body
-      .json()
-    const blob = await Deno.readFile("src/html/form.html")
-    response.body = bindValues(decoder.decode(blob), {
-      action,
-      label,
-      buttonLabel,
-      isEncryption,
-    })
+    if (dev || !cache.modal) {
+      const { action, label, buttonLabel, isEncryption } = await request.body
+        .json()
+
+      cache.modal = bindValues(
+        decoder.decode(await Deno.readFile("src/html/form.html")),
+        {
+          action,
+          label,
+          buttonLabel,
+          isEncryption,
+        },
+      )
+    }
+
+    response.body = cache.modal
   })
   .post(
     "/encrypt",
