@@ -3,7 +3,7 @@ import { bindValues, decrypt, encrypt } from "./lib/utils.ts"
 
 const router = new Router()
 const decoder = new TextDecoder("utf-8")
-const dev = Boolean(Deno.env.get("ENV"))
+const dev = Deno.env.get("ENV") === "development"
 const cache = {
   main: "",
   modal: "",

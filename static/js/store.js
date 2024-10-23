@@ -2,12 +2,14 @@
  * @typedef {Object} Store
  * @property {string} encrypted
  * @property {string} decrypted
+ * @property {string} activeMode
  */
 
 /** @type {Store} */
 const store = {
   encrypted: "",
   decrypted: "",
+  activeMode: "",
 }
 
 const $store = new Proxy(store, {

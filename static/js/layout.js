@@ -9,10 +9,21 @@ backdrop.className = "backdrop"
 
 backdrop.addEventListener("click", () => {
   backdrop.remove()
+  $store.activeMode = ""
 })
 
 modal.addEventListener("click", (event) => {
   event.stopPropagation()
+})
+
+document.addEventListener("keydown", async (event) => {
+  if (event.key === "Escape") {
+    backdrop.remove()
+    $store.activeMode = ""
+  }
+  if (backdrop.hasChildNodes() && event.key === "ArrowRight" && event.metaKey) {
+    await switchMode($store.activeMode === "decryption" ? false : true)
+  }
 })
 
 /**
@@ -32,6 +43,7 @@ document.querySelector("button#decryption")?.addEventListener(
       "submit",
       submit,
     )
+    $store.activeMode = "decryption"
   },
 )
 
@@ -44,11 +56,11 @@ document.querySelector("button#encryption")?.addEventListener(
       buttonLabel: "encrypt",
       isEncryption: true,
     })
-
     formElem?.addEventListener(
       "submit",
       submit,
     )
+    $store.activeMode = "encryption"
   },
 )
 
@@ -97,17 +109,23 @@ async function renderModal(
   )
 
   formElem?.querySelector("#switch")?.addEventListener("click", async () => {
-    await renderModal({
-      action: isEncryption ? "/decrypt" : "/encrypt",
-      label: isEncryption ? "decrypt!" : "let's encrypt",
-      buttonLabel: isEncryption ? "decrypt" : "encrypt",
-      ...(!isEncryption && { isEncryption: true }),
-    })
-    formElem?.addEventListener(
-      "submit",
-      submit,
-    )
+    await switchMode(isEncryption)
   })
+}
+
+/** @param {boolean} isEncryption */
+async function switchMode(isEncryption) {
+  await renderModal({
+    action: isEncryption ? "/decrypt" : "/encrypt",
+    label: isEncryption ? "decrypt!" : "let's encrypt",
+    buttonLabel: isEncryption ? "decrypt" : "encrypt",
+    ...(!isEncryption && { isEncryption: true }),
+  })
+  formElem?.addEventListener(
+    "submit",
+    submit,
+  )
+  $store.activeMode = isEncryption ? "decryption" : "encryption"
 }
 
 /**
