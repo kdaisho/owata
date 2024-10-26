@@ -50,8 +50,7 @@ export default router
   .post(
     "/encrypt",
     async (ctx) => {
-      const formData = await ctx.request.body.formData()
-      const text = formData.get("input-value")
+      const text = await ctx.request.body.text()
 
       if (typeof text !== "string") {
         ctx.throw(400, "invalid input")
@@ -61,8 +60,7 @@ export default router
     },
   )
   .post("/decrypt", async (ctx) => {
-    const formData = await ctx.request.body.formData()
-    const text = formData.get("input-value")
+    const text = await ctx.request.body.text()
 
     if (typeof text !== "string") {
       ctx.throw(400, "invalid input")

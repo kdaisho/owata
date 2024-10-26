@@ -139,13 +139,23 @@ async function switchMode(isEncryption) {
  */
 async function submit(event) {
   event.preventDefault()
-  if (!formElem || !(event.target instanceof HTMLFormElement)) return
+
+  if (
+    !formElem || !(event.target instanceof HTMLFormElement)
+  ) return
+
+  const text = /** @type {string} */ ((new FormData(event.target)).get(
+    "input-value",
+  ))
+
+  if (!text.trim()) return
 
   try {
     const response = await fetch(formElem.action, {
       method: "POST",
-      body: new FormData(event.target),
+      body: text,
     })
+
     if (response.ok) {
       $store.encrypted = await response.text()
       const textarea = formElem.querySelector("#output")
