@@ -74,7 +74,7 @@ document.querySelector("button#encryption")?.addEventListener(
 async function renderModal(
   { action, label, buttonLabel, isEncryption = false },
 ) {
-  const response = await fetch("/get-form", {
+  const response = await fetch("/form", {
     method: "POST",
     body: JSON.stringify({
       action,
@@ -83,14 +83,18 @@ async function renderModal(
       isEncryption,
     }),
   })
-  const html = await response.text()
 
-  modal.innerHTML = html
+  modal.innerHTML = await response.text()
   backdrop.append(modal)
   document.body.append(backdrop)
   formElem = modal.querySelector("#form")
+  /**
+   * @type {HTMLTextAreaElement | null | undefined}
+   */
+  const input = formElem?.querySelector("#input")
+  input?.focus()
 
-  formElem?.querySelector("#input")?.addEventListener("keydown", (e) => {
+  input?.addEventListener("keydown", (e) => {
     if (e instanceof KeyboardEvent && e.key === "Enter") {
       e.preventDefault()
       formElem?.requestSubmit()
@@ -113,7 +117,9 @@ async function renderModal(
   })
 }
 
-/** @param {boolean} isEncryption */
+/**
+ * @param {boolean} isEncryption
+ */
 async function switchMode(isEncryption) {
   await renderModal({
     action: isEncryption ? "/decrypt" : "/encrypt",
@@ -149,8 +155,28 @@ async function submit(event) {
     } else {
       throw new Error(response.status.toString())
     }
+
+    toast("Copied to clipboard!")
+    navigator.clipboard.writeText($store.encrypted)
   } catch (err) {
-    /* directly ends up here only when the promise is rejected: network or CORS errors */
+    // ends up here only when the promise is rejected: network or CORS errors
     console.error(err)
   }
+}
+
+function toast(text = "") {
+  const div = document.createElement("div")
+  const p = document.createElement("p")
+  p.classList.add("text-small")
+  p.textContent = text
+  div.appendChild(p)
+  div.classList.add("toast")
+  document.body.appendChild(div)
+
+  setTimeout(() => {
+    const toast = document.body.querySelector("div.toast")
+    if (toast) {
+      toast.remove()
+    }
+  }, 3000)
 }

@@ -19,19 +19,17 @@ export default router
         Deno.readFile("src/css/main.css"),
         Deno.readFile("src/html/main.html"),
       ])
-      const head = bindValues(decoder.decode(_head), {
-        css: `<style>${decoder.decode(_gcss) + decoder.decode(_css)}</style>`,
-      })
-      response.headers.set("Content-Type", "text/html")
       cache.main = bindValues(decoder.decode(_layout), {
-        head,
+        head: bindValues(decoder.decode(_head), {
+          css: `<style>${decoder.decode(_gcss) + decoder.decode(_css)}</style>`,
+        }),
         main: decoder.decode(_main),
       })
     }
 
     response.body = cache.main
   })
-  .post("/get-form", async ({ request, response }) => {
+  .post("/form", async ({ request, response }) => {
     if (dev || !cache.modal) {
       const { action, label, buttonLabel, isEncryption } = await request.body
         .json()

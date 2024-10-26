@@ -38,7 +38,6 @@ img {
   --lime: hsl(101, 85%, 56%);
   --olive: hsl(56.09, 48.94%, 36.86%);
   --brown: hsl(44.29, 48.84%, 16.86%);
-  --font-color: var(--lime);
 }
 
 h1 {
@@ -103,6 +102,30 @@ button {
   text-decoration: none;
 }
 
+.toast {
+  align-items: center;
+  animation: slide-in 0.2s 0.25s ease-out forwards;
+  background: #fff;
+  border-radius: 6px;
+  bottom: 50px;
+  box-shadow: 20px 20px 60px #bebebe, -20px -20px 60px #ffffff;
+  display: flex;
+  font-size: var(--small);
+  height: 40px;
+  justify-content: flex-start;
+  padding: 0.25rem 1rem;
+  position: fixed;
+  right: -100%;
+  width: 200px;
+  z-index: 30;
+}
+
+@keyframes slide-in {
+  to {
+    right: 20px;
+  }
+}
+
 @layer modal {
   .form-container {
     display: flex;
@@ -164,11 +187,7 @@ button {
     filter: blur(3px);
   }
 
-  .backdrop:has(.form-container[data-is-encryption="true"]) {
-    background: rgba(0, 0, 0, 0.6);
-  }
-
   .modal:has(.form-container[data-is-encryption="true"]) {
-    background: var(--gray);
+    background: var(--lightgray);
   }
 }
