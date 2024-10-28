@@ -71,7 +71,6 @@ body {
   gap: 2rem;
   grid-template-rows: 50px auto;
   height: 100vh;
-  border: 1px solid red;
 }
 
 header {
@@ -127,7 +126,7 @@ button {
 }
 
 @layer modal {
-  .form-container {
+  .modal-inner {
     display: flex;
     flex-flow: column nowrap;
     gap: 2rem;
@@ -153,12 +152,12 @@ button {
     outline-color: var(--black);
   }
 
-  .form-container[data-is-encryption="true"] textarea {
+  .modal-inner[data-is-encryption="true"] textarea {
     background: var(--black);
     color: var(--lightgray);
   }
 
-  .form-container[data-is-encryption="true"] textarea:focus-visible {
+  .modal-inner[data-is-encryption="true"] textarea:focus-visible {
     outline-color: var(--lightgray);
   }
 
@@ -187,7 +186,7 @@ button {
     filter: blur(3px);
   }
 
-  .modal:has(.form-container[data-is-encryption="true"]) {
+  .modal:has(.modal-inner[data-is-encryption="true"]) {
     background: var(--lightgray);
   }
 }

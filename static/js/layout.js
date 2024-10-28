@@ -9,20 +9,17 @@ backdrop.className = "backdrop"
 
 backdrop.addEventListener("click", () => {
   backdrop.remove()
-  $store.activeMode = ""
+  $store.activeMode = null
 })
 
 modal.addEventListener("click", (event) => {
   event.stopPropagation()
 })
 
-document.addEventListener("keydown", async (event) => {
+document.addEventListener("keydown", (event) => {
   if (event.key === "Escape") {
     backdrop.remove()
-    $store.activeMode = ""
-  }
-  if (backdrop.hasChildNodes() && event.key === "ArrowRight" && event.metaKey) {
-    await switchMode($store.activeMode === "decryption" ? false : true)
+    $store.activeMode = null
   }
 })
 
@@ -91,10 +88,10 @@ async function renderModal(
   /**
    * @type {HTMLTextAreaElement | null | undefined}
    */
-  const input = formElem?.querySelector("#input")
-  input?.focus()
+  $store.encryptionInputTextarea = formElem?.querySelector("#input")
+  $store.encryptionInputTextarea?.focus()
 
-  input?.addEventListener("keydown", (e) => {
+  $store.encryptionInputTextarea?.addEventListener("keydown", (e) => {
     if (e instanceof KeyboardEvent && e.key === "Enter") {
       e.preventDefault()
       formElem?.requestSubmit()
@@ -115,6 +112,27 @@ async function renderModal(
   formElem?.querySelector("#switch")?.addEventListener("click", async () => {
     await switchMode(isEncryption)
   })
+
+  document.querySelector("#output")?.addEventListener("click", async () => {
+    await renderOutputModal()
+  })
+}
+
+async function renderOutputModal() {
+  const response = await fetch("/output", {
+    method: "GET",
+  })
+
+  modal.innerHTML = await response.text()
+  backdrop.append(modal)
+  document.body.append(backdrop)
+
+  const outputTextarea = document.querySelector("#output-textarea")
+  if (outputTextarea instanceof HTMLTextAreaElement) {
+    outputTextarea.value = $store.activeMode === "encryption"
+      ? $store.encrypted.join(" ")
+      : $store.decrypted.join(" ")
+  }
 }
 
 /**
@@ -157,17 +175,20 @@ async function submit(event) {
     })
 
     if (response.ok) {
-      $store.encrypted = await response.text()
+      const text = await response.text()
+      $store.activeMode === "encryption"
+        ? $store.encrypted.push(text)
+        : $store.decrypted.push(text)
       const textarea = formElem.querySelector("#output")
       if (textarea instanceof HTMLTextAreaElement) {
-        textarea.value = $store.encrypted
+        textarea.value = text
       }
     } else {
       throw new Error(response.status.toString())
     }
 
-    toast("Copied to clipboard!")
-    navigator.clipboard.writeText($store.encrypted)
+    if (!$store.encryptionInputTextarea) return
+    $store.encryptionInputTextarea.value = ""
   } catch (err) {
     // ends up here only when the promise is rejected: network or CORS errors
     console.error(err)

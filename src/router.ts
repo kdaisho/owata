@@ -47,6 +47,9 @@ export default router
 
     response.body = cache.modal
   })
+  .get("/output", async ({ response }) => {
+    response.body = decoder.decode(await Deno.readFile("src/html/output.html"))
+  })
   .post(
     "/encrypt",
     async (ctx) => {

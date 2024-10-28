@@ -1,4 +1,4 @@
-<div class="form-container" data-is-encryption="{{ isEncryption }}">
+<div class="modal-inner" data-is-encryption="{{ isEncryption }}">
   <form action="{{ action }}" method="post" id="form">
     <div class="form-header">
       <label for="input">{{ label }}</label>
@@ -14,11 +14,6 @@
 
     <button type="submit">{{buttonLabel}}</button>
 
-    <textarea
-      id="output"
-      rows="20"
-      cols="100"
-      placeholder="your stuff will appear here"
-    ></textarea>
+    <button type="button" id="output">output</button>
   </form>
 </div>
