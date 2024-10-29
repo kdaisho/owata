@@ -103,7 +103,7 @@ async function renderModal(
     (e) => {
       if (e.target instanceof HTMLTextAreaElement) {
         navigator.clipboard.writeText(e.target.value).then(() => {
-          console.info("Copied")
+          console.info("copied")
         })
       }
     },
@@ -132,6 +132,15 @@ async function renderOutputModal() {
     outputTextarea.value = $store.activeMode === "encryption"
       ? $store.encrypted.join(" ")
       : $store.decrypted.join(" ")
+
+    const btn = document.querySelector("#copy-output")
+    if (!btn) return
+
+    btn.addEventListener("click", () => {
+      navigator.clipboard.writeText(outputTextarea.value).then(() =>
+        toast("copied!")
+      )
+    })
   }
 }
 
