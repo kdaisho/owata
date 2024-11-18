@@ -1,27 +1,21 @@
 import { decodeBase64, encodeBase64 } from "jsr:@std/encoding/base64"
 
 const stringKey = Deno.env.get("KEY")
-const stringIv = Deno.env.get("IV")
 
-if (!stringKey || !stringIv) {
+if (!stringKey) {
   throw new Error("key not found")
 }
 
-const arrayBufferKey = decodeBase64(stringKey).buffer
-
-const cryptKey = await crypto.subtle.importKey(
-  "raw",
-  arrayBufferKey,
-  { name: "AES-GCM", length: 256 },
-  false,
-  ["encrypt", "decrypt"],
-)
-
 export async function encrypt(input: string): Promise<string> {
-  if (!stringIv) {
-    throw new Error("iv not found")
-  }
-  const encrypted = await encryptData(input, decodeBase64(stringIv), cryptKey)
+  const randomUint8 = crypto.getRandomValues(new Uint8Array(16))
+  const cryptKey = await crypto.subtle.importKey(
+    "raw",
+    randomUint8.buffer,
+    { name: "AES-GCM", length: 256 },
+    false,
+    ["encrypt"],
+  )
+  const encrypted = await encryptData(input, randomUint8, cryptKey)
   return bufferToString(encrypted)
 }
 
@@ -40,6 +34,13 @@ async function encryptData(
 
 export async function decrypt(input: string): Promise<string> {
   const buffer = stringToBuffer(input)
+  const cryptKey = await crypto.subtle.importKey(
+    "raw",
+    buffer.iv,
+    { name: "AES-GCM", length: 256 },
+    false,
+    ["decrypt"],
+  )
   return await decryptData(buffer.value, buffer.iv, cryptKey)
 }
 
