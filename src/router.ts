@@ -2,19 +2,18 @@ import { Router } from "oak/router"
 import { bindValues } from "./lib/utils.ts"
 import { decrypt, encrypt } from "./lib/crypto.ts"
 
+const stringKey = Deno.env.get("KEY")
+
+if (!stringKey) {
+  throw new Error("Key not found")
+}
+
 const router = new Router()
 const decoder = new TextDecoder("utf-8")
 const dev = Deno.env.get("ENV") === "development"
 const cache = {
   main: "",
   modal: "",
-}
-
-const stringKey = Deno.env.get("KEY")
-const stringIv = Deno.env.get("IV")
-
-if (!stringKey || !stringIv) {
-  throw new Error("key not found")
 }
 
 export default router
@@ -66,7 +65,7 @@ export default router
       if (typeof text !== "string") {
         ctx.throw(400, "invalid input")
       } else {
-        ctx.response.body = await encrypt(text, stringIv)
+        ctx.response.body = await encrypt(text, stringKey)
       }
     },
   )
@@ -76,6 +75,6 @@ export default router
     if (typeof text !== "string") {
       ctx.throw(400, "invalid input")
     } else {
-      ctx.response.body = await decrypt(text)
+      ctx.response.body = await decrypt(text, stringKey)
     }
   })

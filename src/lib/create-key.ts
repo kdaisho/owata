@@ -1,19 +1,17 @@
-// Run only once, store the output to env file to enc/dec
-
+/**
+ * Create Key
+ * Run only once, store the output to env file to enc/dec
+ */
 import { encodeBase64 } from "jsr:@std/encoding/base64"
 
-const key = await crypto.subtle.generateKey(
+const secretKey = await crypto.subtle.generateKey(
   { name: "AES-GCM", length: 256 },
   true, // Whether the key is extractable
-  ["encrypt"], // Key usage
+  ["encrypt", "decrypt"], // Key usage
 )
 
-const arrayBufferKey = await crypto.subtle.exportKey("raw", key)
-const stringKey = encodeBase64(arrayBufferKey)
+const arrayBufferKey = await crypto.subtle.exportKey("raw", secretKey)
 
-console.log("To store", { stringKey })
+console.log(encodeBase64(arrayBufferKey))
 
-const iv = crypto.getRandomValues(new Uint8Array(12))
-const stringIv = encodeBase64(iv)
-
-console.log("To store", { stringIv })
+// make this CLI tool

@@ -1,60 +1,40 @@
 import { decodeBase64, encodeBase64 } from "jsr:@std/encoding/base64"
 
-const stringKey = Deno.env.get("KEY")
-
-if (!stringKey) {
-  throw new Error("key not found")
-}
-
-export async function encrypt(input: string): Promise<string> {
-  const randomUint8 = crypto.getRandomValues(new Uint8Array(16))
-  const cryptKey = await crypto.subtle.importKey(
+async function importKey(stringKey: string): Promise<CryptoKey> {
+  const rawKey = decodeBase64(stringKey)
+  return await crypto.subtle.importKey(
     "raw",
-    randomUint8.buffer,
-    { name: "AES-GCM", length: 256 },
-    false,
-    ["encrypt"],
+    rawKey.buffer,
+    { name: "AES-GCM" },
+    true,
+    ["encrypt", "decrypt"],
   )
-  const encrypted = await encryptData(input, randomUint8, cryptKey)
-  return bufferToString(encrypted)
 }
 
-async function encryptData(
+export async function encrypt(
   input: string,
-  iv: Uint8Array,
-  key: CryptoKey,
-) {
-  const buffer = await crypto.subtle.encrypt(
-    { name: "AES-GCM", iv },
-    key,
+  stringKey: string,
+): Promise<string> {
+  const randomUint8 = crypto.getRandomValues(new Uint8Array(16))
+  const encryptedBuffer = await crypto.subtle.encrypt(
+    { name: "AES-GCM", iv: randomUint8 },
+    await importKey(stringKey),
     new TextEncoder().encode(input),
   )
-  return { buffer, iv } // Give user encrypted data with iv for decryption
+  return bufferToString({ buffer: encryptedBuffer, iv: randomUint8 })
 }
 
-export async function decrypt(input: string): Promise<string> {
-  const buffer = stringToBuffer(input)
-  const cryptKey = await crypto.subtle.importKey(
-    "raw",
-    buffer.iv,
-    { name: "AES-GCM", length: 256 },
-    false,
-    ["decrypt"],
-  )
-  return await decryptData(buffer.value, buffer.iv, cryptKey)
-}
-
-async function decryptData(
-  buffer: ArrayBufferLike,
-  iv: Uint8Array,
-  key: CryptoKey,
-) {
-  const decryptedData = await crypto.subtle.decrypt(
+export async function decrypt(
+  input: string,
+  stringKey: string,
+): Promise<string> {
+  const { value, iv } = stringToBuffer(input)
+  const decryptedBuffer = await crypto.subtle.decrypt(
     { name: "AES-GCM", iv },
-    key,
-    buffer,
+    await importKey(stringKey),
+    value,
   )
-  return new TextDecoder().decode(decryptedData)
+  return new TextDecoder().decode(decryptedBuffer)
 }
 
 function bufferToString(encrypted: { buffer: ArrayBuffer; iv: Uint8Array }) {
