@@ -1,5 +1,6 @@
 /**
  * @typedef {Object} Store
+ * @property {string[]} rawText
  * @property {string[]} encrypted
  * @property {string} encryptedOutput
  * @property {string[]} decrypted
@@ -9,6 +10,7 @@
 
 /** @type {Store} */
 const store = {
+  rawText: ["fdadfsad"],
   encrypted: [],
   encryptedOutput: "",
   decrypted: [],
@@ -22,9 +24,10 @@ const $store = new Proxy(store, {
    */
   set(target, prop, value) {
     target[prop] = value
-    // if (prop === "encryptedOutput") {
-    //   dispatchEvent(new Event("encryptedoutput"))
-    // }
+    if (prop === "rawText") {
+      console.log("==>", "======================== ne")
+      document.dispatchEvent(new Event("addrawtext"))
+    }
     return true
   },
 

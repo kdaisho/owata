@@ -42,7 +42,7 @@ export default router
         .json()
 
       cache.modal = bindValues(
-        decoder.decode(await Deno.readFile("src/html/form.html")),
+        decoder.decode(await Deno.readFile("src/html/modal.html")),
         {
           action,
           label,
@@ -60,12 +60,16 @@ export default router
   .post(
     "/encrypt",
     async (ctx) => {
-      const text = await ctx.request.body.text()
+      console.log("==> YO", ctx.request.body)
+      const textArray = await ctx.request.body.json()
+      console.log("==> YO2", { textArray })
 
-      if (typeof text !== "string") {
+      if (typeof textArray[0] !== "string") {
         ctx.throw(400, "invalid input")
       } else {
-        ctx.response.body = await encrypt(text, stringKey)
+        const res = await encrypt(textArray[0], stringKey)
+        console.log("==>", { res })
+        ctx.response.body = res
       }
     },
   )

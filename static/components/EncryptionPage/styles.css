@@ -1,0 +1,15 @@
+section {
+  display: flex;
+  flex-flow: row nowrap;
+  gap: 1rem;
+}
+
+aside {
+  /* border: 1px solid lime; */
+}
+
+form {
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 1rem;
+}

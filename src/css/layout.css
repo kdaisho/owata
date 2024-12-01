@@ -125,8 +125,19 @@ button {
   }
 }
 
+main {
+  height: 100vh;
+  /* background: #222; */
+}
+
 @layer modal {
-  .modal-inner {
+  .modal-content {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: auto auto;
+  }
+
+  .form-wrapper {
     display: flex;
     flex-flow: column nowrap;
     gap: 2rem;
@@ -152,12 +163,12 @@ button {
     outline-color: var(--black);
   }
 
-  .modal-inner[data-is-encryption="true"] textarea {
+  .form-wrapper[data-is-encryption="true"] textarea {
     background: var(--black);
     color: var(--lightgray);
   }
 
-  .modal-inner[data-is-encryption="true"] textarea:focus-visible {
+  .form-wrapper[data-is-encryption="true"] textarea:focus-visible {
     outline-color: var(--lightgray);
   }
 
@@ -176,7 +187,7 @@ button {
     background: var(--lightgray);
     border: 1px solid var(--black);
     max-height: 90%;
-    max-width: 680px;
+    max-width: 1080px;
     overflow-y: auto;
     padding: 2rem;
     width: 100%;
@@ -186,7 +197,7 @@ button {
     filter: blur(3px);
   }
 
-  .modal:has(.modal-inner[data-is-encryption="true"]) {
+  .modal:has(.form-wrapper[data-is-encryption="true"]) {
     background: var(--lightgray);
   }
 }
