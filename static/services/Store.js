@@ -10,7 +10,7 @@
 
 /** @type {Store} */
 const store = {
-  rawText: ["fdadfsad"],
+  rawText: [],
   encrypted: [],
   encryptedOutput: "",
   decrypted: [],
@@ -25,7 +25,7 @@ const $store = new Proxy(store, {
   set(target, prop, value) {
     target[prop] = value
     if (prop === "rawText") {
-      console.log("==>", "======================== ne")
+      console.log(store.rawText)
       document.dispatchEvent(new Event("addrawtext"))
     }
     return true

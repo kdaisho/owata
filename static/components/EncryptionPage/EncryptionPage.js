@@ -21,8 +21,24 @@ export default class EncryptionPage extends HTMLElement {
 
   connectedCallback() {
     this.render()
-    globalThis.addEventListener("_appmenuchange", () => {
-      this.render()
+    this.#setupToPopulateList()
+  }
+
+  #setupToPopulateList() {
+    document.addEventListener("addrawtext", () => {
+      const aside = this.root.querySelector("#raw-text")
+      const ul = document.createElement("ul")
+      for (const text of app.store.rawText) {
+        const _li = `
+      <li>
+        <a href=${text} target="_blank" rel="noopener noreferrer">${text}</a>
+      </li>
+      `
+        ul.insertAdjacentHTML("beforeend", _li)
+      }
+      if (!(aside instanceof HTMLElement)) return
+      aside.innerHTML = ""
+      aside.appendChild(ul)
     })
   }
 
@@ -32,11 +48,11 @@ export default class EncryptionPage extends HTMLElement {
         <label for="encryption-input">encryption</label>
         <textarea
           name="encryption-value"
-          id="encryption-value"
+          id="encryption-textarea"
           rows="5"
           cols="50"
         ></textarea>
-        <button type="button" id="encrypt">encrypt</button>
+        <button type="button" id="add">add</button>
       </form>
     `
     const form = this.root.querySelector("form")
@@ -50,9 +66,19 @@ export default class EncryptionPage extends HTMLElement {
       headers: {
         "Content-Type": "application/json",
       },
-      // body: JSON.stringify($store.rawText),
-      body: JSON.stringify(["https://google.ca"]),
+      body: JSON.stringify(app.store.rawText),
     })
+  }
+
+  /**
+   * @param {HTMLTextAreaElement} textarea
+   */
+  #add(textarea) {
+    app.store.rawText = [
+      textarea.value,
+      ...app.store.rawText,
+    ]
+    textarea.value = ""
   }
 
   render() {
@@ -69,9 +95,11 @@ export default class EncryptionPage extends HTMLElement {
     if (document.startViewTransition) {
       document.startViewTransition(() => {
         this.#renderForm()
-        this.root.querySelector("#encrypt")?.addEventListener(
+        const textarea = this.root.querySelector("#encryption-textarea")
+        if (!(textarea instanceof HTMLTextAreaElement)) return
+        this.root.querySelector("#add")?.addEventListener(
           "click",
-          () => this.#submit(),
+          () => this.#add(textarea),
         )
       })
     } else {
