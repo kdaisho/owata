@@ -1,5 +1,3 @@
-import $store from "../../js/store.js"
-
 export default class EncryptionPage extends HTMLElement {
   constructor() {
     super()
@@ -58,9 +56,9 @@ export default class EncryptionPage extends HTMLElement {
   }
 
   render() {
-    if ($store.rawText) {
+    if (app.store.rawText) {
       const ul = document.createElement("ul")
-      for (const text of $store.rawText) {
+      for (const text of app.store.rawText) {
         ul.innerHTML = `
           <li><a href=${text} target="_blank" rel="noopener noreferrer">${text}</a></li>
         `

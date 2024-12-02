@@ -76,7 +76,13 @@ body {
 header {
   align-items: center;
   display: flex;
-  gap: 3rem;
+  gap: 1rem 3rem;
+}
+
+@media (max-width: 490px) {
+  header {
+    flex-flow: column nowrap;
+  }
 }
 
 nav {
@@ -86,6 +92,9 @@ nav {
 }
 
 .app-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
   max-width: 768px;
   margin: 0 auto;
   width: 100%;
@@ -98,7 +107,9 @@ button {
 }
 
 .app-title a {
+  font-size: var(--h2);
   text-decoration: none;
+  white-space: nowrap;
 }
 
 .toast {
@@ -125,10 +136,16 @@ button {
   }
 }
 
-main {
-  height: 100vh;
-  /* background: #222; */
-}
+/* .app-title {
+  font-size: var(--h5);
+  white-space: nowrap;
+} */
+
+/* .home {
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 1rem;
+} */
 
 @layer modal {
   .modal-content {

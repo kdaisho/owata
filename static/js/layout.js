@@ -1,4 +1,4 @@
-import $store from "./store.js"
+import $store from "../services/Store.js"
 
 const modal = document.createElement("div")
 modal.id = "modal"

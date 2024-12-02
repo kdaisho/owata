@@ -17,7 +17,7 @@ const cache = {
 }
 
 export default router
-  .get("/", async ({ response }) => {
+  .get("/(encryption)?", async ({ response }) => {
     if (dev || !cache.main) {
       const [_layout, _head, _gcss, _css, _main] = await Promise.all([
         Deno.readFile("src/html/layout.html"),

@@ -1,8 +1,11 @@
-import "../components/EncryptionPage/EncryptionPage.js"
+import Router from "../services/Router.js"
+import Store from "../services/Store.js"
 
-const encryptionPage = document.createElement("encryption-page")
+globalThis.app = {}
+app.router = Router
+app.store = Store
 
-const main = document.querySelector("main")
-if (!main) throw new Error("main elem not found")
-main.innerHTML = ""
-main?.appendChild(encryptionPage)
+globalThis.addEventListener("DOMContentLoaded", () => {
+  app.router.init()
+  // loadData()
+})
