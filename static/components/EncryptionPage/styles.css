@@ -1,11 +1,16 @@
 section {
-  display: flex;
-  flex-flow: row nowrap;
+  display: grid;
+  grid-template-columns: 320px auto;
   gap: 1rem;
 }
 
-aside {
-  /* border: 1px solid lime; */
+ul li {
+  overflow-wrap: anywhere;
+}
+
+button {
+  display: block;
+  width: 100%;
 }
 
 form {

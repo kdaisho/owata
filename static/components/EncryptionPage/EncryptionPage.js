@@ -21,23 +21,29 @@ export default class EncryptionPage extends HTMLElement {
 
   connectedCallback() {
     this.render()
-    this.#setupToPopulateList()
+    this.#renderList()
   }
 
-  #setupToPopulateList() {
+  #renderList() {
     document.addEventListener("addrawtext", () => {
       const aside = this.root.querySelector("#raw-text")
+      aside?.childNodes.forEach((node) => {
+        if (node.nodeName === "UL") {
+          node.remove()
+        }
+      })
       const ul = document.createElement("ul")
       for (const text of app.store.rawText) {
         const _li = `
-      <li>
-        <a href=${text} target="_blank" rel="noopener noreferrer">${text}</a>
-      </li>
-      `
+          <li>
+            <a href=${text} target="_blank" rel="noopener noreferrer">${text}</a>
+          </li>
+        `
         ul.insertAdjacentHTML("beforeend", _li)
+        ul.setAttribute("part", "ul")
       }
       if (!(aside instanceof HTMLElement)) return
-      aside.innerHTML = ""
+
       aside.appendChild(ul)
     })
   }
