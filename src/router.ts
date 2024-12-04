@@ -60,17 +60,12 @@ export default router
   .post(
     "/encrypt",
     async (ctx) => {
-      console.log("==> YO", ctx.request.body)
       const textArray = await ctx.request.body.json()
-      console.log("==> YO2", { textArray })
+      const result = await Promise.all(textArray.map((text: string) => {
+        return encrypt(text, stringKey)
+      }))
 
-      if (typeof textArray[0] !== "string") {
-        ctx.throw(400, "invalid input")
-      } else {
-        const res = await encrypt(textArray[0], stringKey)
-        console.log("==>", { res })
-        ctx.response.body = res
-      }
+      ctx.response.body = result
     },
   )
   .post("/decrypt", async (ctx) => {

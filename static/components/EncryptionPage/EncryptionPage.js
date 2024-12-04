@@ -22,6 +22,7 @@ export default class EncryptionPage extends HTMLElement {
   connectedCallback() {
     this.render()
     this.#renderList()
+    this.#submit()
   }
 
   #renderList() {
@@ -66,13 +67,24 @@ export default class EncryptionPage extends HTMLElement {
     form.innerHTML = _form
   }
 
-  async #submit() {
-    await fetch("/encrypt", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(app.store.rawText),
+  #submit() {
+    const btn = this.root.querySelector("#encrypt")
+    btn?.addEventListener("click", async () => {
+      const response = await fetch("/encrypt", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(app.store.rawText),
+      })
+
+      const data = await response.json()
+
+      console.log("==>", { data })
+
+      const textarea = this.root.querySelector("#output")
+      if (!(textarea instanceof HTMLTextAreaElement)) return
+      textarea.value = data.join(",")
     })
   }
 
