@@ -20,9 +20,17 @@ export default class EncryptionPage extends HTMLElement {
   }
 
   connectedCallback() {
+    this.#init()
     this.render()
     this.#renderList()
-    this.#submit()
+    this.#setupSubmit()
+  }
+
+  #init() {
+    if (this.#encryptButton) return
+    this.#encryptButton = document.createElement("button")
+    this.#encryptButton.setAttribute("id", "encrypt")
+    this.#encryptButton.innerText = "encrypt"
   }
 
   #renderList() {
@@ -43,11 +51,20 @@ export default class EncryptionPage extends HTMLElement {
         ul.insertAdjacentHTML("beforeend", _li)
         ul.setAttribute("part", "ul")
       }
-      if (!(aside instanceof HTMLElement)) return
 
-      aside.appendChild(ul)
+      if (
+        !(aside instanceof HTMLElement) ||
+        !(this.#encryptButton instanceof HTMLButtonElement)
+      ) return
+      aside.append(this.#encryptButton)
+      aside.append(ul)
     })
   }
+
+  /**
+   * @type {HTMLButtonElement | null}
+   */
+  #encryptButton = null
 
   #renderForm() {
     const _form = `
@@ -67,9 +84,10 @@ export default class EncryptionPage extends HTMLElement {
     form.innerHTML = _form
   }
 
-  #submit() {
-    const btn = this.root.querySelector("#encrypt")
-    btn?.addEventListener("click", async () => {
+  #setupSubmit() {
+    console.log("==>", "======================== YO", this.#encryptButton)
+    this.#encryptButton?.addEventListener("click", async () => {
+      console.log("==>", "======================== ooo")
       const response = await fetch("/encrypt", {
         method: "POST",
         headers: {
@@ -82,9 +100,12 @@ export default class EncryptionPage extends HTMLElement {
 
       console.log("==>", { data })
 
-      const textarea = this.root.querySelector("#output")
+      const textarea = document.createElement("textarea")
       if (!(textarea instanceof HTMLTextAreaElement)) return
       textarea.value = data.join(",")
+      const sec = this.root.querySelector("section")
+      console.log("==>", sec)
+      this.root.querySelector("section")?.append(textarea)
     })
   }
 

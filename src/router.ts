@@ -17,7 +17,7 @@ const cache = {
 }
 
 export default router
-  .get("/(encryption)?", async ({ response }) => {
+  .get("/(decryption|encryption)?", async ({ response }) => {
     if (dev || !cache.main) {
       const [_layout, _head, _gcss, _css, _main] = await Promise.all([
         Deno.readFile("src/html/layout.html"),
@@ -70,10 +70,14 @@ export default router
   )
   .post("/decrypt", async (ctx) => {
     const text = await ctx.request.body.text()
-
-    if (typeof text !== "string") {
+    const _text = text.split(",")
+    if (typeof _text[0] !== "string") {
       ctx.throw(400, "invalid input")
     } else {
-      ctx.response.body = await decrypt(text, stringKey)
+      const res = await Promise.all(_text.map(async (t) => {
+        return await decrypt(t, stringKey)
+      }))
+
+      ctx.response.body = res
     }
   })

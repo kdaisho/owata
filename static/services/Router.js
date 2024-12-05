@@ -54,14 +54,18 @@ const Router = {
         main?.appendChild(document.createElement("encryption-page"))
         break
       }
+      case "/decryption": {
+        await import(
+          "../components/DecryptionPage/DecryptionPage.js"
+        )
+
+        const main = document.querySelector("main")
+        if (!main) throw new Error("main elem not found")
+        main.innerHTML = ""
+        main?.appendChild(document.createElement("decryption-page"))
+        break
+      }
       default:
-        // if (route.startsWith("/product-")) {
-        //   pageElement = document.createElement("details-page")
-        //   pageElement.dataset.productId = route.substring(
-        //     route.lastIndexOf("-") + 1,
-        //   )
-        //   Router.setMetadata("Details", "green")
-        // }
         break
     }
     // if (pageElement) {
