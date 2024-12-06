@@ -8,32 +8,30 @@ export default class EncryptionPage extends HTMLElement {
     if (!(template instanceof HTMLTemplateElement)) return
     const content = template.content.cloneNode(true)
     const styles = document.createElement("style")
-    if (!(content instanceof Node)) return
     this.root.appendChild(content)
     this.root.appendChild(styles)
 
     async function loadCss() {
-      const request = await fetch("components/EncryptionPage/styles.css")
-      styles.textContent = await request.text()
+      const response = await fetch("components/EncryptionPage/styles.css")
+      styles.textContent = await response.text()
     }
     loadCss()
   }
 
   connectedCallback() {
-    this.#init()
-    this.render()
-    this.#renderList()
-    this.#setupSubmit()
+    this.#initButton()
+    this.#initList()
+    this.#initSubmit()
+    this.#render()
   }
 
-  #init() {
+  #initButton() {
     if (this.#encryptButton) return
     this.#encryptButton = document.createElement("button")
-    this.#encryptButton.setAttribute("id", "encrypt")
     this.#encryptButton.innerText = "encrypt"
   }
 
-  #renderList() {
+  #initList() {
     document.addEventListener("addrawtext", () => {
       const aside = this.root.querySelector("#raw-text")
       aside?.childNodes.forEach((node) => {
@@ -56,8 +54,8 @@ export default class EncryptionPage extends HTMLElement {
         !(aside instanceof HTMLElement) ||
         !(this.#encryptButton instanceof HTMLButtonElement)
       ) return
-      aside.append(this.#encryptButton)
-      aside.append(ul)
+
+      aside.append(this.#encryptButton, ul)
     })
   }
 
@@ -84,10 +82,8 @@ export default class EncryptionPage extends HTMLElement {
     form.innerHTML = _form
   }
 
-  #setupSubmit() {
-    console.log("==>", "======================== YO", this.#encryptButton)
+  #initSubmit() {
     this.#encryptButton?.addEventListener("click", async () => {
-      console.log("==>", "======================== ooo")
       const response = await fetch("/encrypt", {
         method: "POST",
         headers: {
@@ -95,32 +91,15 @@ export default class EncryptionPage extends HTMLElement {
         },
         body: JSON.stringify(app.store.rawText),
       })
-
       const data = await response.json()
-
-      console.log("==>", { data })
-
       const textarea = document.createElement("textarea")
       if (!(textarea instanceof HTMLTextAreaElement)) return
       textarea.value = data.join(",")
-      const sec = this.root.querySelector("section")
-      console.log("==>", sec)
       this.root.querySelector("section")?.append(textarea)
     })
   }
 
-  /**
-   * @param {HTMLTextAreaElement} textarea
-   */
-  #add(textarea) {
-    app.store.rawText = [
-      textarea.value,
-      ...app.store.rawText,
-    ]
-    textarea.value = ""
-  }
-
-  render() {
+  #render() {
     if (app.store.rawText) {
       const ul = document.createElement("ul")
       for (const text of app.store.rawText) {
@@ -138,7 +117,13 @@ export default class EncryptionPage extends HTMLElement {
         if (!(textarea instanceof HTMLTextAreaElement)) return
         this.root.querySelector("#add")?.addEventListener(
           "click",
-          () => this.#add(textarea),
+          () => {
+            app.store.rawText = [
+              textarea.value,
+              ...app.store.rawText,
+            ]
+            textarea.value = ""
+          },
         )
       })
     } else {

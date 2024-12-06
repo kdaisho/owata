@@ -30,13 +30,19 @@ export default class DecryptionPage extends HTMLElement {
   #decryptButton = null
 
   connectedCallback() {
+    this.#init()
+    this.#setupSubmit()
+  }
+
+  #init() {
     this.#decryptTextarea = document.createElement("textarea")
+    if (this.#decryptButton) return
     this.#decryptButton = document.createElement("button")
     this.#decryptButton.innerText = "decrypt"
+
     const section = this.root.querySelector("section")
     if (!(section instanceof HTMLElement)) return
     section.append(this.#decryptTextarea, this.#decryptButton)
-    this.#setupSubmit()
   }
 
   #setupSubmit() {
