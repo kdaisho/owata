@@ -8,18 +8,33 @@
     <div class="app-container">
       <header>
         <h1 class="app-title">
-          <a href="/decryption" title="home">\(^o^)/ owata</a>
+          <a href="/" title="home"><span class="logo">\(^o^)/</span>
+            owata</a>
         </h1>
 
         <nav>
-          <button id="decryption">decryption</button>
-          <button id="encryption">encryption</button>
+          <a class="navlink" href="/decryption">decryption</a>
+          <a class="navlink" href="/encryption">encryption</a>
         </nav>
       </header>
 
-      <main>
-        {{ main }}
-      </main>
+      <main></main>
+
+      <template id="home-page-template">
+        <section></section>
+      </template>
+
+      <template id="encryption-page-template">
+        <section>
+          <aside id="raw-text"></aside>
+
+          <form></form>
+        </section>
+      </template>
+
+      <template id="decryption-page-template">
+        <section></section>
+      </template>
     </div>
   </body>
 </html>

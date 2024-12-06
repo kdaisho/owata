@@ -13,8 +13,9 @@ body, h1, h2, h3, h4, h5, h6, p, ol, ul {
   font-weight: normal;
 }
 
-ol, ul {
+ol, ul, ::part(ol), ::part(ul) {
   list-style: none;
+  padding: 0;
 }
 
 img {
@@ -38,7 +39,6 @@ img {
   --lime: hsl(101, 85%, 56%);
   --olive: hsl(56.09, 48.94%, 36.86%);
   --brown: hsl(44.29, 48.84%, 16.86%);
-  --font-color: var(--lime);
 }
 
 h1 {
@@ -72,13 +72,18 @@ body {
   gap: 2rem;
   grid-template-rows: 50px auto;
   height: 100vh;
-  border: 1px solid red;
 }
 
 header {
   align-items: center;
   display: flex;
-  gap: 3rem;
+  gap: 1rem 3rem;
+}
+
+@media (max-width: 490px) {
+  header {
+    flex-flow: column nowrap;
+  }
 }
 
 nav {
@@ -88,15 +93,12 @@ nav {
 }
 
 .app-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
   max-width: 768px;
   margin: 0 auto;
   width: 100%;
-}
-
-form {
-  display: flex;
-  flex-flow: column nowrap;
-  gap: 1rem;
 }
 
 button {
@@ -105,53 +107,115 @@ button {
   min-height: 1.75rem;
 }
 
-textarea {
-  padding: 0.5rem;
-}
-
-.content {
-  display: flex;
-  flex-flow: column nowrap;
-  gap: 2rem;
-}
-
-form {
-  display: flex;
-  flex-flow: column nowrap;
-  gap: 0.5rem;
-}
-
 .app-title a {
+  font-size: var(--h2);
   text-decoration: none;
+  white-space: nowrap;
 }
 
-.backdrop {
+.toast {
   align-items: center;
+  animation: slide-in 0.2s 0.25s ease-out forwards;
+  background: #fff;
+  border-radius: 6px;
+  bottom: 50px;
+  box-shadow: 20px 20px 60px #bebebe, -20px -20px 60px #ffffff;
   display: flex;
-  height: 100%;
-  justify-content: center;
-  left: 0;
+  font-size: var(--small);
+  height: 40px;
+  justify-content: flex-start;
+  padding: 0.25rem 1rem;
   position: fixed;
-  top: 0;
-  width: 100%;
+  right: -100%;
+  width: 200px;
+  z-index: 30;
 }
 
-.modal {
-  background: var(--lightgray);
-  border: 1px solid var(--black);
-  max-width: 680px;
-  padding: 2rem;
-  width: 100%;
+@keyframes slide-in {
+  to {
+    right: 20px;
+  }
 }
 
-body:has(#modal) .app-container {
-  filter: blur(3px);
-}
+/* .app-title {
+  font-size: var(--h5);
+  white-space: nowrap;
+} */
 
-.backdrop:has(.content[data-is-encryption="true"]) {
-  background: rgba(0, 0, 0, 0.4);
-}
+/* .home {
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 1rem;
+} */
 
-.modal:has(.content[data-is-encryption="true"]) {
-  background: var(--lime);
+@layer modal {
+  .modal-content {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: auto auto;
+  }
+
+  .form-wrapper {
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 2rem;
+  }
+
+  form {
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 1rem;
+  }
+
+  .form-header {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+  }
+
+  textarea {
+    padding: 0.5rem;
+  }
+
+  textarea:focus-visible {
+    outline-color: var(--black);
+  }
+
+  .form-wrapper[data-is-encryption="true"] textarea {
+    background: var(--black);
+    color: var(--lightgray);
+  }
+
+  .form-wrapper[data-is-encryption="true"] textarea:focus-visible {
+    outline-color: var(--lightgray);
+  }
+
+  .backdrop {
+    align-items: center;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+  }
+
+  .modal {
+    background: var(--lightgray);
+    border: 1px solid var(--black);
+    max-height: 90%;
+    max-width: 1080px;
+    overflow-y: auto;
+    padding: 2rem;
+    width: 100%;
+  }
+
+  body:has(#modal) .app-container {
+    filter: blur(3px);
+  }
+
+  .modal:has(.form-wrapper[data-is-encryption="true"]) {
+    background: var(--lightgray);
+  }
 }

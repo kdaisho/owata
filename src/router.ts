@@ -1,103 +1,83 @@
 import { Router } from "oak/router"
-import { bindValues, decrypt, encrypt } from "./lib/utils.ts"
+import { bindValues } from "./lib/utils.ts"
+import { decrypt, encrypt } from "./lib/crypto.ts"
+
+const stringKey = Deno.env.get("KEY")
+
+if (!stringKey) {
+  throw new Error("Key not found")
+}
 
 const router = new Router()
 const decoder = new TextDecoder("utf-8")
+const dev = Deno.env.get("ENV") === "development"
+const cache = {
+  main: "",
+  modal: "",
+}
 
 export default router
-  .get("/", async ({ response }) => {
-    const [_layout, _head, _gcss, _css, _main] = await Promise.all([
-      Deno.readFile("src/html/layout.html"),
-      Deno.readFile("src/html/head.html"),
-      Deno.readFile("src/css/layout.css"),
-      Deno.readFile("src/css/main.css"),
-      Deno.readFile("src/html/main.html"),
-    ])
-    const head = bindValues(decoder.decode(_head), {
-      css: `<style>${decoder.decode(_gcss) + decoder.decode(_css)}</style>`,
-      script: "main.js",
-    })
+  .get("/(decryption|encryption)?", async ({ response }) => {
+    if (dev || !cache.main) {
+      const [_layout, _head, _gcss, _css, _main] = await Promise.all([
+        Deno.readFile("src/html/layout.html"),
+        Deno.readFile("src/html/head.html"),
+        Deno.readFile("src/css/layout.css"),
+        Deno.readFile("src/css/main.css"),
+        Deno.readFile("src/html/main.html"),
+      ])
+      cache.main = bindValues(decoder.decode(_layout), {
+        head: bindValues(decoder.decode(_head), {
+          css: `<style>${decoder.decode(_gcss) + decoder.decode(_css)}</style>`,
+        }),
+        main: decoder.decode(_main),
+      })
+    }
 
-    response.headers.set("Content-Type", "text/html")
-    response.body = bindValues(decoder.decode(_layout), {
-      head,
-      main: decoder.decode(_main),
-    })
+    response.body = cache.main
   })
-  .post("/get-form", async ({ request, response }) => {
-    const { action, label, isEncryption } = await request.body.json()
-    const blob = await Deno.readFile("src/html/form.html")
-    response.body = bindValues(decoder.decode(blob), {
-      action,
-      label,
-      isEncryption,
-    })
-  })
-  .get("/decryption", async ({ response }) => {
-    const [_layout, _head, _gcss, _css, _body] = await Promise.all([
-      Deno.readFile("src/html/layout.html"),
-      Deno.readFile("src/html/head.html"),
-      Deno.readFile("src/css/layout.css"),
-      Deno.readFile("src/css/decryption.css"),
-      Deno.readFile("src/html/pages/decryption.html"),
-    ])
-    const head = bindValues(decoder.decode(_head), {
-      css: `<style>${decoder.decode(_gcss) + decoder.decode(_css)}</style>`,
-      script: "decrypt.js",
-    })
-    const body = bindValues(decoder.decode(_body), {
-      title: "get your stuff back",
-      subtitle: "paste your encrypted key here to decode your secret",
-    })
+  .post("/form", async ({ request, response }) => {
+    if (dev || !cache.modal) {
+      const { action, label, buttonLabel, isEncryption } = await request.body
+        .json()
 
-    response.headers.set("Content-Type", "text/html")
-    response.body = bindValues(decoder.decode(_layout), {
-      head,
-      body,
-    })
-  })
-  .get("/encryption", async ({ response }) => {
-    const [_layout, _head, _gcss, _css, _body] = await Promise.all([
-      Deno.readFile("src/html/layout.html"),
-      Deno.readFile("src/html/head.html"),
-      Deno.readFile("src/css/layout.css"),
-      Deno.readFile("src/css/encryption.css"),
-      Deno.readFile("src/html/pages/encryption.html"),
-    ])
-    const head = bindValues(decoder.decode(_head), {
-      css: `<style>${decoder.decode(_gcss) + decoder.decode(_css)}</style>`,
-      script: "encrypt.js",
-    })
-    const body = bindValues(decoder.decode(_body), {
-      title: "dump your thing",
-      subtitle: "turn your information into encrypted code",
-    })
+      cache.modal = bindValues(
+        decoder.decode(await Deno.readFile("src/html/modal.html")),
+        {
+          action,
+          label,
+          buttonLabel,
+          isEncryption,
+        },
+      )
+    }
 
-    response.body = bindValues(decoder.decode(_layout), {
-      head,
-      body,
-    })
+    response.body = cache.modal
+  })
+  .get("/output", async ({ response }) => {
+    response.body = decoder.decode(await Deno.readFile("src/html/output.html"))
   })
   .post(
     "/encrypt",
     async (ctx) => {
-      const formData = await ctx.request.body.formData()
-      const text = formData.get("input-value")
+      const textArray = await ctx.request.body.json()
+      const result = await Promise.all(textArray.map((text: string) => {
+        return encrypt(text, stringKey)
+      }))
 
-      if (typeof text !== "string") {
-        ctx.throw(400, "invalid input")
-      } else {
-        ctx.response.body = encrypt(text)
-      }
+      ctx.response.body = result
     },
   )
   .post("/decrypt", async (ctx) => {
-    const formData = await ctx.request.body.formData()
-    const text = formData.get("input-value")
-
-    if (typeof text !== "string") {
+    const text = await ctx.request.body.text()
+    const _text = text.split(",")
+    if (typeof _text[0] !== "string") {
       ctx.throw(400, "invalid input")
     } else {
-      ctx.response.body = decrypt(text)
+      const res = await Promise.all(_text.map(async (t) => {
+        return await decrypt(t, stringKey)
+      }))
+
+      ctx.response.body = res
     }
   })

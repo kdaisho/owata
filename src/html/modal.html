@@ -1,0 +1,24 @@
+<div class="modal-content">
+  <form action="{{ action }}" method="post" id="form">
+    <h4>Candidates</h4>
+    <ul id="raw-text"></ul>
+
+    <button type="button" id="submit">submit</button>
+  </form>
+
+  <div id="entry" class="form-wrapper" data-is-encryption="{{ isEncryption }}">
+    <div class="form-header">
+      <label for="input">{{ label }}</label>
+      <button type="button" id="switch">switch →</button>
+    </div>
+
+    <textarea
+      name="input-value"
+      id="input"
+      rows="10"
+      cols="100"
+    ></textarea>
+
+    <button type="button" id="add">{{buttonLabel}}</button>
+  </div>
+</div>
