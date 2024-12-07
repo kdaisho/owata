@@ -16,12 +16,12 @@ modal.addEventListener("click", (event) => {
   event.stopPropagation()
 })
 
-document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape") {
-    backdrop.remove()
-    $store.activeMode = null
-  }
-})
+// document.addEventListener("keydown", (event) => {
+//   if (event.key === "Escape") {
+//     backdrop.remove()
+//     $store.activeMode = null
+//   }
+// })
 
 /**
  * @type {HTMLFormElement | null}
@@ -220,11 +220,6 @@ async function renderModal(
 
     console.log("==>", { data })
   })
-
-  // document.querySelector("#submit")?.addEventListener("submit", () => {
-  //   console.log("==>", "======================== b")
-  //   // await renderOutputModal()
-  // })
 }
 
 /**

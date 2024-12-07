@@ -3,3 +3,7 @@ section {
   grid-template-columns: auto;
   gap: 1rem;
 }
+
+textarea {
+  min-height: 300px;
+}

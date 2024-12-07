@@ -7,7 +7,7 @@ const app = new Application()
 app.use(async (context, next) => {
   try {
     await context.send({
-      root: `${Deno.cwd()}/static`,
+      root: `${Deno.cwd()}/client`,
       index: "index.html",
     })
   } catch {

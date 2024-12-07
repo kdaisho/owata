@@ -19,19 +19,19 @@ export default class EncryptionPage extends HTMLElement {
   }
 
   connectedCallback() {
-    this.#initButton()
-    this.#initList()
-    this.#initSubmit()
+    this.#setButton()
+    this.#setList()
+    this.#setSubmit()
     this.#render()
   }
 
-  #initButton() {
+  #setButton() {
     if (this.#encryptButton) return
     this.#encryptButton = document.createElement("button")
     this.#encryptButton.innerText = "encrypt"
   }
 
-  #initList() {
+  #setList() {
     document.addEventListener("addrawtext", () => {
       const aside = this.root.querySelector("#raw-text")
       aside?.childNodes.forEach((node) => {
@@ -66,23 +66,16 @@ export default class EncryptionPage extends HTMLElement {
 
   #renderForm() {
     const _form = `
-      <form action="/encrypt" method="post">
-        <label for="encryption-input">encryption</label>
-        <textarea
-          name="encryption-value"
-          id="encryption-textarea"
-          rows="5"
-          cols="50"
-        ></textarea>
-        <button type="button" id="add">add</button>
-      </form>
+      <label for="encryption-input">encryption</label>
+      <input name="encryption-value" id="encryption-input" />
+      <button type="button" id="add">add</button>
     `
-    const form = this.root.querySelector("form")
-    if (!form) return
-    form.innerHTML = _form
+    const div = this.root.querySelector("#input-container")
+    if (!div) return
+    div.innerHTML = _form
   }
 
-  #initSubmit() {
+  #setSubmit() {
     this.#encryptButton?.addEventListener("click", async () => {
       const response = await fetch("/encrypt", {
         method: "POST",
@@ -94,9 +87,22 @@ export default class EncryptionPage extends HTMLElement {
       const data = await response.json()
       const textarea = document.createElement("textarea")
       if (!(textarea instanceof HTMLTextAreaElement)) return
+      textarea.classList.add("output")
       textarea.value = data.join(",")
+
       this.root.querySelector("section")?.append(textarea)
     })
+  }
+
+  /**
+   * @param {HTMLInputElement} input
+   */
+  #add(input) {
+    app.store.rawText = [
+      input.value,
+      ...app.store.rawText,
+    ]
+    input.value = ""
   }
 
   #render() {
@@ -113,16 +119,26 @@ export default class EncryptionPage extends HTMLElement {
     if (document.startViewTransition) {
       document.startViewTransition(() => {
         this.#renderForm()
-        const textarea = this.root.querySelector("#encryption-textarea")
-        if (!(textarea instanceof HTMLTextAreaElement)) return
+        const input = this.root.querySelector("#encryption-input")
+        if (
+          !(input instanceof HTMLInputElement)
+        ) return
+
+        this.addEventListener(
+          "keydown",
+          /**
+           * @param {KeyboardEvent} e
+           */
+          (e) => {
+            if (e.key === "Enter") {
+              this.#add(input)
+            }
+          },
+        )
         this.root.querySelector("#add")?.addEventListener(
           "click",
           () => {
-            app.store.rawText = [
-              textarea.value,
-              ...app.store.rawText,
-            ]
-            textarea.value = ""
+            this.#add(input)
           },
         )
       })

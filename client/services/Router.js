@@ -14,8 +14,7 @@ const Router = {
     globalThis.addEventListener("popstate", (event) => {
       Router.goto(event.state.route, false)
     })
-    // Process initial URL
-    console.log("==>", "way")
+
     Router.goto(location.pathname)
   },
   /**
@@ -32,7 +31,6 @@ const Router = {
     let pageElement = null
     switch (route) {
       case "/": {
-        console.log("==>", "homepage")
         await import(
           "../components/HomePage/HomePage.js"
         )
