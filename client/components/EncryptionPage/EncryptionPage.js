@@ -41,12 +41,12 @@ export default class EncryptionPage extends HTMLElement {
       })
       const ul = document.createElement("ul")
       for (const text of app.store.rawText) {
-        const _li = `
+        const li = `
           <li>
             <a href=${text} target="_blank" rel="noopener noreferrer">${text}</a>
           </li>
         `
-        ul.insertAdjacentHTML("beforeend", _li)
+        ul.insertAdjacentHTML("beforeend", li)
         ul.setAttribute("part", "ul")
       }
 
@@ -65,14 +65,27 @@ export default class EncryptionPage extends HTMLElement {
   #encryptButton = null
 
   #renderForm() {
-    const _form = `
+    const fieldset = `
       <label for="encryption-input">encryption</label>
       <input name="encryption-value" id="encryption-input" />
       <button type="button" id="add">add</button>
     `
     const div = this.root.querySelector("#input-container")
     if (!div) return
-    div.innerHTML = _form
+    div.innerHTML = fieldset
+  }
+
+  #renderCopyButton() {
+    const btn = document.createElement("button")
+    btn.textContent = "Copy to clipboard"
+    btn.addEventListener("click", () => {
+      const textarea = this.root.querySelector("textarea.output")
+      if (!(textarea instanceof HTMLTextAreaElement)) return
+      navigator.clipboard.writeText(textarea.value)
+        .then(() => console.log("Copied successfully!"))
+        .catch((err) => console.error("Copy failed:", err))
+    })
+    this.root.querySelector("section")?.append(btn)
   }
 
   #setSubmit() {
@@ -91,6 +104,7 @@ export default class EncryptionPage extends HTMLElement {
       textarea.value = data.join(",")
 
       this.root.querySelector("section")?.append(textarea)
+      this.#renderCopyButton()
     })
   }
 

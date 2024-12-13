@@ -18,7 +18,7 @@ textarea {
 }
 
 textarea.output {
-  min-height: 300px;
+  min-height: 100px;
 }
 
 #input-container {

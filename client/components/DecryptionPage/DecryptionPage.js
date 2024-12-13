@@ -45,6 +45,23 @@ export default class DecryptionPage extends HTMLElement {
     section.append(this.#decryptTextarea, this.#decryptButton)
   }
 
+  /**
+   * @param {string[]} data
+   */
+  #renderList(data) {
+    const ul = document.createElement("ul")
+    for (const item of data) {
+      const li = `
+        <li>
+          <a href=${item} target="_blank" rel="noopener noreferrer">${item}</a>
+        </li>
+      `
+      ul.insertAdjacentHTML("beforeend", li)
+      ul.setAttribute("part", "ul")
+    }
+    this.root.querySelector("section")?.append(ul)
+  }
+
   #setupSubmit() {
     if (
       !(this.#decryptTextarea instanceof HTMLTextAreaElement) ||
@@ -59,9 +76,7 @@ export default class DecryptionPage extends HTMLElement {
         },
         body: this.#decryptTextarea?.value,
       })
-
-      const data = await response.json()
-      console.log("==> BACK", { data })
+      this.#renderList(await response.json())
     })
   }
 }
