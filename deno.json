@@ -7,7 +7,8 @@
   },
   "imports": {
     "oak": "jsr:@oak/oak",
-    "oak/commons": "jsr:@oak/commons"
+    "oak/commons": "jsr:@oak/commons",
+    "jsr/compress": "jsr:@deno-library/compress"
   },
   "compilerOptions": {
     "checkJs": true,

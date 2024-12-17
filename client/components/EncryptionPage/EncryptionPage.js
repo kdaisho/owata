@@ -97,11 +97,10 @@ export default class EncryptionPage extends HTMLElement {
         },
         body: JSON.stringify(app.store.rawText),
       })
-      const data = await response.json()
       const textarea = document.createElement("textarea")
       if (!(textarea instanceof HTMLTextAreaElement)) return
       textarea.classList.add("output")
-      textarea.value = data.join(",")
+      textarea.value = await response.text()
 
       this.root.querySelector("section")?.append(textarea)
       this.#renderCopyButton()
