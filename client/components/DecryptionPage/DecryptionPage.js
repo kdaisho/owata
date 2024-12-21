@@ -1,4 +1,21 @@
+import { submitText } from "../utils.js"
+
 export default class DecryptionPage extends HTMLElement {
+  /**
+   * @type {HTMLTextAreaElement | null }
+   */
+  #decryptTextarea = null
+
+  /**
+   * @type {HTMLButtonElement | null }
+   */
+  #decryptButton = null
+
+  /**
+   * @type {HTMLDialogElement | null }
+   */
+  #modal = null
+
   constructor() {
     super()
 
@@ -19,16 +36,6 @@ export default class DecryptionPage extends HTMLElement {
     loadCss()
   }
 
-  /**
-   * @type {HTMLTextAreaElement | null }
-   */
-  #decryptTextarea = null
-
-  /**
-   * @type {HTMLButtonElement | null }
-   */
-  #decryptButton = null
-
   connectedCallback() {
     this.#init()
     this.#setupSubmit()
@@ -36,13 +43,15 @@ export default class DecryptionPage extends HTMLElement {
 
   #init() {
     this.#decryptTextarea = document.createElement("textarea")
-    if (this.#decryptButton) return
     this.#decryptButton = document.createElement("button")
     this.#decryptButton.innerText = "decrypt"
+    this.#modal = document.createElement("dialog")
+    this.#modal.append(this.#decryptTextarea, this.#decryptButton)
 
     const section = this.root.querySelector("section")
     if (!(section instanceof HTMLElement)) return
-    section.append(this.#decryptTextarea, this.#decryptButton)
+    section.append(this.#modal)
+    this.#modal.showModal()
   }
 
   /**
@@ -63,20 +72,13 @@ export default class DecryptionPage extends HTMLElement {
   }
 
   #setupSubmit() {
-    if (
-      !(this.#decryptTextarea instanceof HTMLTextAreaElement) ||
-      !(this.#decryptButton instanceof HTMLButtonElement)
-    ) return
+    if (!(this.#decryptButton instanceof HTMLButtonElement)) return
 
     this.#decryptButton.addEventListener("click", async () => {
-      const response = await fetch("/decrypt", {
-        method: "POST",
-        headers: {
-          "Content-Type": "text/plain",
-        },
-        body: this.#decryptTextarea?.value,
-      })
-      this.#renderList(await response.json())
+      if (!(this.#decryptTextarea?.value)) return
+      this.#renderList(
+        await submitText(this.#decryptTextarea.value, "/decrypt"),
+      )
     })
   }
 }
