@@ -5,6 +5,6 @@ globalThis.app = {}
 app.router = Router
 app.store = Store
 
-document.addEventListener("DOMContentLoaded", () => {
+document.on("DOMContentLoaded", () => {
   app.router.init()
 })

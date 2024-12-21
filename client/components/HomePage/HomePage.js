@@ -23,9 +23,6 @@ export default class HomePage extends HTMLElement {
 
   connectedCallback() {
     this.render()
-    globalThis.addEventListener("_appmenuchange", () => {
-      this.render()
-    })
   }
 
   #renderHome() {

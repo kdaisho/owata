@@ -34,7 +34,7 @@ export default class EncryptionPage extends HTMLElement {
   }
 
   #setList() {
-    document.addEventListener("addrawtext", () => {
+    document.on("addrawtext", () => {
       const aside = this.root.$("#raw-text")
       aside?.childNodes.forEach((node) => {
         if (node.nodeName === "UL") {
@@ -80,7 +80,7 @@ export default class EncryptionPage extends HTMLElement {
   #renderCopyButton() {
     const btn = document.createElement("button")
     btn.textContent = "Copy to clipboard"
-    btn.addEventListener("click", () => {
+    btn.on("click", () => {
       const textarea = this.root.$("textarea.output")
       if (!(textarea instanceof HTMLTextAreaElement)) return
       navigator.clipboard.writeText(textarea.value)
@@ -91,7 +91,7 @@ export default class EncryptionPage extends HTMLElement {
   }
 
   #setSubmit() {
-    this.#encryptButton?.addEventListener("click", async () => {
+    this.#encryptButton?.on("click", async () => {
       const response = await fetch("/encrypt", {
         method: "POST",
         headers: {
@@ -139,7 +139,7 @@ export default class EncryptionPage extends HTMLElement {
           !(input instanceof HTMLInputElement)
         ) return
 
-        this.addEventListener(
+        this.on(
           "keydown",
           /**
            * @param {KeyboardEvent} e
@@ -150,7 +150,7 @@ export default class EncryptionPage extends HTMLElement {
             }
           },
         )
-        this.root.$("#add")?.addEventListener(
+        this.root.$("#add")?.on(
           "click",
           () => {
             this.#add(input)

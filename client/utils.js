@@ -47,6 +47,22 @@ export const $$ = (selector) => document.querySelectorAll(selector)
  * @param {string} selector
  * @returns {HTMLElement | null}
  */
+ShadowRoot.prototype.$ = function (selector) {
+  return this.querySelector(selector)
+}
+
+/**
+ * @param {string} selector
+ * @returns {NodeListOf<Element> | null}
+ */
+ShadowRoot.prototype.$$ = function (selector) {
+  return this.querySelectorAll(selector)
+}
+
+/**
+ * @param {string} selector
+ * @returns {HTMLElement | null}
+ */
 HTMLElement.prototype.$ = function (selector) {
   return this.querySelector(selector)
 }
@@ -60,17 +76,37 @@ HTMLElement.prototype.$$ = function (selector) {
 }
 
 /**
- * @param {string} selector
- * @returns {HTMLElement | null}
+ * @template T
+ * @param {string} event
+ * @param {(event: T) => void} callback
  */
-ShadowRoot.prototype.$ = function (selector) {
-  return this.querySelector(selector)
+globalThis.on = function (event, callback) {
+  this.addEventListener(
+    event,
+    /** @type {(event: Event) => void} */ (callback),
+  )
 }
 
 /**
- * @param {string} selector
- * @returns {NodeListOf<Element> | null}
+ * @template T
+ * @param {string} event
+ * @param {(event: T) => void} callback
  */
-ShadowRoot.prototype.$$ = function (selector) {
-  return this.querySelectorAll(selector)
+Document.prototype.on = function (event, callback) {
+  this.addEventListener(
+    event,
+    /** @type {(event: Event) => void} */ (callback),
+  )
+}
+
+/**
+ * @template T
+ * @param {string} event
+ * @param {(event: T) => void} callback
+ */
+HTMLElement.prototype.on = function (event, callback) {
+  this.addEventListener(
+    event,
+    /** @type {(event: Event) => void} */ (callback),
+  )
 }

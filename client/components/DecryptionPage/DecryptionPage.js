@@ -51,7 +51,7 @@ export default class DecryptionPage extends HTMLElement {
     if (!(section instanceof HTMLElement)) return
     section.append(this.#modal)
     this.#modal.showModal()
-    this.#modal.addEventListener("click", (event) => {
+    this.#modal.on("click", (event) => {
       if (!(event instanceof MouseEvent) || !this.#modal) return
       closeOnClickOutside(event, this.#modal)
     })
@@ -77,7 +77,7 @@ export default class DecryptionPage extends HTMLElement {
   #setupSubmit() {
     if (!(this.#decryptButton instanceof HTMLButtonElement)) return
 
-    this.#decryptButton.addEventListener("click", async () => {
+    this.#decryptButton.on("click", async () => {
       if (!(this.#decryptTextarea?.value)) return
       this.#renderList(
         await submitText(this.#decryptTextarea.value, "/decrypt"),

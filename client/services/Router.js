@@ -6,19 +6,20 @@ const Router = {
       /**
        * @param {MouseEvent} event
        */
-      a.addEventListener("click", (event) => {
+      a.on("click", (event) => {
         event.preventDefault()
         if (!(event.target instanceof HTMLElement)) return
         Router.goto(event.target.getAttribute("href") || "")
       })
     })
-    // It listen for history changes
-    globalThis.addEventListener("popstate", (event) => {
+    // listen for history changes
+    globalThis.on("popstate", (event) => {
       Router.goto(event.state.route, false)
     })
 
     Router.goto(location.pathname)
   },
+
   /**
    * @param {string} route
    * @param {boolean} addToHistory
