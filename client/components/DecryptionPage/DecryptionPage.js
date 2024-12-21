@@ -1,10 +1,27 @@
+import { $, closeOnClickOutside, submitText } from "../../utils.js"
+
 export default class DecryptionPage extends HTMLElement {
+  /**
+   * @type {HTMLTextAreaElement | null }
+   */
+  #decryptTextarea = null
+
+  /**
+   * @type {HTMLButtonElement | null }
+   */
+  #decryptButton = null
+
+  /**
+   * @type {HTMLDialogElement | null }
+   */
+  #modal = null
+
   constructor() {
     super()
 
     this.root = this.attachShadow({ mode: "open" })
 
-    const template = document.querySelector("#decryption-page-template")
+    const template = $("#decryption-page-template")
     if (!(template instanceof HTMLTemplateElement)) return
     const content = template.content.cloneNode(true)
     const styles = document.createElement("style")
@@ -19,16 +36,6 @@ export default class DecryptionPage extends HTMLElement {
     loadCss()
   }
 
-  /**
-   * @type {HTMLTextAreaElement | null }
-   */
-  #decryptTextarea = null
-
-  /**
-   * @type {HTMLButtonElement | null }
-   */
-  #decryptButton = null
-
   connectedCallback() {
     this.#init()
     this.#setupSubmit()
@@ -36,13 +43,18 @@ export default class DecryptionPage extends HTMLElement {
 
   #init() {
     this.#decryptTextarea = document.createElement("textarea")
-    if (this.#decryptButton) return
     this.#decryptButton = document.createElement("button")
     this.#decryptButton.innerText = "decrypt"
-
-    const section = this.root.querySelector("section")
+    this.#modal = document.createElement("dialog")
+    this.#modal.append(this.#decryptTextarea, this.#decryptButton)
+    const section = this.root.$("section")
     if (!(section instanceof HTMLElement)) return
-    section.append(this.#decryptTextarea, this.#decryptButton)
+    section.append(this.#modal)
+    this.#modal.showModal()
+    this.#modal.on("click", (event) => {
+      if (!(event instanceof MouseEvent) || !this.#modal) return
+      closeOnClickOutside(event, this.#modal)
+    })
   }
 
   /**
@@ -59,24 +71,17 @@ export default class DecryptionPage extends HTMLElement {
       ul.insertAdjacentHTML("beforeend", li)
       ul.setAttribute("part", "ul")
     }
-    this.root.querySelector("section")?.append(ul)
+    this.root.$("section")?.append(ul)
   }
 
   #setupSubmit() {
-    if (
-      !(this.#decryptTextarea instanceof HTMLTextAreaElement) ||
-      !(this.#decryptButton instanceof HTMLButtonElement)
-    ) return
+    if (!(this.#decryptButton instanceof HTMLButtonElement)) return
 
-    this.#decryptButton.addEventListener("click", async () => {
-      const response = await fetch("/decrypt", {
-        method: "POST",
-        headers: {
-          "Content-Type": "text/plain",
-        },
-        body: this.#decryptTextarea?.value,
-      })
-      this.#renderList(await response.json())
+    this.#decryptButton.on("click", async () => {
+      if (!(this.#decryptTextarea?.value)) return
+      this.#renderList(
+        await submitText(this.#decryptTextarea.value, "/decrypt"),
+      )
     })
   }
 }

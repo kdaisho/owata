@@ -1,10 +1,12 @@
+import { $ } from "../../utils.js"
+
 export default class HomePage extends HTMLElement {
   constructor() {
     super()
 
     this.root = this.attachShadow({ mode: "open" })
 
-    const template = document.querySelector("#home-page-template")
+    const template = $("#home-page-template")
     if (!(template instanceof HTMLTemplateElement)) return
     const content = template.content.cloneNode(true)
     const styles = document.createElement("style")
@@ -21,9 +23,6 @@ export default class HomePage extends HTMLElement {
 
   connectedCallback() {
     this.render()
-    globalThis.addEventListener("_appmenuchange", () => {
-      this.render()
-    })
   }
 
   #renderHome() {
@@ -65,7 +64,7 @@ export default class HomePage extends HTMLElement {
         </p>
       </div>
     `
-    const section = this.root.querySelector("section")
+    const section = this.root.$("section")
     if (!section) return
     section.innerHTML = _home
   }
