@@ -7,5 +7,4 @@ app.store = Store
 
 document.addEventListener("DOMContentLoaded", () => {
   app.router.init()
-  // loadData()
 })

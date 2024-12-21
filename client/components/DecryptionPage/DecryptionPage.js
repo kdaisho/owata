@@ -1,4 +1,4 @@
-import { submitText } from "../utils.js"
+import { $, closeOnClickOutside, submitText } from "../utils.js"
 
 export default class DecryptionPage extends HTMLElement {
   /**
@@ -21,7 +21,7 @@ export default class DecryptionPage extends HTMLElement {
 
     this.root = this.attachShadow({ mode: "open" })
 
-    const template = document.querySelector("#decryption-page-template")
+    const template = $("#decryption-page-template")
     if (!(template instanceof HTMLTemplateElement)) return
     const content = template.content.cloneNode(true)
     const styles = document.createElement("style")
@@ -47,11 +47,14 @@ export default class DecryptionPage extends HTMLElement {
     this.#decryptButton.innerText = "decrypt"
     this.#modal = document.createElement("dialog")
     this.#modal.append(this.#decryptTextarea, this.#decryptButton)
-
-    const section = this.root.querySelector("section")
+    const section = this.root.$("section")
     if (!(section instanceof HTMLElement)) return
     section.append(this.#modal)
     this.#modal.showModal()
+    this.#modal.addEventListener("click", (event) => {
+      if (!(event instanceof MouseEvent) || !this.#modal) return
+      closeOnClickOutside(event, this.#modal)
+    })
   }
 
   /**
@@ -68,7 +71,7 @@ export default class DecryptionPage extends HTMLElement {
       ul.insertAdjacentHTML("beforeend", li)
       ul.setAttribute("part", "ul")
     }
-    this.root.querySelector("section")?.append(ul)
+    this.root.$("section")?.append(ul)
   }
 
   #setupSubmit() {
