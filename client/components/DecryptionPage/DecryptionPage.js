@@ -1,4 +1,4 @@
-import { $, closeOnClickOutside, submitText } from "../utils.js"
+import { $, closeOnClickOutside, submitText } from "../../utils.js"
 
 export default class DecryptionPage extends HTMLElement {
   /**

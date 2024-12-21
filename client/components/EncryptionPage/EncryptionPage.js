@@ -1,10 +1,12 @@
+import { $ } from "../../utils.js"
+
 export default class EncryptionPage extends HTMLElement {
   constructor() {
     super()
 
     this.root = this.attachShadow({ mode: "open" })
 
-    const template = document.querySelector("#encryption-page-template")
+    const template = $("#encryption-page-template")
     if (!(template instanceof HTMLTemplateElement)) return
     const content = template.content.cloneNode(true)
     const styles = document.createElement("style")
@@ -33,7 +35,7 @@ export default class EncryptionPage extends HTMLElement {
 
   #setList() {
     document.addEventListener("addrawtext", () => {
-      const aside = this.root.querySelector("#raw-text")
+      const aside = this.root.$("#raw-text")
       aside?.childNodes.forEach((node) => {
         if (node.nodeName === "UL") {
           node.remove()
@@ -70,7 +72,7 @@ export default class EncryptionPage extends HTMLElement {
       <input name="encryption-value" id="encryption-input" />
       <button type="button" id="add">add</button>
     `
-    const div = this.root.querySelector("#input-container")
+    const div = this.root.$("#input-container")
     if (!div) return
     div.innerHTML = fieldset
   }
@@ -79,13 +81,13 @@ export default class EncryptionPage extends HTMLElement {
     const btn = document.createElement("button")
     btn.textContent = "Copy to clipboard"
     btn.addEventListener("click", () => {
-      const textarea = this.root.querySelector("textarea.output")
+      const textarea = this.root.$("textarea.output")
       if (!(textarea instanceof HTMLTextAreaElement)) return
       navigator.clipboard.writeText(textarea.value)
         .then(() => console.log("Copied successfully!"))
         .catch((err) => console.error("Copy failed:", err))
     })
-    this.root.querySelector("section")?.append(btn)
+    this.root.$("section")?.append(btn)
   }
 
   #setSubmit() {
@@ -102,7 +104,7 @@ export default class EncryptionPage extends HTMLElement {
       textarea.classList.add("output")
       textarea.value = await response.text()
 
-      this.root.querySelector("section")?.append(textarea)
+      this.root.$("section")?.append(textarea)
       this.#renderCopyButton()
     })
   }
@@ -126,13 +128,13 @@ export default class EncryptionPage extends HTMLElement {
           <li><a href=${text} target="_blank" rel="noopener noreferrer">${text}</a></li>
         `
       }
-      this.root.querySelector("#raw-text")?.appendChild(ul)
+      this.root.$("#raw-text")?.appendChild(ul)
     }
 
     if (document.startViewTransition) {
       document.startViewTransition(() => {
         this.#renderForm()
-        const input = this.root.querySelector("#encryption-input")
+        const input = this.root.$("#encryption-input")
         if (
           !(input instanceof HTMLInputElement)
         ) return
@@ -148,7 +150,7 @@ export default class EncryptionPage extends HTMLElement {
             }
           },
         )
-        this.root.querySelector("#add")?.addEventListener(
+        this.root.$("#add")?.addEventListener(
           "click",
           () => {
             this.#add(input)
