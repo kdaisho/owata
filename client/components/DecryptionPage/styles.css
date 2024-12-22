@@ -1,18 +1,18 @@
-section {
+/* section {
   display: grid;
   grid-template-columns: auto;
   gap: 1rem;
-}
+} */
 
-ul {
+/* ul {
   display: grid;
   gap: 0.75rem;
-}
+} */
 
 /* 
 1. Define `display` only when [open] is true to make dialog.close() work.
 2. Most styles for dialog are defined in shadow.css, but [open] selector won't work there as it has to use ::part().
 */
-dialog[open] {
+/* dialog[open] {
   display: flex;
-}
+} */

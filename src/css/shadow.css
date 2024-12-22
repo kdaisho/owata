@@ -1,4 +1,4 @@
-::part(dialog) {
+/* ::part(dialog) {
   background: var(--darkblue2);
   border: none;
   border-radius: var(--border-radius-l);
@@ -8,38 +8,38 @@
   max-width: 768px;
   padding: 1.6rem;
   width: 100%;
-}
+} */
 
-::part(dialog)::backdrop {
+/* ::part(dialog)::backdrop {
   backdrop-filter: blur(4px);
-}
+} */
 
-::part(textarea) {
+/* ::part(textarea) {
   background: var(--darkblue2);
   border: 1px solid var(--lightblue);
   border-radius: var(--border-radius-m);
   color: var(--white);
   min-height: 300px;
   padding: 0.5rem;
-}
+} */
 
-::part(button) {
+/* ::part(button) {
   background: var(--lightblue);
   border: 1px solid var(--lightblue);
   border-radius: var(--border-radius-m);
   color: var(--darkblue2);
   font-size: var(--h5);
   min-height: 2.5rem;
-}
+} */
 
-::part(button):focus-visible,
+/* ::part(button):focus-visible,
 ::part(input):focus-visible,
 ::part(textarea):focus-visible {
   outline: 1px solid var(--lightblue);
   outline-offset: 2px;
-}
+} */
 
-@media (max-width: 767px) {
+/* @media (max-width: 767px) {
   ::part(dialog) {
     margin: auto 0 0 0;
     max-width: calc(100% - 50px);
@@ -48,10 +48,10 @@
   ::part(textarea) {
     height: 60vh;
   }
-}
+} */
 
-@media (max-width: 590px) {
+/* @media (max-width: 590px) {
   header {
     flex-flow: column nowrap;
   }
-}
+} */

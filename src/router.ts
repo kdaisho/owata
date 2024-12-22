@@ -17,25 +17,68 @@ const cache = {
 }
 
 export default router
-  .get("/(decryption|encryption)?", async ({ response }) => {
+  .get("/", async ({ response }) => {
     if (dev || !cache.main) {
-      const [layoutHtml, headHtml, resetCss, appCss, shadowCss, mainHtml] =
+      const [layoutHtml, headHtml, homeHtml, resetCss, appCss, homeCss] =
         await Promise.all([
           Deno.readFile("src/html/layout.html"),
           Deno.readFile("src/html/head.html"),
+          Deno.readFile("src/html/home.html"),
           Deno.readFile("client/css/reset.css"),
           Deno.readFile("src/css/app.css"),
-          Deno.readFile("src/css/shadow.css"),
-          Deno.readFile("src/html/main.html"),
+          Deno.readFile("src/css/home.css"),
         ])
       cache.main = bindValues(decoder.decode(layoutHtml), {
         head: bindValues(decoder.decode(headHtml), {
           css: `<style>${
             decoder.decode(resetCss) + decoder.decode(appCss) +
-            decoder.decode(shadowCss)
+            decoder.decode(homeCss)
           }</style>`,
         }),
-        main: decoder.decode(mainHtml),
+        main: decoder.decode(homeHtml),
+      })
+    }
+
+    response.body = cache.main
+  })
+  .get("/decryption", async ({ response }) => {
+    if (dev || !cache.main) {
+      const [layoutHtml, headHtml, resetCss, appCss] = await Promise.all([
+        Deno.readFile("src/html/layout.html"),
+        Deno.readFile("src/html/head.html"),
+        Deno.readFile("client/css/reset.css"),
+        Deno.readFile("src/css/app.css"),
+      ])
+      cache.main = bindValues(decoder.decode(layoutHtml), {
+        head: bindValues(decoder.decode(headHtml), {
+          css: `<style>${
+            decoder.decode(resetCss) + decoder.decode(appCss)
+          }</style>`,
+        }),
+        main: "",
+      })
+    }
+
+    response.body = cache.main
+  })
+  .get("/encryption", async ({ response }) => {
+    if (dev || !cache.main) {
+      const [layoutHtml, headHtml, resetCss, appCss, homeCss] = await Promise
+        .all([
+          Deno.readFile("src/html/layout.html"),
+          Deno.readFile("src/html/head.html"),
+          Deno.readFile("client/css/reset.css"),
+          Deno.readFile("src/css/app.css"),
+          Deno.readFile("src/css/home.css"),
+        ])
+      cache.main = bindValues(decoder.decode(layoutHtml), {
+        head: bindValues(decoder.decode(headHtml), {
+          css: `<style>${
+            decoder.decode(resetCss) + decoder.decode(appCss) +
+            decoder.decode(homeCss)
+          }</style>`,
+        }),
+        main: "",
       })
     }
 

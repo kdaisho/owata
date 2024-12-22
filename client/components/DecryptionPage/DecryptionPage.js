@@ -1,5 +1,5 @@
 import { $, closeOnClickOutside, submitText } from "../../utils.js"
-import { resetCss } from "../../js/reset.css.js"
+import { resetCss, shadowCss } from "../../js/shadow.css.js"
 
 export default class DecryptionPage extends HTMLElement {
   /**
@@ -21,7 +21,7 @@ export default class DecryptionPage extends HTMLElement {
     super()
 
     this.root = this.attachShadow({ mode: "open" })
-    this.root.adoptedStyleSheets = [resetCss]
+    this.root.adoptedStyleSheets = [resetCss, shadowCss]
 
     const template = $("#decryption-page-template")
     if (!(template instanceof HTMLTemplateElement)) return
@@ -39,7 +39,13 @@ export default class DecryptionPage extends HTMLElement {
   }
 
   connectedCallback() {
-    this.#init()
+    if (document.startViewTransition) {
+      document.startViewTransition(() => {
+        this.#init()
+      })
+    } else {
+      this.#init()
+    }
     this.#setupSubmit()
   }
 
@@ -52,15 +58,12 @@ export default class DecryptionPage extends HTMLElement {
     this.#decryptButton.setAttribute("id", "decrypt-btn")
     this.#dialog = document.createElement("dialog")
     this.#dialog.setAttribute("part", "dialog")
-    this.#dialog.style.opacity = "0"
     this.#dialog.append(this.#decryptTextarea, this.#decryptButton)
     const section = this.root.$("section")
     if (!(section instanceof HTMLElement)) return
     section.append(this.#dialog)
     this.#dialog.showModal()
 
-    this.#dialog.style.transition = "opacity 0.2s ease-in"
-    this.#dialog.style.opacity = "1"
     this.#dialog.on("click", (event) => {
       if (!(event instanceof MouseEvent) || !this.#dialog) return
       closeOnClickOutside(event, this.#dialog)

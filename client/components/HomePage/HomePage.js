@@ -59,7 +59,7 @@ export default class HomePage extends HTMLElement {
         </p>
         <p>
           when you return, paste the ciphered text to decrypt it and view your
-          secret bookmark list. Owata keeps your bookmarks secure, private,
+          secret bookmark list. owata keeps your bookmarks secure, private,
           and in your control!
         </p>
       </div>
