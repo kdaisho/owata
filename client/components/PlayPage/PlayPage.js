@@ -1,5 +1,6 @@
 import { $, closeOnClickOutside, submitText } from "../../utils.js"
 import { resetCss, shadowCss } from "../../js/shadow.css.js"
+import { playPageCss } from "../../js/play-page.css.js"
 
 export default class PlayPage extends HTMLElement {
   /**
@@ -17,19 +18,32 @@ export default class PlayPage extends HTMLElement {
    */
   #dialog = null
 
+  /**
+   * @type {HTMLButtonElement | null}
+   */
+  #importButton = null
+
+  /**
+   * @type {HTMLButtonElement | null}
+   */
+  #encryptButton = null
+
+  /**
+   * @type {HTMLButtonElement | null}
+   */
+  #sidebarButton = null
+
   constructor() {
     super()
 
     this.root = this.attachShadow({ mode: "open" })
-    this.root.adoptedStyleSheets = [resetCss, shadowCss]
+    this.root.adoptedStyleSheets = [resetCss, shadowCss, playPageCss]
 
     const template = $("#play-page-template")
     if (!(template instanceof HTMLTemplateElement)) return
     const content = template.content.cloneNode(true)
-    const styles = document.$el("style")
     if (!(content instanceof Node)) return
     this.root.appendChild(content)
-    this.root.appendChild(styles)
   }
 
   connectedCallback() {
@@ -44,19 +58,49 @@ export default class PlayPage extends HTMLElement {
   }
 
   #init() {
-    this.#decryptTextarea = document.$el("textarea")
-    this.#decryptButton = document.$el("button")
-    this.#decryptButton.innerText = "decrypt"
-    this.#dialog = document.$el("dialog")
-    this.#dialog.append(this.#decryptTextarea, this.#decryptButton)
+    this.#importButton = document.$el("button")
+    this.#encryptButton = document.$el("button")
+    this.#sidebarButton = document.$el("button")
+
+    this.#importButton.innerText = "import"
+    this.#encryptButton.innerText = "encrypt"
+    this.#sidebarButton.classList.add("icon")
+
+    const urlInput = document.$el("input")
+    urlInput.$attr("type", "url")
+    const urlLabel = document.$el("label")
+    urlLabel.innerText = "url"
+    const nameInput = document.$el("input")
+    const nameLabel = document.$el("label")
+    nameLabel.innerText = "name (optional)"
+
+    const urlFieldset = document.$el("fieldset")
+    urlFieldset.append(urlLabel, urlInput)
+    const nameFieldset = document.$el("fieldset")
+    nameFieldset.append(nameLabel, nameInput)
+
+    const cancelButton = document.$el("button")
+    cancelButton.innerText = "cancel"
+    const addButton = document.$el("button")
+    addButton.innerText = "add"
+
+    const form = document.$el("form")
+    form.append(urlFieldset, nameFieldset, cancelButton, addButton)
+
+    const aside = document.$el("aside")
+    aside.append(this.#sidebarButton)
+    aside.append(form)
+
+    const div = document.$el("div")
+    div.classList.add("top-nav")
+    div.append(this.#importButton, this.#encryptButton)
+
     const section = this.root.$("section")
     if (!(section instanceof HTMLElement)) return
-    section.append(this.#dialog)
-    this.#dialog.showModal()
+    section.append(div, aside)
 
-    this.#dialog.$on("click", (event) => {
-      if (!(event instanceof MouseEvent) || !this.#dialog) return
-      closeOnClickOutside(event, this.#dialog)
+    this.#sidebarButton.$on("click", () => {
+      aside.classList.toggle("active")
     })
   }
 

@@ -1,5 +1,5 @@
 :root {
-  font-family: monospace, sans-serif;
+  /* font-family: monospace, sans-serif; */
   --base-size: 1rem;
   --scale: 1.2;
   --h5: calc(var(--base-size) * var(--scale));
@@ -22,11 +22,14 @@
   /* https://www.joshwcomeau.com/css/designing-shadows/ */
   --lightblue: hsl(221, 100%, 91%);
   --blue: hsl(220deg 84% 73%);
-  --darkblue: hsl(220deg 100% 72%);
-  --darkblue2: hsl(221deg 64% 58%);
+  --darkblue: hsl(221deg 64% 58%);
   --darkgray: hsl(0deg 0% 0% / 0.25);
   --white: hsl(0, 0%, 100%);
   --hover-opacity: 0.75;
+
+  --shadow-l: 3px 9px 24px;
+  --shadow-m: 2px 6px 18px;
+  --shadow-s: 1px 2px 6px;
 }
 
 h1 {
