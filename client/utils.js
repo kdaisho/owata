@@ -80,7 +80,7 @@ HTMLElement.prototype.$$ = function (selector) {
  * @param {string} event
  * @param {(event: T) => void} callback
  */
-globalThis.on = function (event, callback) {
+globalThis.$on = function (event, callback) {
   this.addEventListener(
     event,
     /** @type {(event: Event) => void} */ (callback),
@@ -92,7 +92,7 @@ globalThis.on = function (event, callback) {
  * @param {string} event
  * @param {(event: T) => void} callback
  */
-Document.prototype.on = function (event, callback) {
+Document.prototype.$on = function (event, callback) {
   this.addEventListener(
     event,
     /** @type {(event: Event) => void} */ (callback),
@@ -104,9 +104,18 @@ Document.prototype.on = function (event, callback) {
  * @param {string} event
  * @param {(event: T) => void} callback
  */
-HTMLElement.prototype.on = function (event, callback) {
+HTMLElement.prototype.$on = function (event, callback) {
   this.addEventListener(
     event,
     /** @type {(event: Event) => void} */ (callback),
   )
+}
+
+/**
+ * @template {keyof HTMLElementTagNameMap} T
+ * @param {T} tag
+ * @returns {HTMLElementTagNameMap[T]}
+ */
+Document.prototype.$el = function (tag) {
+  return document.createElement(tag)
 }

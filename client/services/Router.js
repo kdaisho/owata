@@ -6,14 +6,14 @@ const Router = {
       /**
        * @param {MouseEvent} event
        */
-      a.on("click", (event) => {
+      a.$on("click", (event) => {
         event.preventDefault()
         if (!(event.target instanceof HTMLElement)) return
         Router.goto(event.target.getAttribute("href") || "")
       })
     })
     // listen for history changes
-    globalThis.on("popstate", (event) => {
+    globalThis.$on("popstate", (event) => {
       Router.goto(event.state.route, false)
     })
 
@@ -30,26 +30,12 @@ const Router = {
     }
 
     switch (route) {
-      case "/encryption": {
-        await import(
-          "../components/EncryptionPage/EncryptionPage.js"
-        )
+      case "/play": {
+        await import("../components/PlayPage/PlayPage.js")
 
         const main = $("main")
         if (!main) throw new Error("main elem not found")
-        main.innerHTML = ""
-        main?.appendChild(document.createElement("encryption-page"))
-        break
-      }
-      case "/decryption": {
-        await import(
-          "../components/DecryptionPage/DecryptionPage.js"
-        )
-
-        const main = $("main")
-        if (!main) throw new Error("main elem not found")
-        main.innerHTML = ""
-        main?.appendChild(document.createElement("decryption-page"))
+        main?.appendChild(document.createElement("play-page"))
         break
       }
       default:

@@ -1,7 +1,7 @@
 import { $, closeOnClickOutside, submitText } from "../../utils.js"
 import { resetCss, shadowCss } from "../../js/shadow.css.js"
 
-export default class DecryptionPage extends HTMLElement {
+export default class PlayPage extends HTMLElement {
   /**
    * @type {HTMLTextAreaElement | null }
    */
@@ -23,7 +23,7 @@ export default class DecryptionPage extends HTMLElement {
     this.root = this.attachShadow({ mode: "open" })
     this.root.adoptedStyleSheets = [resetCss, shadowCss]
 
-    const template = $("#decryption-page-template")
+    const template = $("#play-page-template")
     if (!(template instanceof HTMLTemplateElement)) return
     const content = template.content.cloneNode(true)
     const styles = document.$el("style")
@@ -31,11 +31,11 @@ export default class DecryptionPage extends HTMLElement {
     this.root.appendChild(content)
     this.root.appendChild(styles)
 
-    async function loadCss() {
-      const request = await fetch("components/DecryptionPage/styles.css")
-      styles.textContent = await request.text()
-    }
-    loadCss()
+    // async function loadCss() {
+    //   const request = await fetch("components/DecryptionPage/styles.css")
+    //   styles.textContent = await request.text()
+    // }
+    // loadCss()
   }
 
   connectedCallback() {
@@ -99,4 +99,4 @@ export default class DecryptionPage extends HTMLElement {
   }
 }
 
-customElements.define("decryption-page", DecryptionPage)
+customElements.define("play-page", PlayPage)

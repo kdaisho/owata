@@ -9,7 +9,7 @@ export default class EncryptionPage extends HTMLElement {
     const template = $("#encryption-page-template")
     if (!(template instanceof HTMLTemplateElement)) return
     const content = template.content.cloneNode(true)
-    const styles = document.createElement("style")
+    const styles = document.$el("style")
     this.root.appendChild(content)
     this.root.appendChild(styles)
 
@@ -29,19 +29,19 @@ export default class EncryptionPage extends HTMLElement {
 
   #setButton() {
     if (this.#encryptButton) return
-    this.#encryptButton = document.createElement("button")
+    this.#encryptButton = document.$el("button")
     this.#encryptButton.innerText = "encrypt"
   }
 
   #setList() {
-    document.on("addrawtext", () => {
+    document.$on("addrawtext", () => {
       const aside = this.root.$("#raw-text")
       aside?.childNodes.forEach((node) => {
         if (node.nodeName === "UL") {
           node.remove()
         }
       })
-      const ul = document.createElement("ul")
+      const ul = document.$el("ul")
       for (const text of app.store.rawText) {
         const li = `
           <li>
@@ -78,9 +78,9 @@ export default class EncryptionPage extends HTMLElement {
   }
 
   #renderCopyButton() {
-    const btn = document.createElement("button")
+    const btn = document.$el("button")
     btn.textContent = "Copy to clipboard"
-    btn.on("click", () => {
+    btn.$on("click", () => {
       const textarea = this.root.$("textarea.output")
       if (!(textarea instanceof HTMLTextAreaElement)) return
       navigator.clipboard.writeText(textarea.value)
@@ -91,7 +91,7 @@ export default class EncryptionPage extends HTMLElement {
   }
 
   #setSubmit() {
-    this.#encryptButton?.on("click", async () => {
+    this.#encryptButton?.$on("click", async () => {
       const response = await fetch("/encrypt", {
         method: "POST",
         headers: {
@@ -99,7 +99,7 @@ export default class EncryptionPage extends HTMLElement {
         },
         body: JSON.stringify(app.store.rawText),
       })
-      const textarea = document.createElement("textarea")
+      const textarea = document.$el("textarea")
       if (!(textarea instanceof HTMLTextAreaElement)) return
       textarea.classList.add("output")
       textarea.value = await response.text()
@@ -122,7 +122,7 @@ export default class EncryptionPage extends HTMLElement {
 
   #render() {
     if (app.store.rawText) {
-      const ul = document.createElement("ul")
+      const ul = document.$el("ul")
       for (const text of app.store.rawText) {
         ul.innerHTML = `
           <li><a href=${text} target="_blank" rel="noopener noreferrer">${text}</a></li>
@@ -139,7 +139,7 @@ export default class EncryptionPage extends HTMLElement {
           !(input instanceof HTMLInputElement)
         ) return
 
-        this.on(
+        this.$on(
           "keydown",
           /**
            * @param {KeyboardEvent} e
@@ -150,7 +150,7 @@ export default class EncryptionPage extends HTMLElement {
             }
           },
         )
-        this.root.$("#add")?.on(
+        this.root.$("#add")?.$on(
           "click",
           () => {
             this.#add(input)
