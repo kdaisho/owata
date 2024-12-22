@@ -14,24 +14,28 @@ const decoder = new TextDecoder("utf-8")
 const dev = Deno.env.get("ENV") === "development"
 const cache = {
   main: "",
-  modal: "",
 }
 
 export default router
   .get("/(decryption|encryption)?", async ({ response }) => {
     if (dev || !cache.main) {
-      const [_layout, _head, _gcss, _css, _main] = await Promise.all([
-        Deno.readFile("src/html/layout.html"),
-        Deno.readFile("src/html/head.html"),
-        Deno.readFile("src/css/layout.css"),
-        Deno.readFile("src/css/main.css"),
-        Deno.readFile("src/html/main.html"),
-      ])
-      cache.main = bindValues(decoder.decode(_layout), {
-        head: bindValues(decoder.decode(_head), {
-          css: `<style>${decoder.decode(_gcss) + decoder.decode(_css)}</style>`,
+      const [layoutHtml, headHtml, resetCss, appCss, shadowCss, mainHtml] =
+        await Promise.all([
+          Deno.readFile("src/html/layout.html"),
+          Deno.readFile("src/html/head.html"),
+          Deno.readFile("src/css/reset.css"),
+          Deno.readFile("src/css/app.css"),
+          Deno.readFile("src/css/shadow.css"),
+          Deno.readFile("src/html/main.html"),
+        ])
+      cache.main = bindValues(decoder.decode(layoutHtml), {
+        head: bindValues(decoder.decode(headHtml), {
+          css: `<style>${
+            decoder.decode(resetCss) + decoder.decode(appCss) +
+            decoder.decode(shadowCss)
+          }</style>`,
         }),
-        main: decoder.decode(_main),
+        // main: decoder.decode(mainHtml),
       })
     }
 

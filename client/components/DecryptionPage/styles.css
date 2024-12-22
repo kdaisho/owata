@@ -11,7 +11,7 @@ ul {
 
 /* 
 1. Define `display` only when [open] is true to make dialog.close() work.
-2. Most styles for dialog are defined in layout.css, but [open] selector won't work there as it has to use ::part().
+2. Most styles for dialog are defined in shadow.css, but [open] selector won't work there as it has to use ::part().
 */
 dialog[open] {
   display: flex;

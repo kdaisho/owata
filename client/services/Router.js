@@ -37,7 +37,6 @@ const Router = {
 
         const main = $("main")
         if (!main) throw new Error("main elem not found")
-        main.innerHTML = ""
         main?.appendChild(document.createElement("home-page"))
         break
       }
