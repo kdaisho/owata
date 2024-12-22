@@ -1,4 +1,5 @@
 import { $, closeOnClickOutside, submitText } from "../../utils.js"
+import { resetCss } from "../../js/reset.css.js"
 
 export default class DecryptionPage extends HTMLElement {
   /**
@@ -20,6 +21,7 @@ export default class DecryptionPage extends HTMLElement {
     super()
 
     this.root = this.attachShadow({ mode: "open" })
+    this.root.adoptedStyleSheets = [resetCss]
 
     const template = $("#decryption-page-template")
     if (!(template instanceof HTMLTemplateElement)) return

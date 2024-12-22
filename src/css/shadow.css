@@ -32,11 +32,6 @@
   min-height: 2.5rem;
 }
 
-::part(button):hover {
-  cursor: pointer;
-  opacity: var(--hover-opacity);
-}
-
 ::part(button):focus-visible,
 ::part(input):focus-visible,
 ::part(textarea):focus-visible {

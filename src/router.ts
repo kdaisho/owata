@@ -23,7 +23,7 @@ export default router
         await Promise.all([
           Deno.readFile("src/html/layout.html"),
           Deno.readFile("src/html/head.html"),
-          Deno.readFile("src/css/reset.css"),
+          Deno.readFile("client/css/reset.css"),
           Deno.readFile("src/css/app.css"),
           Deno.readFile("src/css/shadow.css"),
           Deno.readFile("src/html/main.html"),
@@ -35,7 +35,7 @@ export default router
             decoder.decode(shadowCss)
           }</style>`,
         }),
-        // main: decoder.decode(mainHtml),
+        main: decoder.decode(mainHtml),
       })
     }
 
