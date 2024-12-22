@@ -14,7 +14,7 @@ export default class DecryptionPage extends HTMLElement {
   /**
    * @type {HTMLDialogElement | null }
    */
-  #modal = null
+  #dialog = null
 
   constructor() {
     super()
@@ -43,17 +43,25 @@ export default class DecryptionPage extends HTMLElement {
 
   #init() {
     this.#decryptTextarea = document.createElement("textarea")
+    this.#decryptTextarea.setAttribute("part", "textarea")
     this.#decryptButton = document.createElement("button")
+    this.#decryptButton.setAttribute("part", "button")
     this.#decryptButton.innerText = "decrypt"
-    this.#modal = document.createElement("dialog")
-    this.#modal.append(this.#decryptTextarea, this.#decryptButton)
+    this.#decryptButton.setAttribute("id", "decrypt-btn")
+    this.#dialog = document.createElement("dialog")
+    this.#dialog.setAttribute("part", "dialog")
+    this.#dialog.style.opacity = "0"
+    this.#dialog.append(this.#decryptTextarea, this.#decryptButton)
     const section = this.root.$("section")
     if (!(section instanceof HTMLElement)) return
-    section.append(this.#modal)
-    this.#modal.showModal()
-    this.#modal.on("click", (event) => {
-      if (!(event instanceof MouseEvent) || !this.#modal) return
-      closeOnClickOutside(event, this.#modal)
+    section.append(this.#dialog)
+    this.#dialog.showModal()
+
+    this.#dialog.style.transition = "opacity 0.2s ease-in"
+    this.#dialog.style.opacity = "1"
+    this.#dialog.on("click", (event) => {
+      if (!(event instanceof MouseEvent) || !this.#dialog) return
+      closeOnClickOutside(event, this.#dialog)
     })
   }
 

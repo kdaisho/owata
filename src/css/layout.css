@@ -39,6 +39,40 @@ img {
   --lime: hsl(101, 85%, 56%);
   --olive: hsl(56.09, 48.94%, 36.86%);
   --brown: hsl(44.29, 48.84%, 16.86%);
+  --purple: rebeccapurple;
+  --border-radius-m: 7px;
+  --border-radius-l: 10px;
+
+  /* nice color set */
+  /* https://www.joshwcomeau.com/css/designing-shadows/ */
+  --lightblue: hsl(221, 100%, 91%);
+  --blue: hsl(220deg 84% 73%);
+  --darkblue: hsl(220deg 100% 72%);
+  --darkblue2: hsl(221deg 64% 58%);
+  --darkgray: hsl(0deg 0% 0% / 0.25);
+  --white: hsl(0, 0%, 100%);
+  --hover-opacity: 0.75;
+}
+
+.black.box {
+  --shadow-color: hsl(0deg 0% 0% / 0.25);
+}
+.darker.box {
+  --shadow-color: hsl(220deg 100% 55%);
+}
+
+.black.box {
+  --shadow-color: hsl(0deg 0% 0% / 0.5);
+}
+.darker.box {
+  --shadow-color: hsl(220deg 100% 50%);
+}
+.goldilocks.box {
+  --shadow-color: hsl(220deg 60% 50%);
+}
+
+.box {
+  filter: drop-shadow(1px 2px 8px var(--shadow-color));
 }
 
 h1 {
@@ -66,24 +100,24 @@ small,
   font-size: calc(var(--base-size) / var(--scale));
 }
 
+a {
+  color: var(--white);
+}
+
 body {
-  padding: 1rem 2rem;
+  background: var(--blue);
+  color: var(--white);
   display: grid;
   gap: 2rem;
   grid-template-rows: 50px auto;
   height: 100vh;
+  padding: 1rem 2rem;
 }
 
 header {
   align-items: center;
   display: flex;
   gap: 1rem 3rem;
-}
-
-@media (max-width: 490px) {
-  header {
-    flex-flow: column nowrap;
-  }
 }
 
 nav {
@@ -101,10 +135,67 @@ nav {
   width: 100%;
 }
 
-button {
-  color: var(--black);
+::part(dialog) {
+  background: var(--darkblue2);
+  border: none;
+  border-radius: var(--border-radius-l);
+  filter: drop-shadow(3px 9px 24px var(--darkblue2));
+  flex-flow: column nowrap;
+  gap: 1rem;
+  max-width: 768px;
+  padding: 1.6rem;
+  width: 100%;
+}
+
+::part(dialog)::backdrop {
+  backdrop-filter: blur(4px);
+}
+
+::part(textarea) {
+  background: var(--darkblue2);
+  border: 1px solid var(--lightblue);
+  border-radius: var(--border-radius-m);
+  color: var(--white);
+  min-height: 300px;
+  padding: 0.5rem;
+}
+
+::part(button) {
+  background: var(--lightblue);
+  border: 1px solid var(--lightblue);
+  border-radius: var(--border-radius-m);
+  color: var(--darkblue2);
+  font-size: var(--h5);
+  min-height: 2.5rem;
+}
+
+::part(button):hover {
   cursor: pointer;
-  min-height: 1.75rem;
+  opacity: var(--hover-opacity);
+}
+
+::part(button):focus-visible,
+::part(input):focus-visible,
+::part(textarea):focus-visible {
+  outline: 1px solid var(--lightblue);
+  outline-offset: 2px;
+}
+
+@media (max-width: 767px) {
+  ::part(dialog) {
+    margin: auto 0 0 0;
+    max-width: calc(100% - 50px);
+  }
+
+  ::part(textarea) {
+    height: 60vh;
+  }
+}
+
+@media (max-width: 590px) {
+  header {
+    flex-flow: column nowrap;
+  }
 }
 
 .app-title a {
@@ -134,88 +225,5 @@ button {
 @keyframes slide-in {
   to {
     right: 20px;
-  }
-}
-
-/* .app-title {
-  font-size: var(--h5);
-  white-space: nowrap;
-} */
-
-/* .home {
-  display: flex;
-  flex-flow: column nowrap;
-  gap: 1rem;
-} */
-
-@layer modal {
-  .modal-content {
-    display: grid;
-    gap: 2rem;
-    grid-template-columns: auto auto;
-  }
-
-  .form-wrapper {
-    display: flex;
-    flex-flow: column nowrap;
-    gap: 2rem;
-  }
-
-  form {
-    display: flex;
-    flex-flow: column nowrap;
-    gap: 1rem;
-  }
-
-  .form-header {
-    display: flex;
-    flex-flow: row nowrap;
-    justify-content: space-between;
-  }
-
-  textarea {
-    padding: 0.5rem;
-  }
-
-  textarea:focus-visible {
-    outline-color: var(--black);
-  }
-
-  .form-wrapper[data-is-encryption="true"] textarea {
-    background: var(--black);
-    color: var(--lightgray);
-  }
-
-  .form-wrapper[data-is-encryption="true"] textarea:focus-visible {
-    outline-color: var(--lightgray);
-  }
-
-  .backdrop {
-    align-items: center;
-    display: flex;
-    height: 100%;
-    justify-content: center;
-    left: 0;
-    position: fixed;
-    top: 0;
-    width: 100%;
-  }
-
-  .modal {
-    background: var(--lightgray);
-    border: 1px solid var(--black);
-    max-height: 90%;
-    max-width: 1080px;
-    overflow-y: auto;
-    padding: 2rem;
-    width: 100%;
-  }
-
-  body:has(#modal) .app-container {
-    filter: blur(3px);
-  }
-
-  .modal:has(.form-wrapper[data-is-encryption="true"]) {
-    background: var(--lightgray);
   }
 }

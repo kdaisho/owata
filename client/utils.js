@@ -17,17 +17,17 @@ export async function submitText(data, endpoint) {
 
 /**
  * @param {MouseEvent} event
- * @param {HTMLDialogElement} modal
+ * @param {HTMLDialogElement} dialog
  */
-export function closeOnClickOutside(event, modal) {
-  const rect = modal.getBoundingClientRect()
+export function closeOnClickOutside(event, dialog) {
+  const rect = dialog.getBoundingClientRect()
   if (
     event.clientX < rect.left ||
     event.clientX > rect.right ||
     event.clientY < rect.top ||
     event.clientY > rect.bottom
   ) {
-    modal.close()
+    dialog.close()
   }
 }
 
