@@ -37,24 +37,6 @@ export default router
 
     response.body = cache.main
   })
-  .post("/form", async ({ request, response }) => {
-    if (dev || !cache.modal) {
-      const { action, label, buttonLabel, isEncryption } = await request.body
-        .json()
-
-      cache.modal = bindValues(
-        decoder.decode(await Deno.readFile("src/html/modal.html")),
-        {
-          action,
-          label,
-          buttonLabel,
-          isEncryption,
-        },
-      )
-    }
-
-    response.body = cache.modal
-  })
   .get("/output", async ({ response }) => {
     response.body = decoder.decode(await Deno.readFile("src/html/output.html"))
   })
