@@ -63,19 +63,17 @@ export default router
   })
   .get("/encryption", async ({ response }) => {
     if (dev || !cache.main) {
-      const [layoutHtml, headHtml, resetCss, appCss, homeCss] = await Promise
+      const [layoutHtml, headHtml, resetCss, appCss] = await Promise
         .all([
           Deno.readFile("src/html/layout.html"),
           Deno.readFile("src/html/head.html"),
           Deno.readFile("client/css/reset.css"),
           Deno.readFile("src/css/app.css"),
-          Deno.readFile("src/css/home.css"),
         ])
       cache.main = bindValues(decoder.decode(layoutHtml), {
         head: bindValues(decoder.decode(headHtml), {
           css: `<style>${
-            decoder.decode(resetCss) + decoder.decode(appCss) +
-            decoder.decode(homeCss)
+            decoder.decode(resetCss) + decoder.decode(appCss)
           }</style>`,
         }),
         main: "",
@@ -83,9 +81,6 @@ export default router
     }
 
     response.body = cache.main
-  })
-  .get("/output", async ({ response }) => {
-    response.body = decoder.decode(await Deno.readFile("src/html/output.html"))
   })
   .post(
     "/encrypt",
