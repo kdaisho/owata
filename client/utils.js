@@ -104,7 +104,7 @@ Document.prototype.$on = function (event, callback) {
  * @param {string} event
  * @param {(event: T) => void} callback
  */
-HTMLElement.prototype.$on = function (event, callback) {
+Element.prototype.$on = function (event, callback) {
   this.addEventListener(
     event,
     /** @type {(event: Event) => void} */ (callback),
@@ -112,10 +112,19 @@ HTMLElement.prototype.$on = function (event, callback) {
 }
 
 /**
- * @template {keyof HTMLElementTagNameMap} T
- * @param {T} tag
- * @returns {HTMLElementTagNameMap[T]}
+ * @param {string} attribute
+ * @param {string} value
+ */
+HTMLElement.prototype.$attr = function (attribute, value) {
+  this.setAttribute(attribute, value)
+}
+
+/**
+ * @template {keyof HTMLElementTagNameMap | keyof CustomElementTagNameMap} T
+ * @param {keyof HTMLElementTagNameMap | keyof CustomElementTagNameMap} tag
+ * @returns {(T extends keyof HTMLElementTagNameMap ? HTMLElementTagNameMap[T] : T extends "play-page" ? CustomElementTagNameMap[T] : Element)}
  */
 Document.prototype.$el = function (tag) {
-  return document.createElement(tag)
+  // using any here because jsDoc doesn't support conditional types
+  return /** @type {any} */ (document.createElement(tag))
 }

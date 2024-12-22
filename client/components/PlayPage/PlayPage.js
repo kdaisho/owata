@@ -30,12 +30,6 @@ export default class PlayPage extends HTMLElement {
     if (!(content instanceof Node)) return
     this.root.appendChild(content)
     this.root.appendChild(styles)
-
-    // async function loadCss() {
-    //   const request = await fetch("components/DecryptionPage/styles.css")
-    //   styles.textContent = await request.text()
-    // }
-    // loadCss()
   }
 
   connectedCallback() {
@@ -51,13 +45,9 @@ export default class PlayPage extends HTMLElement {
 
   #init() {
     this.#decryptTextarea = document.$el("textarea")
-    this.#decryptTextarea.setAttribute("part", "textarea")
     this.#decryptButton = document.$el("button")
-    this.#decryptButton.setAttribute("part", "button")
     this.#decryptButton.innerText = "decrypt"
-    this.#decryptButton.setAttribute("id", "decrypt-btn")
     this.#dialog = document.$el("dialog")
-    this.#dialog.setAttribute("part", "dialog")
     this.#dialog.append(this.#decryptTextarea, this.#decryptButton)
     const section = this.root.$("section")
     if (!(section instanceof HTMLElement)) return
@@ -82,7 +72,6 @@ export default class PlayPage extends HTMLElement {
         </li>
       `
       ul.insertAdjacentHTML("beforeend", li)
-      ul.setAttribute("part", "ul")
     }
     this.root.$("section")?.append(ul)
   }

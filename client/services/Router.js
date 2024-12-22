@@ -35,7 +35,8 @@ const Router = {
 
         const main = $("main")
         if (!main) throw new Error("main elem not found")
-        main?.appendChild(document.createElement("play-page"))
+        main.innerHTML = ""
+        main?.appendChild(document.$el("play-page"))
         break
       }
       default:
