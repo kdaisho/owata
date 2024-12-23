@@ -64,7 +64,7 @@ export default class PlayPage extends HTMLElement {
 
     this.#importButton.innerText = "import"
     this.#encryptButton.innerText = "encrypt"
-    this.#sidebarButton.classList.add("icon")
+    this.#sidebarButton.classList.add("icon-btn")
 
     const urlInput = document.$el("input")
     urlInput.$attr("type", "url")

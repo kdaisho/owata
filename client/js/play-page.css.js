@@ -5,17 +5,38 @@ playPageCss.replaceSync(/*css*/ `
     gap: 2rem;
     justify-content: flex-end;
   }
+
+  aside {
+    background: var(--darkblue);
+    border-radius: var(--border-radius-l);
+    filter: drop-shadow(var(--shadow-m) var(--darkblue));
+    padding: 2rem 1.25rem 1.5rem;
+    position: fixed;
+    right: -352px;
+    top: 66px;
+    transition: translate .25s ease-in-out;
+  }
+
+  aside.active {
+    translate: calc(-352px - 1.5rem);
+  }
+
+  button {
+    transition: all 12s;
+    translate: 0 -.75rem;
+  }
   
-  button.icon {
+  button.icon-btn {
     filter: drop-shadow(var(--shadow-s) var(--darkblue));
     font-size: var(--h2);
     height: 40px;
     position: relative;
     width: 40px;
-    translate: -74px 0;
+    translate: -74px -.75rem;
+    transition: translate .25s ease-in-out;
   }
 
-  button.icon::after {
+  button.icon-btn::after {
     content: '\\2039';
     top: 50%;
     left: 50%;
@@ -23,23 +44,13 @@ playPageCss.replaceSync(/*css*/ `
     transform: translate(-50%, -54%);
   }
 
-  aside {
-    background: var(--darkblue);
-    border-radius: var(--border-radius-l);
-    filter: drop-shadow(var(--shadow-m) var(--darkblue));
-    padding: 0 1.25rem 3rem;
-    position: fixed;
-    right: -352px;
-    top: 66px;
-    transition: translate .25s;
-  }
-
-  aside.active {
-    translate: calc(-352px - 1.5rem);
-  }
-
-  .active button.icon::after {
+  .active button.icon-btn::after {
     content: '\\203A';
+  }
+  
+  .active button.icon-btn {
+    translate: 0 -.75rem;
+    transition: translate .25s ease-in-out;
   }
 
   aside fieldset {

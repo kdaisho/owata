@@ -43,7 +43,7 @@ shadowCss.replaceSync(/*css*/ `
     min-height: 2.5rem;
   }
 
-  button:not(.icon) {
+  button:not(.icon-btn) {
     min-width: 150px;
   }
 
