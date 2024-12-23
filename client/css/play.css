@@ -1,0 +1,149 @@
+/* TODO: consider if PlayPage really using shadow.css */
+/* shadow.css starts */
+dialog[open] {
+  background: var(--darkblue);
+  border: none;
+  border-radius: var(--border-radius-l);
+  display: flex;
+  filter: drop-shadow(var(--shadow-l) var(--darkblue));
+  flex-flow: column nowrap;
+  gap: 1rem;
+  max-width: 768px;
+  padding: 1.6rem;
+  width: 100%;
+}
+
+dialog::backdrop {
+  backdrop-filter: blur(4px);
+}
+
+textarea {
+  background: var(--darkblue);
+  border: 1px solid var(--lightblue);
+  border-radius: var(--border-radius-m);
+  color: var(--white);
+  min-height: 300px;
+  padding: 0.5rem;
+}
+
+button {
+  background: var(--lightblue);
+  border: 1px solid var(--lightblue);
+  border-radius: var(--border-radius-m);
+  color: var(--darkblue);
+  cursor: pointer;
+  font-size: var(--h5);
+  min-height: 2.5rem;
+}
+
+button:not(.icon-btn) {
+  min-width: 150px;
+}
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 1px solid var(--lightblue);
+  outline-offset: 2px;
+}
+
+input {
+  border: 1px solid var(--white);
+  border-radius: var(--border-radius-m);
+  color: var(--darkblue);
+  padding: 0 0.5rem;
+  height: 36px;
+}
+
+@media (max-width: 767px) {
+  dialog {
+    margin: auto 0 0 0;
+    max-width: calc(100% - 50px);
+  }
+
+  textarea {
+    height: 60vh;
+  }
+}
+
+/* shadow.css ends */
+
+.top-nav {
+  display: flex;
+  gap: 2rem;
+  justify-content: flex-end;
+}
+
+aside {
+  background: var(--darkblue);
+  border-radius: var(--border-radius-l);
+  filter: drop-shadow(var(--shadow-m) var(--darkblue));
+  padding: 2rem 1.25rem 1.5rem;
+  position: fixed;
+  right: -352px;
+  top: 66px;
+  transition: translate 0.25s ease-in-out;
+}
+
+aside.active {
+  translate: calc(-352px - 1.5rem);
+}
+
+button {
+  transition: all 12s;
+  translate: 0 -0.75rem;
+}
+
+button.icon-btn {
+  filter: drop-shadow(var(--shadow-s) var(--darkblue));
+  font-size: var(--h2);
+  height: 40px;
+  position: relative;
+  width: 40px;
+  translate: -74px -0.75rem;
+  transition: translate 0.25s ease-in-out;
+}
+
+button.icon-btn::after {
+  content: "\2039";
+  top: 50%;
+  left: 50%;
+  position: absolute;
+  transform: translate(-50%, -54%);
+}
+
+.active button.icon-btn::after {
+  content: "\203A";
+}
+
+.active button.icon-btn {
+  translate: 0 -0.75rem;
+  transition: translate 0.25s ease-in-out;
+}
+
+aside fieldset {
+  display: grid;
+  gap: 0.25rem;
+}
+
+aside form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+form fieldset {
+  grid-column: 1 / 3;
+}
+
+form fieldset:last-of-type {
+  margin-bottom: 1.75rem;
+}
+
+form button:first-child {
+  grid-column: 1 / 2;
+}
+
+form button:last-child {
+  grid-column: 2 / 3;
+}

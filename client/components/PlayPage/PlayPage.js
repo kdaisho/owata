@@ -1,17 +1,15 @@
 import { $, closeOnClickOutside, submitText } from "../../utils.js"
-import { resetCss, shadowCss } from "./shadow.css.js"
-import { playPageCss } from "./play-page.css.js"
 
 export default class PlayPage extends HTMLElement {
   /**
    * @type {HTMLTextAreaElement | null }
    */
-  #decryptTextarea = null
+  decryptTextarea = null
 
   /**
    * @type {HTMLButtonElement | null }
    */
-  #decryptButton = null
+  decryptButton = null
 
   /**
    * @type {HTMLDialogElement | null }
@@ -21,28 +19,38 @@ export default class PlayPage extends HTMLElement {
   /**
    * @type {HTMLButtonElement | null}
    */
-  #importButton = null
+  importButton = null
 
   /**
    * @type {HTMLButtonElement | null}
    */
-  #encryptButton = null
+  encryptButton = null
 
   /**
    * @type {HTMLElement | null}
    */
-  #aside = null
+  // aside = null
 
   /**
    * @type {HTMLButtonElement | null}
    */
-  #sidebarButton = null
+  // sidebarButton = null
 
   constructor() {
     super()
 
     this.root = this.attachShadow({ mode: "open" })
-    this.root.adoptedStyleSheets = [resetCss, shadowCss, playPageCss]
+
+    for (const name of ["reset", "play"]) {
+      const link = document.$el("link")
+      link.rel = "preload"
+      link.href = `css/${name}.css`
+      link.as = "style"
+      link.onload = () => {
+        link.rel = "stylesheet"
+      }
+      this.root.append(link)
+    }
 
     const template = $("#play-page-template")
     if (!(template instanceof HTMLTemplateElement)) return
@@ -53,21 +61,14 @@ export default class PlayPage extends HTMLElement {
 
   connectedCallback() {
     document.startViewTransition
-      ? document.startViewTransition(() => this.#render())
-      : this.#render()
-
-    this.#setupSubmit()
+      ? document.startViewTransition(() => this.render())
+      : this.render()
+    this.populateList()
+    // this.setupSubmit()
+    this.setSubmit()
   }
 
-  #render() {
-    this.#importButton = document.$el("button")
-    this.#encryptButton = document.$el("button")
-    this.#sidebarButton = document.$el("button")
-
-    this.#importButton.innerText = "import"
-    this.#encryptButton.innerText = "encrypt"
-    this.#sidebarButton.classList.add("icon-btn")
-
+  render() {
     const urlLabel = document.$el("label")
     const urlInput = document.$el("input")
     urlInput.$attr("type", "url")
@@ -100,38 +101,45 @@ export default class PlayPage extends HTMLElement {
       },
     )
 
-    const div = document.$el("div")
-    div.classList.add("top-nav")
-    div.append(this.#importButton, this.#encryptButton)
-
     const form = document.$el("form")
     form.append(urlFieldset, nameFieldset, cancelButton, addButton)
 
-    this.#aside = document.$el("aside")
-    this.#aside.append(this.#sidebarButton)
-    this.#aside.append(form)
+    const aside = this.root.$("aside")
+    if (!aside) return
+
+    aside.append(form)
 
     const section = this.root.$("section")
     if (!(section instanceof HTMLElement)) return
-    section.append(div, this.#aside)
 
-    this.#sidebarButton?.$on("click", () => {
-      this.#aside?.classList.toggle("active")
+    section.style.visibility = "visible"
+
+    const toggle = this.root.$(".icon-btn")
+    if (!toggle) return
+    toggle.$on("click", () => {
+      aside.classList.toggle("active")
     })
-
-    this.#setSubmit()
   }
 
-  // #populateList() {
-  //   // const document.$el("textarea")
-  //   document.$on("addrawtext", () => {
-  //     console.log("==> ADDED", app.store.rawText)
-  //   })
-  // }
+  populateList() {
+    const links = this.root.$(".links")
 
-  #setSubmit() {
-    console.log("==> NOPE?", this.#encryptButton)
-    this.#encryptButton?.$on("click", async () => {
+    document.$on("addrawtext", () => {
+      console.log("==> ADDED", app.store.rawText)
+      const a = document.$el("a")
+      a.href = a.innerText = app.store.rawText[0]
+
+      const li = document.$el("li")
+      li.append(a)
+      links?.prepend(li)
+    })
+  }
+
+  setSubmit() {
+    const encryptBtn = this.root.$("button#encrypt")
+    if (!encryptBtn) return
+
+    encryptBtn.$on("click", async () => {
       console.log("==>", app.store.rawText)
       const response = await fetch("/encrypt", {
         method: "POST",
@@ -141,33 +149,35 @@ export default class PlayPage extends HTMLElement {
         body: JSON.stringify(app.store.rawText),
       })
       console.log("==> RES", await response.text())
+      // const links = this.root.$('.links')
+      // links?.$('ul')
       // const urlInput = this.root.$('input[name="url"]')
       // if (!(urlInput instanceof HTMLTextAreaElement)) return
       // textarea.classList.add("output")
       // textarea.value = await response.text()
 
       // this.root.$("section")?.append(textarea)
-      this.#renderCopyButton()
+      // this.renderCopyButton()
     })
   }
 
-  #renderCopyButton() {
-    const btn = document.$el("button")
-    btn.textContent = "Copy to clipboard"
-    btn.$on("click", () => {
-      const textarea = this.root.$("textarea.output")
-      if (!(textarea instanceof HTMLTextAreaElement)) return
-      navigator.clipboard.writeText(textarea.value)
-        .then(() => console.log("Copied successfully!"))
-        .catch((err) => console.error("Copy failed:", err))
-    })
-    this.root.$("section")?.append(btn)
-  }
+  // renderCopyButton() {
+  //   const btn = document.$el("button")
+  //   btn.textContent = "copy to clipboard"
+  //   btn.$on("click", () => {
+  //     const textarea = this.root.$("textarea.output")
+  //     if (!(textarea instanceof HTMLTextAreaElement)) return
+  //     navigator.clipboard.writeText(textarea.value)
+  //       .then(() => console.log("Copied successfully!"))
+  //       .catch((err) => console.error("Copy failed:", err))
+  //   })
+  //   this.root.$("section")?.append(btn)
+  // }
 
   /**
    * @param {string[]} data
    */
-  #renderList(data) {
+  renderList(data) {
     const ul = document.$el("ul")
     for (const item of data) {
       const li = `
@@ -180,16 +190,16 @@ export default class PlayPage extends HTMLElement {
     this.root.$("section")?.append(ul)
   }
 
-  #setupSubmit() {
-    if (!(this.#decryptButton instanceof HTMLButtonElement)) return
+  // setupSubmit() {
+  //   if (!(this.decryptButton instanceof HTMLButtonElement)) return
 
-    this.#decryptButton.$on("click", async () => {
-      if (!(this.#decryptTextarea?.value)) return
-      this.#renderList(
-        await submitText(this.#decryptTextarea.value, "/decrypt"),
-      )
-    })
-  }
+  //   this.decryptButton.$on("click", async () => {
+  //     if (!(this.decryptTextarea?.value)) return
+  //     this.renderList(
+  //       await submitText(this.decryptTextarea.value, "/decrypt"),
+  //     )
+  //   })
+  // }
 }
 
 customElements.define("play-page", PlayPage)
