@@ -1,0 +1,71 @@
+import { $ } from "../../utils.js"
+
+export default class HomePage extends HTMLElement {
+  constructor() {
+    super()
+    this.root = this.attachShadow({ mode: "open" })
+
+    for (const name of ["reset", "home"]) {
+      const link = document.$el("link")
+      link.rel = "stylesheet"
+      link.href = `css/${name}.css`
+      this.root.append(link)
+    }
+
+    const template = $("#home-page-template")
+    if (!(template instanceof HTMLTemplateElement)) return
+    const content = template.content.cloneNode(true)
+    this.root.appendChild(content)
+  }
+
+  connectedCallback() {
+    document.startViewTransition
+      ? document.startViewTransition(() => this.render())
+      : this.render()
+  }
+
+  render() {
+    const section = this.root.$("section")
+    if (!section) return
+    section.innerHTML = /*html*/ `
+      <div class="home">
+        <hgroup>
+          <h2>welcome to owata!</h2>
+          <p>your private, encrypted bookmarking tool.</p>
+        </hgroup>
+
+        <p>
+          how it works:
+        </p>
+
+        <ul>
+          <li>
+            enter a website URL into the input field.
+          </li>
+          <li>
+            hit "add" to include it in your bookmark list.
+          </li>
+          <li>
+            repeat steps 1 and 2 for all the URLs you want to save.
+          </li>
+          <li>
+            when you're done, hit "encrypt"
+          </li>
+        </ul>
+
+        <p>
+          owata will encrypt your list of URLs and provide you with a ciphered
+          text. copy the ciphered text and store it securely. (owata doesn't
+          save anything for you!)
+        </p>
+        <p>
+          when you return, paste the ciphered text to decrypt it and view your
+          secret bookmark list. owata keeps your bookmarks secure, private,
+          and in your control!
+        </p>
+      </div>
+    `
+  }
+}
+
+customElements.define("home-page", HomePage)

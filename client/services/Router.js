@@ -30,6 +30,16 @@ const Router = {
     }
 
     switch (route) {
+      case "/": {
+        await import(
+          "../components/HomePage/HomePage.js"
+        )
+        const main = $("main")
+        if (!main) throw new Error("main elem not found")
+        main.innerHTML = ""
+        main?.appendChild(document.createElement("home-page"))
+        break
+      }
       case "/play": {
         await import("../components/PlayPage/PlayPage.js")
 

@@ -1,5 +1,4 @@
 import { Router } from "oak/router"
-import { bindValues } from "./lib/utils.ts"
 import { decrypt, encrypt } from "./lib/crypto.ts"
 import { deflate, inflate } from "jsr/compress"
 
@@ -10,56 +9,10 @@ if (!stringKey) {
 }
 
 const router = new Router()
-const decoder = new TextDecoder("utf-8")
-const dev = Deno.env.get("ENV") === "development"
-const cache = {
-  main: "",
-}
 
 export default router
-  .get("/", async ({ response }) => {
-    if (dev || !cache.main) {
-      const [layoutHtml, headHtml, homeHtml, resetCss, appCss, homeCss] =
-        await Promise.all([
-          Deno.readFile("src/html/layout.html"),
-          Deno.readFile("src/html/head.html"),
-          Deno.readFile("src/html/home.html"),
-          Deno.readFile("client/css/reset.css"),
-          Deno.readFile("src/css/app.css"),
-          Deno.readFile("src/css/home.css"),
-        ])
-      cache.main = bindValues(decoder.decode(layoutHtml), {
-        head: bindValues(decoder.decode(headHtml), {
-          css: `<style>${
-            decoder.decode(resetCss) + decoder.decode(appCss) +
-            decoder.decode(homeCss)
-          }</style>`,
-        }),
-        main: decoder.decode(homeHtml),
-      })
-    }
-
-    response.body = cache.main
-  })
-  .get("/play", async ({ response }) => {
-    if (dev || !cache.main) {
-      const [layoutHtml, headHtml, resetCss, appCss] = await Promise.all([
-        Deno.readFile("src/html/layout.html"),
-        Deno.readFile("src/html/head.html"),
-        Deno.readFile("client/css/reset.css"),
-        Deno.readFile("src/css/app.css"),
-      ])
-      cache.main = bindValues(decoder.decode(layoutHtml), {
-        head: bindValues(decoder.decode(headHtml), {
-          css: `<style>${
-            decoder.decode(resetCss) + decoder.decode(appCss)
-          }</style>`,
-        }),
-        main: "",
-      })
-    }
-
-    response.body = cache.main
+  .get("/(play)?", async ({ response }) => {
+    response.body = await Deno.readFile("src/html/layout.html")
   })
   .post(
     "/encrypt",

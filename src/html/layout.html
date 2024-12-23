@@ -1,14 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
-  <!DOCTYPE html>
   <head>
-    {{ head }}
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/reset.css" />
+    <link rel="stylesheet" href="css/app.css" />
+    <script src="app.js" type="module" defer></script>
   </head>
+
   <body>
     <div class="app-container">
       <header>
         <h1 class="app-title">
-          <a href="/" title="home">
+          <a class="navlink" href="/" title="home">
             <span class="logo">\(^o^)/</span>
             owata</a>
         </h1>
@@ -18,7 +22,11 @@
         </nav>
       </header>
 
-      <main>{{ main }}</main>
+      <main></main>
+
+      <template id="home-page-template">
+        <section></section>
+      </template>
 
       <template id="encryption-page-template">
         <section>
