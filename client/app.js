@@ -1,5 +1,5 @@
-import Router from "../services/Router.js"
-import Store from "../services/Store.js"
+import Router from "./services/Router.js"
+import Store from "./services/Store.js"
 
 globalThis.app = {}
 app.router = Router

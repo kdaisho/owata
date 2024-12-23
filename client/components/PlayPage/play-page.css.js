@@ -69,7 +69,7 @@ playPageCss.replaceSync(/*css*/ `
   }
 
   form fieldset:last-of-type {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.75rem;
   }
 
   form button:first-child {

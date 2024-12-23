@@ -1,6 +1,6 @@
 import { $, closeOnClickOutside, submitText } from "../../utils.js"
-import { resetCss, shadowCss } from "../../js/shadow.css.js"
-import { playPageCss } from "../../js/play-page.css.js"
+import { resetCss, shadowCss } from "./shadow.css.js"
+import { playPageCss } from "./play-page.css.js"
 
 export default class PlayPage extends HTMLElement {
   /**

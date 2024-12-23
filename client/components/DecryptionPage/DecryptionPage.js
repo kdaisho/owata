@@ -1,5 +1,5 @@
 import { $, closeOnClickOutside, submitText } from "../../utils.js"
-import { resetCss, shadowCss } from "../../js/shadow.css.js"
+import { resetCss, shadowCss } from "../PlayPage/shadow.css.js"
 
 export default class DecryptionPage extends HTMLElement {
   /**
