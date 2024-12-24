@@ -16,7 +16,11 @@ declare global {
   interface Element {
     $: (selector: string) => HTMLElement | null
     $$: (selector: string) => NodeListOf<Element> | null
-    $on: <T extends Event>(event: string, callback: (event: T) => void) => void
+    $on: <T extends keyof HTMLElementEventMap>(
+      event: T,
+      callback: (event: HTMLElementEventMap[T]) => void,
+      options?: AddEventListenerOptions,
+    ) => void
     $attr: (attribute: string, value: string) => void
   }
 

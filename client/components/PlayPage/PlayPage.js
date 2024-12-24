@@ -1,41 +1,6 @@
-import { $, closeOnClickOutside, submitText } from "../../utils.js"
+import { $, closeOnClickOutside, submitText, toast } from "../../utils.js"
 
 export default class PlayPage extends HTMLElement {
-  /**
-   * @type {HTMLTextAreaElement | null }
-   */
-  decryptTextarea = null
-
-  /**
-   * @type {HTMLButtonElement | null }
-   */
-  decryptButton = null
-
-  /**
-   * @type {HTMLDialogElement | null }
-   */
-  #dialog = null
-
-  /**
-   * @type {HTMLButtonElement | null}
-   */
-  importButton = null
-
-  /**
-   * @type {HTMLButtonElement | null}
-   */
-  encryptButton = null
-
-  /**
-   * @type {HTMLElement | null}
-   */
-  // aside = null
-
-  /**
-   * @type {HTMLButtonElement | null}
-   */
-  // sidebarButton = null
-
   constructor() {
     super()
 
@@ -61,6 +26,7 @@ export default class PlayPage extends HTMLElement {
       : this.render()
     this.populateList()
     this.setSubmit()
+    this.import()
   }
 
   render() {
@@ -103,16 +69,54 @@ export default class PlayPage extends HTMLElement {
     if (!aside) return
 
     aside.append(form)
-
     const section = this.root.$("section")
     if (!(section instanceof HTMLElement)) return
 
     section.hidden = false
-
     const toggle = this.root.$(".icon-btn")
     if (!toggle) return
+
     toggle.$on("click", () => {
       aside.classList.toggle("active")
+    })
+  }
+
+  import() {
+    const importBtn = this.root.$("#import")
+    const template = $("#dialog-template")
+    if (!(template instanceof HTMLTemplateElement)) return
+
+    importBtn?.$on("click", () => {
+      this.root.append(template?.content.cloneNode(true))
+      const dialog = this.root.$("dialog")
+      if (!(dialog instanceof HTMLDialogElement)) return
+
+      dialog.showModal()
+
+      const textarea = this.root.$("#dialog-textarea")
+      const decryptBtn = this.root.$("#dialog-btn")
+      if (!(textarea instanceof HTMLTextAreaElement) || !decryptBtn) return
+
+      decryptBtn.innerText = "decrypt"
+
+      decryptBtn.$on("click", async () => {
+        const value = textarea.value.trim()
+        if (!value) return
+        const data = await submitText(value, "/decrypt")
+        console.log("==>", { data })
+      })
+
+      dialog.$on(
+        "click",
+        /** @type {(event: MouseEvent) => void} */ (event) => {
+          closeOnClickOutside(event, dialog)
+        },
+        { once: true },
+      )
+
+      dialog.$on("close", () => {
+        this.root.removeChild(dialog)
+      })
     })
   }
 
@@ -135,17 +139,21 @@ export default class PlayPage extends HTMLElement {
   }
 
   setSubmit() {
-    const encryptBtn = this.root.$("button#encrypt")
+    const encryptBtn = this.root.$("#encrypt")
     if (!encryptBtn) return
 
     encryptBtn.$on("click", async () => {
-      console.log("==>", app.store.rawText)
+      const rawTexts = app.store.rawText
+      if (!rawTexts.length) {
+        toast("success", "create a list first")
+        return
+      }
       const response = await fetch("/encrypt", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(app.store.rawText),
+        body: JSON.stringify(rawTexts),
       })
 
       const template = $("#dialog-template")
@@ -154,16 +162,19 @@ export default class PlayPage extends HTMLElement {
       this.root.append(template?.content.cloneNode(true))
 
       const dialog = this.root.$("dialog")
-      const textarea = this.root.$("#encrypted")
+      const textarea = this.root.$("#dialog-textarea")
       if (
         !(textarea instanceof HTMLTextAreaElement) ||
         !(dialog instanceof HTMLDialogElement)
       ) return
+      dialog.id = "copy-encryption-value"
 
       textarea.innerText = await response.text()
 
       const copyBtn = dialog.$("button")
-      copyBtn?.$on("click", () => {
+      if (!copyBtn) return
+      copyBtn.innerText = "copy"
+      copyBtn.$on("click", () => {
         navigator.clipboard.writeText(textarea.value).then(() => {
           console.info("copied successfully!")
           const temp = copyBtn.innerText
@@ -174,13 +185,19 @@ export default class PlayPage extends HTMLElement {
         }).catch((err) => console.error("copy failed", err))
       })
 
-      document.$on(
+      dialog.showModal()
+
+      dialog.$on(
         "click",
-        /** @type {(event: MouseEvent) => void} */ (event) =>
-          closeOnClickOutside(event, dialog),
+        /** @type {(event: MouseEvent) => void} */ (event) => {
+          closeOnClickOutside(event, dialog)
+        },
+        { once: true },
       )
 
-      dialog.showModal()
+      dialog.$on("close", () => {
+        this.root.removeChild(dialog)
+      })
     })
   }
 }

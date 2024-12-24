@@ -32,6 +32,26 @@ export function closeOnClickOutside(event, dialog) {
 }
 
 /**
+ * @param {'success' | 'error' | 'warn'} type
+ * @param {string} text
+ */
+export function toast(type = "success", text = "") {
+  const div = document.$el("div")
+  const p = document.$el("p")
+  p.classList.add("text-small")
+  p.textContent = text
+  div.classList.add(type)
+  div.appendChild(p)
+  div.classList.add("toast")
+  document.body.appendChild(div)
+
+  setTimeout(() => {
+    const toast = document.body.$("div.toast")
+    toast?.remove()
+  }, 3000)
+}
+
+/**
  * @param {string} selector
  * @returns {Element | null}
  */

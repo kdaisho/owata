@@ -23,6 +23,9 @@
   --lightblue: hsl(221, 100%, 91%);
   --blue: hsl(220deg 84% 73%);
   --darkblue: hsl(221deg 64% 58%);
+  /* --danger: hsl(351, 58%, 53%);
+  --warn: hsl(30, 62%, 53%);
+  --success: hsl(140, 55%, 59%); */
   --darkgray: hsl(0deg 0% 0% / 0.25);
   --white: hsl(0, 0%, 100%);
   --hover-opacity: 0.75;

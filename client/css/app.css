@@ -30,6 +30,10 @@
   --shadow-l: 3px 9px 24px;
   --shadow-m: 2px 6px 18px;
   --shadow-s: 1px 2px 6px;
+
+  --success: hsl(88, 50%, 53%);
+  --warn: hsl(45, 100%, 50%);
+  --error: hsl(14, 100%, 57%);
 }
 
 h1 {
@@ -100,13 +104,11 @@ a {
 
 .toast {
   align-items: center;
-  animation: slide-in 0.2s 0.25s ease-out forwards;
-  background: #fff;
-  border-radius: 6px;
+  animation: slide-in 0.25s 0.25s ease-out forwards;
+  background: var(--white);
+  border-radius: var(--border-radius-m);
   bottom: 50px;
-  box-shadow:
-    20px 20px 60px #bebebe,
-    -20px -20px 60px #ffffff; /* TODO: replace with drop-shadow */
+  filter: drop-shadow(var(--shadow-m) var(--darkblue));
   display: flex;
   font-size: var(--small);
   height: 40px;
@@ -116,6 +118,21 @@ a {
   right: -100%;
   width: 200px;
   z-index: 30;
+}
+
+.toast.success {
+  border-left: 9px solid var(--success);
+  color: var(--success);
+}
+
+.toast.warn {
+  border-left: 9px solid var(--warn);
+  color: var(--warn);
+}
+
+.toast.error {
+  border-left: 9px solid var(--error);
+  color: var(--error);
 }
 
 @keyframes slide-in {
