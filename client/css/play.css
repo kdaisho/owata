@@ -89,11 +89,6 @@ aside.active {
   translate: calc(-352px - 1.5rem);
 }
 
-button {
-  transition: all 12s;
-  translate: 0 -0.75rem;
-}
-
 button.icon-btn {
   filter: drop-shadow(var(--shadow-s) var(--darkblue));
   font-size: var(--h2);
@@ -146,4 +141,13 @@ form button:first-child {
 
 form button:last-child {
   grid-column: 2 / 3;
+}
+
+.links {
+  display: grid;
+  gap: 1rem;
+
+  a {
+    color: var(--white);
+  }
 }

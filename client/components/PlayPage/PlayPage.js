@@ -43,12 +43,8 @@ export default class PlayPage extends HTMLElement {
 
     for (const name of ["reset", "play"]) {
       const link = document.$el("link")
-      link.rel = "preload"
+      link.rel = "stylesheet"
       link.href = `css/${name}.css`
-      link.as = "style"
-      link.onload = () => {
-        link.rel = "stylesheet"
-      }
       this.root.append(link)
     }
 
@@ -125,13 +121,17 @@ export default class PlayPage extends HTMLElement {
     const links = this.root.$(".links")
 
     document.$on("addrawtext", () => {
-      console.log("==> ADDED", app.store.rawText)
-      const a = document.$el("a")
-      a.href = a.innerText = app.store.rawText[0]
-
-      const li = document.$el("li")
-      li.append(a)
-      links?.prepend(li)
+      const url = app.store.rawText[0]
+      links?.insertAdjacentHTML(
+        "afterbegin",
+        /*html*/ `
+        <li>
+          <a href=${url} target="_blank" rel="noopener noreferrer">
+            ${url}
+          </a>
+        </li>
+      `,
+      )
     })
   }
 
