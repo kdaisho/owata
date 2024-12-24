@@ -71,7 +71,7 @@ input {
 .top-nav {
   display: flex;
   gap: 2rem;
-  justify-content: flex-end;
+  justify-content: flex-start;
 }
 
 aside {
@@ -81,7 +81,7 @@ aside {
   padding: 2rem 1.25rem 1.5rem;
   position: fixed;
   right: -352px;
-  top: 66px;
+  top: 83px;
   transition: translate 0.25s ease-in-out;
 }
 

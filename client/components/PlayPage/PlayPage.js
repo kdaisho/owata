@@ -102,8 +102,28 @@ export default class PlayPage extends HTMLElement {
       decryptBtn.$on("click", async () => {
         const value = textarea.value.trim()
         if (!value) return
-        const data = await submitText(value, "/decrypt")
-        console.log("==>", { data })
+
+        /**
+         * @type {string[]}
+         */
+        let data = []
+        if (
+          !app.store.rawText.length ||
+          (app.store.rawText.length && "prompted" in decryptBtn.dataset)
+        ) {
+          data = await submitText(value, "/decrypt")
+          delete decryptBtn.dataset.prompted
+        } else if (app.store.rawText.length) {
+          decryptBtn.dataset.prompted = ""
+          decryptBtn.innerText = "list already exist. wanna overwrite?"
+          return
+        }
+
+        const links = this.root.$(".links")
+        links?.replaceChildren()
+        app.store.rawText = data
+        toast("success", "successfully decrypted!")
+        dialog.close()
       })
 
       dialog.$on(
@@ -145,7 +165,7 @@ export default class PlayPage extends HTMLElement {
     encryptBtn.$on("click", async () => {
       const rawTexts = app.store.rawText
       if (!rawTexts.length) {
-        toast("success", "create a list first")
+        toast("warn", "create a list first")
         return
       }
       const response = await fetch("/encrypt", {
