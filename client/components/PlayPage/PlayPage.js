@@ -60,7 +60,6 @@ export default class PlayPage extends HTMLElement {
       ? document.startViewTransition(() => this.render())
       : this.render()
     this.populateList()
-    // this.setupSubmit()
     this.setSubmit()
   }
 
@@ -108,7 +107,7 @@ export default class PlayPage extends HTMLElement {
     const section = this.root.$("section")
     if (!(section instanceof HTMLElement)) return
 
-    section.style.visibility = "visible"
+    section.hidden = false
 
     const toggle = this.root.$(".icon-btn")
     if (!toggle) return
@@ -148,58 +147,30 @@ export default class PlayPage extends HTMLElement {
         },
         body: JSON.stringify(app.store.rawText),
       })
-      console.log("==> RES", await response.text())
-      // const links = this.root.$('.links')
-      // links?.$('ul')
-      // const urlInput = this.root.$('input[name="url"]')
-      // if (!(urlInput instanceof HTMLTextAreaElement)) return
-      // textarea.classList.add("output")
-      // textarea.value = await response.text()
 
-      // this.root.$("section")?.append(textarea)
-      // this.renderCopyButton()
+      const template = $("#dialog-template")
+
+      if (!(template instanceof HTMLTemplateElement)) return
+      this.root.append(template?.content.cloneNode(true))
+
+      const dialog = this.root.$("dialog")
+      const textarea = this.root.$("#encrypted")
+      if (
+        !(textarea instanceof HTMLTextAreaElement) ||
+        !(dialog instanceof HTMLDialogElement)
+      ) return
+
+      textarea.innerText = await response.text()
+      const copyBtn = dialog.$("button")
+      copyBtn?.$on("click", () => {
+        navigator.clipboard.writeText(textarea.value).then(() =>
+          console.info("copied successfully!")
+        ).catch((err) => console.error("copy failed", err))
+      })
+
+      dialog.showModal()
     })
   }
-
-  // renderCopyButton() {
-  //   const btn = document.$el("button")
-  //   btn.textContent = "copy to clipboard"
-  //   btn.$on("click", () => {
-  //     const textarea = this.root.$("textarea.output")
-  //     if (!(textarea instanceof HTMLTextAreaElement)) return
-  //     navigator.clipboard.writeText(textarea.value)
-  //       .then(() => console.log("Copied successfully!"))
-  //       .catch((err) => console.error("Copy failed:", err))
-  //   })
-  //   this.root.$("section")?.append(btn)
-  // }
-
-  /**
-   * @param {string[]} data
-   */
-  renderList(data) {
-    const ul = document.$el("ul")
-    for (const item of data) {
-      const li = `
-        <li>
-          <a href=${item} target="_blank" rel="noopener noreferrer">${item}</a>
-        </li>
-      `
-      ul.insertAdjacentHTML("beforeend", li)
-    }
-    this.root.$("section")?.append(ul)
-  }
-
-  // setupSubmit() {
-  //   if (!(this.decryptButton instanceof HTMLButtonElement)) return
-
-  //   this.decryptButton.$on("click", async () => {
-  //     if (!(this.decryptTextarea?.value)) return
-  //     this.renderList(
-  //       await submitText(this.decryptTextarea.value, "/decrypt"),
-  //     )
-  //   })
-  // }
 }
 
 customElements.define("play-page", PlayPage)

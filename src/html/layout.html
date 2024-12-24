@@ -36,7 +36,7 @@
       </template>
 
       <template id="play-page-template">
-        <section style="visibility: hidden">
+        <section hidden>
           <div class="top-nav">
             <button id="import">import</button>
             <button id="encrypt">encrypt</button>
@@ -48,6 +48,13 @@
 
           <ul class="links"></ul>
         </section>
+      </template>
+
+      <template id="dialog-template">
+        <dialog>
+          <textarea id="encrypted"></textarea>
+          <button>copy</button>
+        </dialog>
       </template>
     </div>
   </body>

@@ -122,7 +122,6 @@ HTMLElement.prototype.$attr = function (attribute, value) {
 /**
  * @template {keyof HTMLElementTagNameMap | keyof CustomElementTagNameMap} T
  * @param {keyof HTMLElementTagNameMap | keyof CustomElementTagNameMap} tag
- * @returns {(T extends keyof HTMLElementTagNameMap ? HTMLElementTagNameMap[T] : T extends "play-page" ? CustomElementTagNameMap[T] : Element)}
  */
 Document.prototype.$el = function (tag) {
   // using any here because jsDoc doesn't support conditional types
