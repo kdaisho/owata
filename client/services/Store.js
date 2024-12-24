@@ -2,20 +2,14 @@
  * @typedef {Object} Store
  * @property {string[]} rawText
  * @property {string[]} encrypted
- * @property {string} encryptedOutput
  * @property {string[]} decrypted
- * @property {"encryption" | "decryption" | null} activeMode
- * @property {HTMLTextAreaElement | null | undefined} encryptionInputTextarea
  */
 
 /** @type {Store} */
 const store = {
   rawText: [],
   encrypted: [],
-  encryptedOutput: "",
   decrypted: [],
-  activeMode: null,
-  encryptionInputTextarea: null,
 }
 
 const $store = new Proxy(store, {
