@@ -161,12 +161,24 @@ export default class PlayPage extends HTMLElement {
       ) return
 
       textarea.innerText = await response.text()
+
       const copyBtn = dialog.$("button")
       copyBtn?.$on("click", () => {
-        navigator.clipboard.writeText(textarea.value).then(() =>
+        navigator.clipboard.writeText(textarea.value).then(() => {
           console.info("copied successfully!")
-        ).catch((err) => console.error("copy failed", err))
+          const temp = copyBtn.innerText
+          copyBtn.innerText = "copied!"
+          setTimeout(() => {
+            copyBtn.innerText = temp
+          }, 750)
+        }).catch((err) => console.error("copy failed", err))
       })
+
+      document.$on(
+        "click",
+        /** @type {(event: MouseEvent) => void} */ (event) =>
+          closeOnClickOutside(event, dialog),
+      )
 
       dialog.showModal()
     })
