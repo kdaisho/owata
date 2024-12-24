@@ -31,7 +31,7 @@ const Router = {
 
     switch (route) {
       case "/": {
-        await import("../components/HomePage/HomePage.js")
+        await import("../components/HomePage.js")
 
         const main = $("main")
         if (!main) throw new Error("main elem not found")
@@ -40,7 +40,7 @@ const Router = {
         break
       }
       case "/play": {
-        await import("../components/PlayPage/PlayPage.js")
+        await import("../components/PlayPage.js")
 
         const main = $("main")
         if (!main) throw new Error("main elem not found")

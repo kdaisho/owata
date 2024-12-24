@@ -1,4 +1,4 @@
-import { $, closeOnClickOutside, submitText, toast } from "../../utils.js"
+import { $, closeOnClickOutside, submitText, toast } from "../utils.js"
 
 export default class PlayPage extends HTMLElement {
   constructor() {

@@ -1,5 +1,5 @@
-import type HomePage from "./components/HomePage/HomePage.js"
-import type PlayPage from "./components/PlayPage/PlayPage.js"
+import type HomePage from "./components/HomePage.js"
+import type PlayPage from "./components/PlayPage.js"
 
 declare global {
   interface Document {
