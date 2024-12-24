@@ -52,18 +52,21 @@ export default class PlayPage extends HTMLElement {
     addButton.$attr("type", "button")
     addButton.innerText = "add"
 
+    const form = document.$el("form")
+    form.append(urlFieldset, nameFieldset, cancelButton, addButton)
+
+    form.$on("keydown", (e) => {
+      if (e.key === "Enter") {
+        this.add(urlInput)
+      }
+    })
+
     addButton.$on(
       "click",
       () => {
-        const value = urlInput.value.trim()
-        if (!value) return
-        app.store.rawText = [value, ...app.store.rawText]
-        urlInput.value = ""
+        this.add(urlInput)
       },
     )
-
-    const form = document.$el("form")
-    form.append(urlFieldset, nameFieldset, cancelButton, addButton)
 
     const aside = this.root.$("aside")
     if (!aside) return
@@ -79,6 +82,16 @@ export default class PlayPage extends HTMLElement {
     toggle.$on("click", () => {
       aside.classList.toggle("active")
     })
+  }
+
+  /**
+   * @param {HTMLInputElement} urlInput
+   */
+  add(urlInput) {
+    const v = urlInput.value.trim()
+    if (!v) return
+    app.store.rawText = [v, ...app.store.rawText]
+    urlInput.value = ""
   }
 
   import() {
@@ -144,14 +157,20 @@ export default class PlayPage extends HTMLElement {
     const links = this.root.$(".links")
 
     document.$on("addrawtext", () => {
-      const url = app.store.rawText[0]
+      let url = ""
+      try {
+        url = (new URL(app.store.rawText[0])).toString()
+      } catch (_) { /* do nothing */ }
+
       links?.insertAdjacentHTML(
         "afterbegin",
         /*html*/ `
         <li>
-          <a href=${url} target="_blank" rel="noopener noreferrer">
-            ${url}
-          </a>
+        ${
+          url
+            ? `<a href=${url} target="_blank" rel="noopener noreferrer">${url}</a>`
+            : `<span>${app.store.rawText[0]}</span>`
+        }
         </li>
       `,
       )

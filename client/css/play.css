@@ -68,6 +68,11 @@ input {
 
 /* shadow.css ends */
 
+section {
+  display: grid;
+  gap: 2rem;
+}
+
 .top-nav {
   display: flex;
   gap: 2rem;
@@ -149,5 +154,6 @@ form button:last-child {
 
   a {
     color: var(--white);
+    overflow-wrap: anywhere;
   }
 }
