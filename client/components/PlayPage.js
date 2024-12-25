@@ -65,6 +65,7 @@ export default class PlayPage extends HTMLElement {
       }
       if (e.key === "Escape") {
         aside.classList.remove("active")
+        removeBackdrop()
       }
     })
 
@@ -134,10 +135,20 @@ export default class PlayPage extends HTMLElement {
       const textarea = this.root.$("#dialog-textarea")
       const decryptBtn = this.root.$("#dialog-btn")
       if (!(textarea instanceof HTMLTextAreaElement) || !decryptBtn) return
-
       decryptBtn.innerText = "decrypt"
 
+      textarea.$on("keydown", async (event) => {
+        if (event.key === "Enter") {
+          event.preventDefault()
+          await handleDecrypt()
+        }
+      })
+
       decryptBtn.$on("click", async () => {
+        await handleDecrypt()
+      })
+
+      const handleDecrypt = async () => {
         const value = textarea.value.trim()
         if (!value) return
 
@@ -162,7 +173,7 @@ export default class PlayPage extends HTMLElement {
         app.store.hyperlinks = data.map((d) => JSON.parse(d))
         toast("success", "successfully decrypted!")
         dialog.close()
-      })
+      }
 
       dialog.$on(
         "click",
