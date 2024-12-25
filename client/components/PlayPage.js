@@ -46,19 +46,25 @@ export default class PlayPage extends HTMLElement {
     const nameFieldset = document.$el("fieldset")
     nameFieldset.append(nameLabel, nameInput)
 
-    const cancelButton = document.$el("button")
-    cancelButton.$attr("type", "button")
-    cancelButton.innerText = "cancel"
     const addButton = document.$el("button")
     addButton.$attr("type", "button")
     addButton.innerText = "add"
 
     const form = document.$el("form")
-    form.append(urlFieldset, nameFieldset, cancelButton, addButton)
+    form.append(urlFieldset, nameFieldset, addButton)
+
+    const aside = this.root.$("aside")
+    if (!aside) return
+
+    aside.append(form)
 
     form.$on("keydown", (e) => {
       if (e.key === "Enter") {
         this.add(urlInput, nameInput)
+        urlInput.focus()
+      }
+      if (e.key === "Escape") {
+        aside.classList.remove("active")
       }
     })
 
@@ -66,13 +72,10 @@ export default class PlayPage extends HTMLElement {
       "click",
       () => {
         this.add(urlInput, nameInput)
+        urlInput.focus()
       },
     )
 
-    const aside = this.root.$("aside")
-    if (!aside) return
-
-    aside.append(form)
     const section = this.root.$("section")
     if (!(section instanceof HTMLElement)) return
 
@@ -82,6 +85,7 @@ export default class PlayPage extends HTMLElement {
 
     toggle.$on("click", () => {
       aside.classList.toggle("active")
+      urlInput.focus()
     })
   }
 
