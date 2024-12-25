@@ -13,6 +13,10 @@ export async function submit(data, endpoint) {
     body: data,
   })
 
+  if (!response.ok) {
+    throw new Error()
+  }
+
   return await response.json()
 }
 

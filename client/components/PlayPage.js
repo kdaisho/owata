@@ -160,8 +160,17 @@ export default class PlayPage extends HTMLElement {
           !app.store.hyperlinks.length ||
           (app.store.hyperlinks.length && "prompted" in decryptBtn.dataset)
         ) {
-          data = await submit(value, "/decrypt")
-          delete decryptBtn.dataset.prompted
+          try {
+            data = await submit(value, "/decrypt")
+            delete decryptBtn.dataset.prompted
+          } catch (_) {
+            const temp = decryptBtn.innerText
+            decryptBtn.innerText = "hmm... not decrypted text"
+            setTimeout(() => {
+              decryptBtn.innerText = temp
+            }, 3000)
+            return
+          }
         } else if (app.store.hyperlinks.length) {
           decryptBtn.dataset.prompted = ""
           decryptBtn.innerText = "overwrite the list?"
@@ -296,6 +305,7 @@ export default class PlayPage extends HTMLElement {
       })
 
       dialog.showModal()
+      // dialog.show()
 
       dialog.$on(
         "click",

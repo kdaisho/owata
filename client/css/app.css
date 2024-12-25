@@ -106,7 +106,7 @@ a {
   animation: slide-in 0.35s 0.25s ease-out forwards;
   background: var(--white);
   border-radius: var(--border-radius-s);
-  bottom: 50px;
+  bottom: 60px;
   filter: drop-shadow(var(--shadow-m) var(--darkblue));
   display: flex;
   font-size: var(--small);
@@ -116,7 +116,7 @@ a {
   position: fixed;
   right: -100%;
   width: 230px;
-  z-index: 30;
+  z-index: 200;
 }
 
 .toast.success {
@@ -145,6 +145,10 @@ a {
 
   h2, ::part(h2) {
     font-size: var(--h3);
+  }
+
+  .toast {
+    bottom: 30px;
   }
 }
 
