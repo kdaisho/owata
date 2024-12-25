@@ -61,22 +61,21 @@ body {
   color: var(--white);
   display: grid;
   gap: 2rem;
-  grid-template-rows: 50px auto;
-  height: 100vh;
-  padding: 2rem;
+  padding: 2rem 2rem 3rem;
 }
 
 header {
   align-items: flex-end;
   display: flex;
   flex-flow: row wrap;
-  gap: 1rem 3rem;
+  gap: 1rem;
+  justify-content: space-between;
 }
 
 nav {
   display: flex;
   gap: 1rem;
-  padding-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
 }
 
 .app-container {
@@ -137,11 +136,15 @@ a {
 
 @media (max-width: 490px) {
   body {
-    padding: 1.25rem;
+    padding: 1.75rem 1.25rem 3rem;
   }
 
-  h1 {
+  h1, ::part(h1) {
     font-size: var(--h2);
+  }
+
+  h2, ::part(h2) {
+    font-size: var(--h3);
   }
 }
 

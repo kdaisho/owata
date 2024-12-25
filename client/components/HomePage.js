@@ -34,24 +34,30 @@ export default class HomePage extends HTMLElement {
           <p>your private, secure bookmarking tool.</p>
         </hgroup>
 
-        <h4 part="h4">how it works:</h4>
+        <h4 part="h4">~ how it works ~</h4>
 
-        <ol>
-          <li>head to the "play" page</li>
-          <li>open the input pane by clicking the arrow on the top-right</li>
-          <li>type in your url, give it a name (optional), and hit "add" to save it to your list</li>
-          <li>repeat as needed! when you're done, close the pane and click "encrypt"</li>
-        </ol>
+        <div class='category'>
+          <h4 part="h4">encrypt:</h4>
 
-        <p>
-          owata will turn your list of urls into secure, ciphered text. copy it, and store it safely.
-          (owata has no interest in storing it-keeping it safe is your responsibility!)
-        </p>
+          <ol>
+            <li>head to the "play" page</li>
+            <li>open the input pane by clicking the arrow button</li>
+            <li>type in your url, give it a name (optional), and hit "add" to save it to your list</li>
+            <li>repeat as needed! when you're done, close the pane and click "encrypt"</li>
+          </ol>
 
-        <h4 part="h4">decrypt:</h4>
-        <p>
-          when you return, hit "import", paste your ciphered text, and owata will decrypt it, showing your original urls on the screen. your stuff stays secure, private, and in your control!
-        </p>
+          <p>
+            owata will turn your list of urls into secure, ciphered text. copy it, and store it safely.
+            (owata has no interest in storing it-keeping it safe is your responsibility!)
+          </p>
+        </div>
+
+        <div class='category'>
+          <h4 part="h4">decrypt:</h4>
+          <p>
+            when you return, hit "import", paste your ciphered text, and owata will decrypt it, showing your original urls on the screen. your stuff stays secure, private, and in your control!
+          </p>
+        </div>
       </div>
     `
   }
