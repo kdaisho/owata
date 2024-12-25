@@ -31,7 +31,6 @@ export default new Proxy(store, {
             : "link:iterate",
         ),
       )
-      console.log(store.hyperlinks)
     }
     return true
   },

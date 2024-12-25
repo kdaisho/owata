@@ -30,38 +30,27 @@ export default class HomePage extends HTMLElement {
     section.innerHTML = /*html*/ `
       <div class="home">
         <hgroup>
-          <h2>welcome to owata!</h2>
-          <p>your private, encrypted bookmarking tool.</p>
+          <h2 part="h2">welcome to owata!</h2>
+          <p>your private, secure bookmarking tool.</p>
         </hgroup>
 
-        <p>
-          how it works:
-        </p>
+        <h4 part="h4">how it works:</h4>
 
-        <ul>
-          <li>
-            enter a website URL into the input field.
-          </li>
-          <li>
-            hit "add" to include it in your bookmark list.
-          </li>
-          <li>
-            repeat steps 1 and 2 for all the URLs you want to save.
-          </li>
-          <li>
-            when you're done, hit "encrypt"
-          </li>
-        </ul>
+        <ol>
+          <li>head to the "play" page</li>
+          <li>open the input pane by clicking the arrow on the top-right</li>
+          <li>type in your url, give it a name (optional), and hit "add" to save it to your list</li>
+          <li>repeat as needed! when you're done, close the pane and click "encrypt"</li>
+        </ol>
 
         <p>
-          owata will encrypt your list of URLs and provide you with a ciphered
-          text. copy the ciphered text and store it securely. (owata doesn't
-          save anything for you!)
+          owata will turn your list of urls into secure, ciphered text. copy it, and store it safely.
+          (owata has no interest in storing it-keeping it safe is your responsibility!)
         </p>
+
+        <h4 part="h4">decrypt:</h4>
         <p>
-          when you return, paste the ciphered text to decrypt it and view your
-          secret bookmark list. owata keeps your bookmarks secure, private,
-          and in your control!
+          when you return, hit "import", paste your ciphered text, and owata will decrypt it, showing your original urls on the screen. your stuff stays secure, private, and in your control!
         </p>
       </div>
     `

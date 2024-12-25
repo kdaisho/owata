@@ -83,10 +83,27 @@ export default class PlayPage extends HTMLElement {
     const toggle = this.root.$(".icon-btn")
     if (!toggle) return
 
+    const backdrop = document.$el("div")
+
     toggle.$on("click", () => {
       aside.classList.toggle("active")
+      backdrop.classList.add("backdrop")
+      aside.classList.contains("active")
+        ? section.append(backdrop)
+        : removeBackdrop()
       urlInput.focus()
     })
+
+    backdrop.$on("click", () => {
+      aside.classList.toggle("active")
+      removeBackdrop()
+    })
+
+    function removeBackdrop() {
+      setTimeout(() => {
+        backdrop.remove()
+      }, 150)
+    }
   }
 
   /**
@@ -140,8 +157,6 @@ export default class PlayPage extends HTMLElement {
           return
         }
 
-        console.log("==> DATA", data)
-
         const links = this.root.$(".links")
         links?.replaceChildren()
         app.store.hyperlinks = data.map((d) => JSON.parse(d))
@@ -172,8 +187,6 @@ export default class PlayPage extends HTMLElement {
         url = (new URL(app.store.hyperlinks[0].url)).toString()
       } catch (_) { /* do nothing */ }
       if (!links) return
-
-      console.log("==> L", { links })
 
       links?.insertAdjacentHTML(
         "afterbegin",

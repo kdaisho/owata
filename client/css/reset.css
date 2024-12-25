@@ -14,7 +14,7 @@ body, h1, h2, h3, h4, h5, h6, p, ol, ul {
   font-weight: normal;
 }
 
-ol, ul {
+ul {
   list-style: none;
   padding: 0;
 }
@@ -31,7 +31,7 @@ button {
   font-size: 1rem;
 }
 
-button:hover {
+button:hover:not(.icon-btn) {
   opacity: var(--hover-opacity);
 }
 
