@@ -5,9 +5,9 @@ dialog[open] {
   display: flex;
   filter: drop-shadow(var(--shadow-l) var(--darkblue));
   flex-flow: column nowrap;
-  gap: 1rem;
+  gap: 1.25rem;
   max-width: 768px;
-  padding: 1.6rem;
+  padding: 1.5rem;
   width: 100%;
 }
 
@@ -80,7 +80,7 @@ aside {
   border-radius: var(--border-radius-l);
   display: grid;
   filter: drop-shadow(var(--shadow-m) var(--darkblue));
-  gap: 1.25rem 1rem;
+  gap: 1.5rem;
   grid-template-columns: 48px auto;
   padding: 1.25rem 1.25rem 1.5rem;
   position: fixed;
@@ -166,7 +166,7 @@ form fieldset:last-of-type {
 
 @media (max-width: 490px) {
   .top-nav {
-    gap: 1rem;
+    gap: 1.5rem;
     justify-content: space-between;
 
     button {
@@ -175,7 +175,7 @@ form fieldset:last-of-type {
   }
 
   aside {
-    bottom: -180px;
+    bottom: -240px;
     top: auto;
   }
 
@@ -192,5 +192,9 @@ form fieldset:last-of-type {
 
   aside.active form {
     width: 100%;
+  }
+
+  dialog[open] {
+    padding: 1.5rem 1.25rem;
   }
 }

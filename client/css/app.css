@@ -71,7 +71,7 @@ body {
   gap: 2rem;
   grid-template-rows: 50px auto;
   height: 100vh;
-  padding: 1rem 2rem;
+  padding: 2rem;
 }
 
 header {
@@ -90,7 +90,7 @@ nav {
 .app-container {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 3rem;
+  gap: 2.5rem;
   max-width: 768px;
   margin: 0 auto;
   width: 100%;
@@ -145,7 +145,7 @@ a {
 
 @media (max-width: 490px) {
   body {
-    padding: 1rem 1.25rem;
+    padding: 1.25rem;
   }
 
   h1 {
