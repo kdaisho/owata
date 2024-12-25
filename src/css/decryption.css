@@ -1,7 +1,0 @@
-:root {
-  background: var(--lightgray);
-}
-
-body *:not(button) {
-  color: var(--black);
-}

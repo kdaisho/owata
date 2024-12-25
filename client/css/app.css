@@ -8,13 +8,6 @@
   --h2: calc(var(--h3) * var(--scale));
   --h1: calc(var(--h2) * var(--scale));
 
-  --black: hsl(0, 0%, 15%);
-  --lightgray: hsl(240, 7%, 91%);
-  --gray: hsl(240, 0.43%, 54.71%);
-  --lime: hsl(101, 85%, 56%);
-  --olive: hsl(56.09, 48.94%, 36.86%);
-  --brown: hsl(44.29, 48.84%, 16.86%);
-  --purple: rebeccapurple;
   --border-radius-s: 4px;
   --border-radius-m: 7px;
   --border-radius-l: 10px;
@@ -24,7 +17,6 @@
   --lightblue: hsl(221, 100%, 91%);
   --blue: hsl(220deg 84% 73%);
   --darkblue: hsl(221deg 64% 58%);
-  --darkgray: hsl(0deg 0% 0% / 0.25);
   --white: hsl(0, 0%, 100%);
   --hover-opacity: 0.75;
 
