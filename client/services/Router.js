@@ -25,7 +25,6 @@ const Router = {
    * @param {boolean} addToHistory
    */
   goto: async (route, addToHistory = true) => {
-    if (route === location.pathname) return
     if (addToHistory) {
       history.pushState({ route }, "", route)
     }
