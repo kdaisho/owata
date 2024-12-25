@@ -136,7 +136,7 @@ export default class PlayPage extends HTMLElement {
           delete decryptBtn.dataset.prompted
         } else if (app.store.hyperlinks.length) {
           decryptBtn.dataset.prompted = ""
-          decryptBtn.innerText = "list already exist. want to overwrite?"
+          decryptBtn.innerText = "overwrite the list?"
           return
         }
 

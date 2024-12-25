@@ -136,6 +136,12 @@ a {
   color: var(--error);
 }
 
+@media (max-width: 490px) {
+  body {
+    padding: 1rem 1.25rem;
+  }
+}
+
 @keyframes slide-in {
   to {
     right: 20px;
