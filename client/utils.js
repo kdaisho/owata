@@ -1,9 +1,10 @@
+// * @returns {Promise<typeof app.store.hyperlinks>}
 /**
  * @param {string} data
  * @param {string} endpoint
  * @returns {Promise<string[]>}
  */
-export async function submitText(data, endpoint) {
+export async function submit(data, endpoint) {
   const response = await fetch(endpoint, {
     method: "POST",
     headers: {

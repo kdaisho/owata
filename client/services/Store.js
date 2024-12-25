@@ -1,26 +1,37 @@
 /**
+ * @typedef {object} HyperlinkObject
+ * @property {string} url
+ * @property {string} name
+ */
+
+/**
  * @typedef {Object} Store
- * @property {string[]} rawText
- * @property {string[]} encrypted
- * @property {string[]} decrypted
+ * @property {HyperlinkObject[]} hyperlinks
  */
 
 /** @type {Store} */
 const store = {
-  rawText: [],
-  encrypted: [],
-  decrypted: [],
+  hyperlinks: [],
 }
 
-const $store = new Proxy(store, {
+export default new Proxy(store, {
   /**
    * @param {keyof Store} prop
+   * @param {Store[keyof Store]} value
    */
   set(target, prop, value) {
-    target[prop] = value
-    if (prop === "rawText") {
-      console.log(store.rawText)
-      document.dispatchEvent(new Event("addrawtext"))
+    const prevLength = target[prop].length
+    Reflect.set(target, prop, value)
+
+    if (prop === "hyperlinks") {
+      document.dispatchEvent(
+        new Event(
+          Reflect.get(target, prop).length - prevLength === 1
+            ? "link:prepend"
+            : "link:iterate",
+        ),
+      )
+      console.log(store.hyperlinks)
     }
     return true
   },
@@ -32,5 +43,3 @@ const $store = new Proxy(store, {
     return target[prop]
   },
 })
-
-export default $store

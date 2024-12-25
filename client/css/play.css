@@ -70,7 +70,7 @@ input {
 
 section {
   display: grid;
-  gap: 2rem;
+  gap: 3rem;
 }
 
 .top-nav {
@@ -150,9 +150,16 @@ form button:last-child {
 
 .links {
   display: grid;
-  gap: 1rem;
+  gap: 1.75rem;
 
-  a {
+  li {
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 0.5rem;
+  }
+
+  a,
+  span {
     color: var(--white);
     overflow-wrap: anywhere;
   }

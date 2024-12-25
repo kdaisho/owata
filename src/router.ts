@@ -17,10 +17,13 @@ export default router
   .post(
     "/encrypt",
     async (ctx) => {
-      const textArray: string[] = await ctx.request.body.json()
-      const result = await Promise.all(textArray.map((text: string) => {
-        return encrypt(text, stringKey)
-      }))
+      const textArray: { url: string; name: string }[] = await ctx.request.body
+        .json()
+      const result = await Promise.all(
+        textArray.map((data: { url: string; name: string }) => {
+          return encrypt(JSON.stringify(data), stringKey)
+        }),
+      )
       const bytes = new TextEncoder().encode(result.join(","))
       const compressed = deflate(bytes)
       const compressedBase64 = btoa(String.fromCharCode(...compressed))
@@ -30,6 +33,7 @@ export default router
   )
   .post("/decrypt", async (ctx) => {
     const text = await ctx.request.body.text()
+
     const compressedUint8Array = Uint8Array.from(
       atob(text),
       (c) => c.charCodeAt(0),

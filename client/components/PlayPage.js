@@ -1,4 +1,5 @@
-import { $, closeOnClickOutside, submitText, toast } from "../utils.js"
+import { $, closeOnClickOutside, submit, toast } from "../utils.js"
+import("../services/Store.js")
 
 export default class PlayPage extends HTMLElement {
   constructor() {
@@ -57,14 +58,14 @@ export default class PlayPage extends HTMLElement {
 
     form.$on("keydown", (e) => {
       if (e.key === "Enter") {
-        this.add(urlInput)
+        this.add(urlInput, nameInput)
       }
     })
 
     addButton.$on(
       "click",
       () => {
-        this.add(urlInput)
+        this.add(urlInput, nameInput)
       },
     )
 
@@ -86,12 +87,15 @@ export default class PlayPage extends HTMLElement {
 
   /**
    * @param {HTMLInputElement} urlInput
+   * @param {HTMLInputElement} nameInput
    */
-  add(urlInput) {
-    const v = urlInput.value.trim()
-    if (!v) return
-    app.store.rawText = [v, ...app.store.rawText]
+  add(urlInput, nameInput) {
+    const url = urlInput.value.trim()
+    const name = nameInput.value.trim()
+    if (!url) return
+    app.store.hyperlinks = [{ url, name }, ...app.store.hyperlinks]
     urlInput.value = ""
+    nameInput.value = ""
   }
 
   import() {
@@ -121,20 +125,22 @@ export default class PlayPage extends HTMLElement {
          */
         let data = []
         if (
-          !app.store.rawText.length ||
-          (app.store.rawText.length && "prompted" in decryptBtn.dataset)
+          !app.store.hyperlinks.length ||
+          (app.store.hyperlinks.length && "prompted" in decryptBtn.dataset)
         ) {
-          data = await submitText(value, "/decrypt")
+          data = await submit(value, "/decrypt")
           delete decryptBtn.dataset.prompted
-        } else if (app.store.rawText.length) {
+        } else if (app.store.hyperlinks.length) {
           decryptBtn.dataset.prompted = ""
-          decryptBtn.innerText = "list already exist. wanna overwrite?"
+          decryptBtn.innerText = "list already exist. want to overwrite?"
           return
         }
 
+        console.log("==> DATA", data)
+
         const links = this.root.$(".links")
         links?.replaceChildren()
-        app.store.rawText = data
+        app.store.hyperlinks = data.map((d) => JSON.parse(d))
         toast("success", "successfully decrypted!")
         dialog.close()
       })
@@ -156,24 +162,61 @@ export default class PlayPage extends HTMLElement {
   populateList() {
     const links = this.root.$(".links")
 
-    document.$on("addrawtext", () => {
+    document.$on("link:prepend", () => {
       let url = ""
       try {
-        url = (new URL(app.store.rawText[0])).toString()
+        url = (new URL(app.store.hyperlinks[0].url)).toString()
       } catch (_) { /* do nothing */ }
+      if (!links) return
+
+      console.log("==> L", { links })
 
       links?.insertAdjacentHTML(
         "afterbegin",
         /*html*/ `
         <li>
-        ${
+          ${
           url
-            ? `<a href=${url} target="_blank" rel="noopener noreferrer">${url}</a>`
-            : `<span>${app.store.rawText[0]}</span>`
+            ? /*html*/ `
+              <a href=${url} target="_blank" rel="noopener noreferrer">${url}</a><span>${
+              app.store.hyperlinks[0].name
+            }</span>
+            `
+            : /*html*/ `
+              <span>${app.store.hyperlinks[0].url}</span><span>${
+              app.store.hyperlinks[0].name
+            }</span>
+            `
         }
         </li>
       `,
       )
+    })
+
+    document.$on("link:iterate", () => {
+      if (!links) return
+      links.innerHTML = ""
+
+      app.store.hyperlinks.forEach((link) => {
+        let url = ""
+        try {
+          url = (new URL(link.url)).toString()
+        } catch (_) { /* do nothing */ }
+
+        links.innerHTML += /*html*/ `
+        <li>
+          ${
+          url
+            ? /*html*/ `
+              <a href=${url} target="_blank" rel="noopener noreferrer">${url}</a><span>${link.name}</span>
+            `
+            : /*html*/ `
+              <span>${link.url}</span><span>${link.name}</span>
+            `
+        }
+        </li>
+      `
+      })
     })
   }
 
@@ -182,8 +225,8 @@ export default class PlayPage extends HTMLElement {
     if (!encryptBtn) return
 
     encryptBtn.$on("click", async () => {
-      const rawTexts = app.store.rawText
-      if (!rawTexts.length) {
+      const hyperlinks = app.store.hyperlinks
+      if (!hyperlinks.length) {
         toast("warn", "create a list first")
         return
       }
@@ -192,7 +235,7 @@ export default class PlayPage extends HTMLElement {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(rawTexts),
+        body: JSON.stringify(hyperlinks),
       })
 
       const template = $("#dialog-template")
