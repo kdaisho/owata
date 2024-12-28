@@ -7,7 +7,7 @@ const env = config()
 const stringKey = env.KEY
 
 if (!stringKey) {
-  throw new Error("Key not found")
+  throw new Error("Ah, key not found")
 }
 
 const router = new Router()
