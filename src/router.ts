@@ -1,8 +1,10 @@
 import { Router } from "oak/router"
 import { decrypt, encrypt } from "./lib/crypto.ts"
 import { deflate, inflate } from "jsr/compress"
+import { config } from "https://deno.land/x/dotenv@v3.2.2/mod.ts"
 
-const stringKey = Deno.env.get("KEY")
+const env = config()
+const stringKey = env.KEY
 
 if (!stringKey) {
   throw new Error("Key not found")

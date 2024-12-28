@@ -254,7 +254,9 @@
     "https://deno.land/x/compress@v0.4.5/zlib/zlib/status.ts": "5987864d2d43d59bbbfa2e6ef4d5a07284c1d10489cc5843ddf41ac547957ac3",
     "https://deno.land/x/compress@v0.4.5/zlib/zlib/trees.ts": "6b65a767646e031e87e7b725ffad0c511fe701f393a01652e1e7ee8884f60fee",
     "https://deno.land/x/compress@v0.4.5/zlib/zlib/zstream.ts": "c110fd5919235e317d64933852e24a1bba0126202be592e90e58f7b19315ad93",
-    "https://deno.land/x/crc32@v0.2.0/mod.ts": "de7a3fa2d4ef24b96fc21e1cc4d2d65d1d2b1dcea92f63960e3e11bfa82df0fa"
+    "https://deno.land/x/crc32@v0.2.0/mod.ts": "de7a3fa2d4ef24b96fc21e1cc4d2d65d1d2b1dcea92f63960e3e11bfa82df0fa",
+    "https://deno.land/x/dotenv@v3.2.2/mod.ts": "077b48773de9205266a0b44c3c3a3c3083449ed64bb0b6cc461b95720678d38e",
+    "https://deno.land/x/dotenv@v3.2.2/util.ts": "693730877b13f8ead2b79b2aa31e2a0652862f7dc0c5f6d2f313f4d39c7b7670"
   },
   "workspace": {
     "dependencies": [
