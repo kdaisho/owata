@@ -21,7 +21,7 @@ jobs:
         env:
           KEY: ${{ secrets.ENCRYPTION_KEY }}
         run: |
-          cp -r . /var/www/owata/
+          cp -r client/ src/ deno.json deno.lock index.ts .env /var/www/owata/
           cd /var/www/owata
           pm2 delete owata
           deno cache index.ts # preload dependencies
