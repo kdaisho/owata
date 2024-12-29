@@ -1,21 +1,28 @@
-name: My First Workflow
+name: Deploy
 
 on:
   push:
-    branches:
-      - main
-  workflow_dispatch:
+    branches: main
+  pull_request:
+    branches: main
 
 jobs:
-  MyFirstJob:
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "Hello Merld!"
+  deploy:
+    name: Deploy
+    runs-on: self-hosted
 
-      - name: Checkout
+    steps:
+      - run: echo "owata \(^o^)/"
+
+      - name: Checkout repository
         uses: actions/checkout@v4.2.2
 
-      - name: List fiels in the repository
+      - name: Deploy app
+        env:
+          KEY: ${{ secrets.ENCRYPTION_KEY }}
         run: |
-          echo "The repository ${{ github.repository }} contains the following files:"
-          tree
+          # cp -r . /var/www/owata/
+          cd /var/www/owata
+          pm2 delete owata
+          deno cache index.ts # preload dependencies
+          pm2 start --interpreter="deno" --interpreter-args="run --allow-read --allow-net --allow-env" index.ts --name owata
