@@ -50,8 +50,12 @@ export default class PlayPage extends HTMLElement {
     addButton.$attr("type", "button")
     addButton.innerText = "add"
 
+    const encryptAllButton = document.$el("button")
+    encryptAllButton.$attr("type", "button")
+    encryptAllButton.innerText = "encrypt all"
+
     const form = document.$el("form")
-    form.append(urlFieldset, nameFieldset, addButton)
+    form.append(urlFieldset, nameFieldset, addButton, encryptAllButton)
 
     const aside = this.root.$("aside")
     if (!aside) return
@@ -74,6 +78,13 @@ export default class PlayPage extends HTMLElement {
       () => {
         this.add(urlInput, nameInput)
         urlInput.focus()
+      },
+    )
+
+    encryptAllButton.$on(
+      "click",
+      () => {
+        this.handleEncrypt()
       },
     )
 
@@ -257,67 +268,70 @@ export default class PlayPage extends HTMLElement {
     })
   }
 
+  async handleEncrypt() {
+    const hyperlinks = app.store.hyperlinks
+    if (!hyperlinks.length) {
+      toast("warn", "create a list first")
+      return
+    }
+    const response = await fetch("/encrypt", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(hyperlinks),
+    })
+
+    const template = $("#dialog-template")
+
+    if (!(template instanceof HTMLTemplateElement)) return
+    this.root.append(template?.content.cloneNode(true))
+
+    const dialog = this.root.$("dialog")
+    const textarea = this.root.$("#dialog-textarea")
+    if (
+      !(textarea instanceof HTMLTextAreaElement) ||
+      !(dialog instanceof HTMLDialogElement)
+    ) return
+    dialog.id = "copy-encryption-value"
+
+    textarea.innerText = await response.text()
+
+    const copyBtn = dialog.$("button")
+    if (!copyBtn) return
+    copyBtn.innerText = "copy"
+    copyBtn.$on("click", () => {
+      navigator.clipboard.writeText(textarea.value).then(() => {
+        console.info("copied successfully!")
+        const temp = copyBtn.innerText
+        copyBtn.innerText = "copied!"
+        setTimeout(() => {
+          copyBtn.innerText = temp
+        }, 750)
+      }).catch((err) => console.error("copy failed", err))
+    })
+
+    dialog.showModal()
+
+    dialog.$on(
+      "click",
+      /** @type {(event: MouseEvent) => void} */ (event) => {
+        closeOnClickOutside(event, dialog)
+      },
+      { once: true },
+    )
+
+    dialog.$on("close", () => {
+      this.root.removeChild(dialog)
+    })
+  }
+
   setSubmit() {
     const encryptBtn = this.root.$("#encrypt")
     if (!encryptBtn) return
 
-    encryptBtn.$on("click", async () => {
-      const hyperlinks = app.store.hyperlinks
-      if (!hyperlinks.length) {
-        toast("warn", "create a list first")
-        return
-      }
-      const response = await fetch("/encrypt", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(hyperlinks),
-      })
-
-      const template = $("#dialog-template")
-
-      if (!(template instanceof HTMLTemplateElement)) return
-      this.root.append(template?.content.cloneNode(true))
-
-      const dialog = this.root.$("dialog")
-      const textarea = this.root.$("#dialog-textarea")
-      if (
-        !(textarea instanceof HTMLTextAreaElement) ||
-        !(dialog instanceof HTMLDialogElement)
-      ) return
-      dialog.id = "copy-encryption-value"
-
-      textarea.innerText = await response.text()
-
-      const copyBtn = dialog.$("button")
-      if (!copyBtn) return
-      copyBtn.innerText = "copy"
-      copyBtn.$on("click", () => {
-        navigator.clipboard.writeText(textarea.value).then(() => {
-          console.info("copied successfully!")
-          const temp = copyBtn.innerText
-          copyBtn.innerText = "copied!"
-          setTimeout(() => {
-            copyBtn.innerText = temp
-          }, 750)
-        }).catch((err) => console.error("copy failed", err))
-      })
-
-      dialog.showModal()
-      // dialog.show()
-
-      dialog.$on(
-        "click",
-        /** @type {(event: MouseEvent) => void} */ (event) => {
-          closeOnClickOutside(event, dialog)
-        },
-        { once: true },
-      )
-
-      dialog.$on("close", () => {
-        this.root.removeChild(dialog)
-      })
+    encryptBtn.$on("click", () => {
+      this.handleEncrypt()
     })
   }
 }
