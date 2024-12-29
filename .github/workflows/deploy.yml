@@ -6,17 +6,16 @@ on:
       - main
   workflow_dispatch:
 
-  jobs:
-    MyFirstJob:
-      runs-on: ubuntu-latest
-      steps:
-        - run: echo "Hello Merld!"
+jobs:
+  MyFirstJob:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Hello Merld!"
 
-        - name: Checkout
-          uses: actions/checkout@v4.2.2
+      - name: Checkout
+        uses: actions/checkout@v4.2.2
 
-        - name: List fiels in the repository
-          run: |
-            echo "The repository ${{ github.repository }} contains the following files:"
-            tree
-          
+      - name: List fiels in the repository
+        run: |
+          echo "The repository ${{ github.repository }} contains the following files:"
+          tree
