@@ -92,7 +92,7 @@ export default class PlayPage extends HTMLElement {
     if (!(section instanceof HTMLElement)) return
 
     section.hidden = false
-    const toggle = this.root.$(".icon-btn")
+    const toggle = this.root.$(".toggle-form")
     if (!toggle) return
 
     const backdrop = document.$el("div")
@@ -126,7 +126,10 @@ export default class PlayPage extends HTMLElement {
     const url = urlInput.value.trim()
     const name = nameInput.value.trim()
     if (!url) return
-    app.store.hyperlinks = [{ url, name }, ...app.store.hyperlinks]
+    app.store.hyperlinks = [
+      { url, name, index: app.store.hyperlinks.length },
+      ...app.store.hyperlinks,
+    ]
     urlInput.value = ""
     nameInput.value = ""
   }
@@ -213,6 +216,7 @@ export default class PlayPage extends HTMLElement {
     const links = this.root.$(".links")
 
     document.$on("link:prepend", () => {
+      console.log("==>", app.store.hyperlinks)
       let url = ""
       try {
         url = (new URL(app.store.hyperlinks[0].url)).toString()
@@ -223,6 +227,9 @@ export default class PlayPage extends HTMLElement {
         "afterbegin",
         /*html*/ `
         <li>
+          ${/*html*/ `<button class="square delete-btn" data-index="${
+          app.store.hyperlinks[0].index
+        }" title="delete">&#x2715;</button>`}
           ${
           url
             ? /*html*/ `
@@ -235,10 +242,12 @@ export default class PlayPage extends HTMLElement {
               app.store.hyperlinks[0].name
             }</span>
             `
-        }
+        }  
         </li>
       `,
       )
+
+      this.handleDeletion()
     })
 
     document.$on("link:iterate", () => {
@@ -253,7 +262,8 @@ export default class PlayPage extends HTMLElement {
 
         links.innerHTML += /*html*/ `
         <li>
-          ${
+        ${/*html*/ `<button class="square delete-btn" data-index="${link.index}" title="delete">&#x2715;</button>`}
+        ${
           url
             ? /*html*/ `
               <a href=${url} target="_blank" rel="noopener noreferrer">${url}</a><span>${link.name}</span>
@@ -264,6 +274,24 @@ export default class PlayPage extends HTMLElement {
         }
         </li>
       `
+      })
+
+      this.handleDeletion()
+    })
+  }
+
+  handleDeletion() {
+    this.root.$$(".delete-btn")?.forEach((btn) => {
+      if (!(btn instanceof HTMLElement)) return
+      btn.$on("click", ({ target }) => {
+        if ("prompted" in btn.dataset) {
+          console.log("==>", app.store.hyperlinks)
+        } else {
+          if (!(target instanceof HTMLElement)) return
+          target.dataset.prompted = ""
+          target.innerText = "k?"
+          return
+        }
       })
     })
   }
