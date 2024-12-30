@@ -127,7 +127,7 @@ export default class PlayPage extends HTMLElement {
     const name = nameInput.value.trim()
     if (!url) return
     app.store.hyperlinks = [
-      { url, name, index: app.store.hyperlinks.length },
+      { url, name, index: crypto.randomUUID() },
       ...app.store.hyperlinks,
     ]
     urlInput.value = ""
@@ -287,7 +287,7 @@ export default class PlayPage extends HTMLElement {
         if (!(target instanceof HTMLElement)) return
         if (target.innerText === "k?") {
           app.store.hyperlinks = app.store.hyperlinks.filter((link) => {
-            return link.index !== Number(target.dataset.index)
+            return link.index !== target.dataset.index
           })
         } else {
           setTimeout(() => {

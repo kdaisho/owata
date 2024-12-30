@@ -2,7 +2,7 @@
  * @typedef {object} HyperlinkObject
  * @property {string} url
  * @property {string} name
- * @property {number} index
+ * @property {string} index
  */
 
 /**
