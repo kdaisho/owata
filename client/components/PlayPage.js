@@ -284,13 +284,15 @@ export default class PlayPage extends HTMLElement {
     this.root.$$(".delete-btn")?.forEach((btn) => {
       if (!(btn instanceof HTMLElement)) return
       btn.$on("click", ({ target }) => {
-        if ("prompted" in btn.dataset) {
-          console.log("==>", app.store.hyperlinks)
+        if (!(target instanceof HTMLElement)) return
+        if (target.innerText === "k?") {
+          app.store.hyperlinks = app.store.hyperlinks.filter((link) => {
+            return link.index !== Number(target.dataset.index)
+          })
         } else {
-          if (!(target instanceof HTMLElement)) return
-          target.dataset.prompted = ""
-          target.innerText = "k?"
-          return
+          setTimeout(() => {
+            target.innerText = "k?"
+          })
         }
       })
     })
