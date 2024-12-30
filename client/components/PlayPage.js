@@ -216,7 +216,6 @@ export default class PlayPage extends HTMLElement {
     const links = this.root.$(".links")
 
     document.$on("link:prepend", () => {
-      console.log("==>", app.store.hyperlinks)
       let url = ""
       try {
         url = (new URL(app.store.hyperlinks[0].url)).toString()
@@ -254,7 +253,6 @@ export default class PlayPage extends HTMLElement {
     document.$on("link:iterate", () => {
       if (!links) return
       links.innerHTML = ""
-      console.log("==>", app.store.hyperlinks)
 
       app.store.hyperlinks.forEach((link) => {
         let url = ""
