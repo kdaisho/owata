@@ -127,7 +127,7 @@ export default class PlayPage extends HTMLElement {
     const name = nameInput.value.trim()
     if (!url) return
     app.store.hyperlinks = [
-      { url, name, index: crypto.randomUUID() },
+      { url, name, id: crypto.randomUUID() },
       ...app.store.hyperlinks,
     ]
     urlInput.value = ""
@@ -227,9 +227,10 @@ export default class PlayPage extends HTMLElement {
         "afterbegin",
         /*html*/ `
         <li>
-          ${/*html*/ `<button class="square delete-btn" data-index="${
-          app.store.hyperlinks[0].index
-        }" title="delete">&#x2715;</button>`}
+          ${/*html*/ `<button id="${
+          app.store.hyperlinks[0].id
+        }" class="square delete-btn"
+        title="delete">&#x2715;</button>`}
           ${
           url
             ? /*html*/ `
@@ -253,6 +254,7 @@ export default class PlayPage extends HTMLElement {
     document.$on("link:iterate", () => {
       if (!links) return
       links.innerHTML = ""
+      console.log("==>", app.store.hyperlinks)
 
       app.store.hyperlinks.forEach((link) => {
         let url = ""
@@ -262,7 +264,7 @@ export default class PlayPage extends HTMLElement {
 
         links.innerHTML += /*html*/ `
         <li>
-        ${/*html*/ `<button class="square delete-btn" data-index="${link.index}" title="delete">&#x2715;</button>`}
+        ${/*html*/ `<button class="square delete-btn" id="${link.id}" title="delete">&#x2715;</button>`}
         ${
           url
             ? /*html*/ `
@@ -287,7 +289,7 @@ export default class PlayPage extends HTMLElement {
         if (!(target instanceof HTMLElement)) return
         if (target.innerText === "k?") {
           app.store.hyperlinks = app.store.hyperlinks.filter((link) => {
-            return link.index !== target.dataset.index
+            return link.id !== target.id
           })
         } else {
           setTimeout(() => {
