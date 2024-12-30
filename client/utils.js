@@ -1,4 +1,3 @@
-// * @returns {Promise<typeof app.store.hyperlinks>}
 /**
  * @param {string} data
  * @param {string} endpoint
