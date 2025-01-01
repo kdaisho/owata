@@ -2,20 +2,20 @@ import { $, closeOnClickOutside, submit, toast } from "../utils.js"
 import { Arrow, Trash } from "./Icons.js"
 import("../services/Store.js")
 
-export default class PlayPage extends HTMLElement {
+export default class CryptoPage extends HTMLElement {
   constructor() {
     super()
 
     this.root = this.attachShadow({ mode: "open" })
 
-    for (const name of ["reset", "play"]) {
+    for (const name of ["reset", "crypto"]) {
       const link = document.$el("link")
       link.rel = "stylesheet"
       link.href = `css/${name}.css`
       this.root.append(link)
     }
 
-    const template = $("#play-page-template")
+    const template = $("#crypto-page-template")
     if (!(template instanceof HTMLTemplateElement)) return
     const content = template.content.cloneNode(true)
     if (!(content instanceof Node)) return
@@ -372,4 +372,4 @@ export default class PlayPage extends HTMLElement {
   }
 }
 
-customElements.define("play-page", PlayPage)
+customElements.define("crypto-page", CryptoPage)

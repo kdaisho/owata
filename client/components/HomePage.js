@@ -40,10 +40,10 @@ export default class HomePage extends HTMLElement {
           <h4 part="h4">encrypt:</h4>
 
           <ol>
-            <li>head to the "play" page</li>
+            <li>head to the "crypto" page</li>
             <li>open the input pane by clicking the arrow button</li>
             <li>type in your url, give it a name (optional), and hit "add" to save it to your list</li>
-            <li>repeat as needed! when you're done, close the pane and click "encrypt"</li>
+            <li>repeat as needed! when you're done, click "encrypt all"</li>
           </ol>
 
           <p>
