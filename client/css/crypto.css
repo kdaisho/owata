@@ -112,9 +112,11 @@ button.square {
 }
 
 button.toggle {
+  align-items: center;
+  display: flex;
   filter: drop-shadow(var(--shadow-s) var(--darkblue));
-  font-size: var(--h2);
   grid-column: 1 / 2;
+  justify-content: center;
   position: relative;
   translate: -88px 0;
   transition: translate 0.2s ease-in-out;
