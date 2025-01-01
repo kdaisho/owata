@@ -1,5 +1,5 @@
 import { $, closeOnClickOutside, submit, toast } from "../utils.js"
-import { Arrow, Trash } from "./Icons.js"
+import { Arrow, Remove, Trash } from "./Icons.js"
 import("../services/Store.js")
 
 export default class CryptoPage extends HTMLElement {
@@ -241,7 +241,7 @@ export default class CryptoPage extends HTMLElement {
           ${/*html*/ `<button id="${
           app.store.hyperlinks[0].id
         }" class="delete-btn" title="delete">
-            ${Trash}
+            ${Remove}
           </button>`}
           ${
           url
@@ -277,7 +277,7 @@ export default class CryptoPage extends HTMLElement {
         links.innerHTML += /*html*/ `
         <li>
         ${/*html*/ `<button class="delete-btn" id="${link.id}" title="delete">
-            ${Trash}
+            ${Remove}
           </button>`}
         ${
           url
