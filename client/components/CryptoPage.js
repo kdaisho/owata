@@ -1,20 +1,21 @@
 import { $, closeOnClickOutside, submit, toast } from "../utils.js"
+import { Arrow, Trash } from "./Icons.js"
 import("../services/Store.js")
 
-export default class PlayPage extends HTMLElement {
+export default class CryptoPage extends HTMLElement {
   constructor() {
     super()
 
     this.root = this.attachShadow({ mode: "open" })
 
-    for (const name of ["reset", "play"]) {
+    for (const name of ["reset", "crypto"]) {
       const link = document.$el("link")
       link.rel = "stylesheet"
       link.href = `css/${name}.css`
       this.root.append(link)
     }
 
-    const template = $("#play-page-template")
+    const template = $("#crypto-page-template")
     if (!(template instanceof HTMLTemplateElement)) return
     const content = template.content.cloneNode(true)
     if (!(content instanceof Node)) return
@@ -92,8 +93,10 @@ export default class PlayPage extends HTMLElement {
     if (!(section instanceof HTMLElement)) return
 
     section.hidden = false
-    const toggle = this.root.$(".toggle-form")
+    const toggle = this.root.$(".toggle")
     if (!toggle) return
+
+    toggle.innerHTML = Arrow
 
     const backdrop = document.$el("div")
 
@@ -212,6 +215,15 @@ export default class PlayPage extends HTMLElement {
     })
   }
 
+  /**
+   * @param {'encrypt' | 'create'} txt
+   */
+  updateBtnText(txt) {
+    const encryptBtn = this.root.$("#encrypt")
+    if (!encryptBtn) return
+    encryptBtn.innerText = txt
+  }
+
   populateList() {
     const links = this.root.$(".links")
 
@@ -228,8 +240,9 @@ export default class PlayPage extends HTMLElement {
         <li>
           ${/*html*/ `<button id="${
           app.store.hyperlinks[0].id
-        }" class="square delete-btn"
-        title="delete">&#x2715;</button>`}
+        }" class="square_ delete-btn" title="delete">
+            ${Trash}
+          </button>`}
           ${
           url
             ? /*html*/ `
@@ -242,12 +255,13 @@ export default class PlayPage extends HTMLElement {
               app.store.hyperlinks[0].name
             }</span>
             `
-        }  
+        }
         </li>
       `,
       )
 
       this.handleDeletion()
+      this.updateBtnText("encrypt")
     })
 
     document.$on("link:iterate", () => {
@@ -262,7 +276,9 @@ export default class PlayPage extends HTMLElement {
 
         links.innerHTML += /*html*/ `
         <li>
-        ${/*html*/ `<button class="square delete-btn" id="${link.id}" title="delete">&#x2715;</button>`}
+        ${/*html*/ `<button class="square_ delete-btn" id="${link.id}" title="delete">
+            ${Trash}
+          </button>`}
         ${
           url
             ? /*html*/ `
@@ -277,6 +293,7 @@ export default class PlayPage extends HTMLElement {
       })
 
       this.handleDeletion()
+      this.updateBtnText("encrypt")
     })
   }
 
@@ -361,9 +378,11 @@ export default class PlayPage extends HTMLElement {
     if (!encryptBtn) return
 
     encryptBtn.$on("click", () => {
-      this.handleEncrypt()
+      app.store.hyperlinks.length
+        ? this.handleEncrypt()
+        : this.root.$(".toggle")?.click()
     })
   }
 }
 
-customElements.define("play-page", PlayPage)
+customElements.define("crypto-page", CryptoPage)

@@ -1,5 +1,5 @@
 import type HomePage from "./components/HomePage.js"
-import type PlayPage from "./components/PlayPage.js"
+import type CryptoPage from "./components/CryptoPage.js"
 
 declare global {
   interface Document {
@@ -31,6 +31,6 @@ declare global {
 
   interface CustomElementTagNameMap {
     "home-page": HomePage
-    "play-page": PlayPage
+    "crypto-page": CryptoPage
   }
 }

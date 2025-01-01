@@ -13,7 +13,7 @@ if (!stringKey) {
 const router = new Router()
 
 export default router
-  .get("/(play)?", async ({ response }) => {
+  .get("/(crypto)?", async ({ response }) => {
     response.body = await Deno.readFile("src/html/layout.html")
   })
   .post(
