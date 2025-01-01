@@ -169,6 +169,7 @@ form fieldset:last-of-type {
 
 button.delete-btn {
   align-items: center;
+  color: var(--error);
   display: flex;
   grid-column: 1 / 2;
   grid-row: 1 / 3;
