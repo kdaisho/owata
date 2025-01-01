@@ -215,10 +215,8 @@ export default class CryptoPage extends HTMLElement {
     })
   }
 
-  /**
-   * @param {'encrypt' | 'create'} txt
-   */
-  updateBtnText(txt) {
+  updateBtnText() {
+    const txt = app.store.hyperlinks.length ? "encrypt" : "create"
     const encryptBtn = this.root.$("#encrypt")
     if (!encryptBtn) return
     encryptBtn.innerText = txt
@@ -259,7 +257,7 @@ export default class CryptoPage extends HTMLElement {
       )
 
       this.handleDeletion()
-      this.updateBtnText("encrypt")
+      this.updateBtnText()
     })
 
     document.$on("link:iterate", () => {
@@ -289,7 +287,7 @@ export default class CryptoPage extends HTMLElement {
       })
 
       this.handleDeletion()
-      this.updateBtnText("encrypt")
+      this.updateBtnText()
     })
   }
 
@@ -309,6 +307,7 @@ export default class CryptoPage extends HTMLElement {
         }
       })
     })
+    this.updateBtnText()
   }
 
   async handleEncrypt() {
