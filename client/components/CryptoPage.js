@@ -240,7 +240,7 @@ export default class CryptoPage extends HTMLElement {
         <li>
           ${/*html*/ `<button id="${
           app.store.hyperlinks[0].id
-        }" class="square_ delete-btn" title="delete">
+        }" class="delete-btn" title="delete">
             ${Trash}
           </button>`}
           ${
@@ -276,7 +276,7 @@ export default class CryptoPage extends HTMLElement {
 
         links.innerHTML += /*html*/ `
         <li>
-        ${/*html*/ `<button class="square_ delete-btn" id="${link.id}" title="delete">
+        ${/*html*/ `<button class="delete-btn" id="${link.id}" title="delete">
             ${Trash}
           </button>`}
         ${
@@ -307,9 +307,7 @@ export default class CryptoPage extends HTMLElement {
             return link.id !== target.id
           })
         } else {
-          setTimeout(() => {
-            target.innerText = "k?"
-          })
+          target.innerText = "k?"
         }
       })
     })

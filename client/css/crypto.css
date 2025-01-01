@@ -37,6 +37,10 @@ button:not(.square) {
   min-width: 150px;
 }
 
+button svg {
+  pointer-events: none;
+}
+
 button:focus-visible,
 input:focus-visible,
 textarea:focus-visible {
