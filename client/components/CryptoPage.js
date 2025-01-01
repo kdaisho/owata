@@ -307,7 +307,9 @@ export default class CryptoPage extends HTMLElement {
             return link.id !== target.id
           })
         } else {
-          target.innerText = "k?"
+          setTimeout(() => {
+            target.innerText = "k?"
+          })
         }
       })
     })
