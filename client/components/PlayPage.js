@@ -1,4 +1,5 @@
 import { $, closeOnClickOutside, submit, toast } from "../utils.js"
+import { Arrow, Trash } from "./Icons.js"
 import("../services/Store.js")
 
 export default class PlayPage extends HTMLElement {
@@ -92,8 +93,10 @@ export default class PlayPage extends HTMLElement {
     if (!(section instanceof HTMLElement)) return
 
     section.hidden = false
-    const toggle = this.root.$(".toggle-form")
+    const toggle = this.root.$(".toggle")
     if (!toggle) return
+
+    toggle.innerHTML = Arrow
 
     const backdrop = document.$el("div")
 
@@ -228,8 +231,9 @@ export default class PlayPage extends HTMLElement {
         <li>
           ${/*html*/ `<button id="${
           app.store.hyperlinks[0].id
-        }" class="square delete-btn"
-        title="delete">&#x2715;</button>`}
+        }" class="square_ delete-btn" title="delete">
+            ${Trash}
+          </button>`}
           ${
           url
             ? /*html*/ `
@@ -242,7 +246,7 @@ export default class PlayPage extends HTMLElement {
               app.store.hyperlinks[0].name
             }</span>
             `
-        }  
+        }
         </li>
       `,
       )
@@ -262,7 +266,9 @@ export default class PlayPage extends HTMLElement {
 
         links.innerHTML += /*html*/ `
         <li>
-        ${/*html*/ `<button class="square delete-btn" id="${link.id}" title="delete">&#x2715;</button>`}
+        ${/*html*/ `<button class="square_ delete-btn" id="${link.id}" title="delete">
+            ${Trash}
+          </button>`}
         ${
           url
             ? /*html*/ `
