@@ -240,9 +240,7 @@ export default class CryptoPage extends HTMLElement {
         <li>
           ${/*html*/ `<button id="${
           app.store.hyperlinks[0].id
-        }" class="delete-btn" title="delete">
-            ${Remove}
-          </button>`}
+        }" class="delete-btn" title="delete"></button>`}
           ${
           url
             ? /*html*/ `
@@ -260,6 +258,10 @@ export default class CryptoPage extends HTMLElement {
       `,
       )
 
+      links.$$(".delete-btn")?.forEach((btn) => {
+        btn.innerHTML = Remove
+      })
+
       this.handleDeletion()
       this.updateBtnText("encrypt")
     })
@@ -276,9 +278,7 @@ export default class CryptoPage extends HTMLElement {
 
         links.innerHTML += /*html*/ `
         <li>
-        ${/*html*/ `<button class="delete-btn" id="${link.id}" title="delete">
-            ${Remove}
-          </button>`}
+        ${/*html*/ `<button class="delete-btn" id="${link.id}" title="delete"></button>`}
         ${
           url
             ? /*html*/ `
@@ -290,6 +290,10 @@ export default class CryptoPage extends HTMLElement {
         }
         </li>
       `
+      })
+
+      links.$$(".delete-btn")?.forEach((btn) => {
+        btn.innerHTML = Remove
       })
 
       this.handleDeletion()
