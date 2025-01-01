@@ -27,6 +27,7 @@
   --success: hsl(88, 50%, 53%);
   --warn: hsl(45, 100%, 50%);
   --error: hsl(14, 100%, 57%);
+  --lightpink: hsl(0, 100%, 92%);
 
   line-height: 1.4;
 }
