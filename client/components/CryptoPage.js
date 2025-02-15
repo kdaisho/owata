@@ -1,5 +1,5 @@
 import { $, closeOnClickOutside, submit, toast } from "../utils.js"
-import { Arrow, Remove } from "./Icons.js"
+import { Arrow, Remove, Up } from "./Icons.js"
 import("../services/Store.js")
 
 export default class CryptoPage extends HTMLElement {
@@ -274,7 +274,8 @@ export default class CryptoPage extends HTMLElement {
 
         links.innerHTML += /*html*/ `
         <li>
-        ${/*html*/ `<button class="delete-btn" id="${link.id}" title="delete">${Remove}</button>`}
+        ${/*html*/ `<button class="icon-btn delete-btn" id="${link.id}" title="delete">${Remove}</button>`}
+        ${/*html*/ `<button class="icon-btn promote-btn" id="${link.id}" title="promote">${Up}</button>`}
         ${
           url
             ? /*html*/ `
@@ -289,6 +290,7 @@ export default class CryptoPage extends HTMLElement {
       })
 
       this.handleDeletion()
+      this.handlePromotion()
       this.updateBtnText()
     })
   }
@@ -310,6 +312,26 @@ export default class CryptoPage extends HTMLElement {
       })
     })
     this.updateBtnText()
+  }
+
+  handlePromotion() {
+    this.root.$$(".promote-btn")?.forEach((btn) => {
+      if (!(btn instanceof HTMLElement)) return
+      btn.$on("click", ({ target }) => {
+        console.log("boom", target)
+        if (!(target instanceof HTMLElement)) return
+        console.log(app.store.hyperlinks)
+        const found = app.store.hyperlinks.find((item) => item.id === target.id)
+        console.log("found", found)
+        if (!found) return
+        app.store.hyperlinks = [
+          found,
+          ...app.store.hyperlinks.filter((item) => item.id !== found.id),
+        ]
+
+        console.log(app.store.hyperlinks)
+      })
+    })
   }
 
   async handleEncrypt() {
