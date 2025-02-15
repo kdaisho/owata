@@ -21,10 +21,10 @@ export default new Proxy(store, {
    * @param {Store[keyof Store]} value
    */
   set(target, prop, value) {
-    const prevLength = target[prop].length
     Reflect.set(target, prop, value)
 
     if (prop === "hyperlinks") {
+      const prevLength = target[prop].length
       document.dispatchEvent(
         new Event(
           Reflect.get(target, prop).length - prevLength === 1

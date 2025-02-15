@@ -1,5 +1,5 @@
 import { $, closeOnClickOutside, submit, toast } from "../utils.js"
-import { Arrow, Remove, Trash } from "./Icons.js"
+import { Arrow, Remove } from "./Icons.js"
 import("../services/Store.js")
 
 export default class CryptoPage extends HTMLElement {
@@ -166,6 +166,7 @@ export default class CryptoPage extends HTMLElement {
       })
 
       const handleDecrypt = async () => {
+        decryptBtn.textContent = "decrypting..."
         const value = textarea.value.trim()
         if (!value) return
 
@@ -197,6 +198,7 @@ export default class CryptoPage extends HTMLElement {
         const links = this.root.$(".links")
         links?.replaceChildren()
         app.store.hyperlinks = data.map((d) => JSON.parse(d))
+        decryptBtn.textContent = "decrypt"
         toast("success", "successfully decrypted!")
         dialog.close()
       }
