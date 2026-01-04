@@ -22,5 +22,5 @@ jobs:
           cp -r client/ src/ deno.json deno.lock index.ts /var/www/owata/
           cd /var/www/owata
           pm2 delete owata
-          deno cache index.ts # preload dependencies
+          deno cache index.ts # preload dependencies (similar purpose to npm install, but uses global cache)
           pm2 start --interpreter="deno" --interpreter-args="run --allow-read --allow-net --allow-env" index.ts --name owata

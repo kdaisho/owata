@@ -1,0 +1,9 @@
+---
+globs: *.ts,*.js
+alwaysApply: false
+---
+- Don't delete console.log that I added.
+- Do not ever use `any`. If you feel like you have to use `any`, use `unknown` instead.
+- Use `Boolean()` if you need to force a boolean value instead of using `!!`.
+- Sort imports alphabetically.
+- Ensure member imports are sorted alphabetically. (e.g., `import { A, B, C } from "mod";`)
